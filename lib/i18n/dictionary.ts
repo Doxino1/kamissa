@@ -542,7 +542,7 @@ export const fr: Dictionary = {
     repliesToggle: (count) => (count > 1 ? `${count} réponses` : `${count} réponse`),
   },
   weeklyEmail: {
-    subject: (count, ville) => `${count} événement${count > 1 ? "s" : ""} à ${ville} cette semaine`,
+    subject: (count, ville) => `${count} événement${count > 1 ? "s" : ""} à ${ville} cette semaine — Kamissa`,
     greeting: (nom) => `Bonjour ${nom},`,
     intro: (ville) => `Voici les événements à ${ville} pour les 7 prochains jours :`,
     communityLine: (matches, messages, ville) => {
@@ -892,7 +892,7 @@ export const en: Dictionary = {
     repliesToggle: (count) => (count > 1 ? `${count} replies` : `${count} reply`),
   },
   weeklyEmail: {
-    subject: (count, ville) => `${count} event${count > 1 ? "s" : ""} in ${ville} this week`,
+    subject: (count, ville) => `${count} event${count > 1 ? "s" : ""} in ${ville} this week — Kamissa`,
     greeting: (nom) => `Hi ${nom},`,
     intro: (ville) => `Here are the events in ${ville} for the next 7 days:`,
     communityLine: (matches, messages, ville) => {
@@ -1245,7 +1245,7 @@ export const el: Dictionary = {
     repliesToggle: (count) => (count > 1 ? `${count} απαντήσεις` : `${count} απάντηση`),
   },
   weeklyEmail: {
-    subject: (count, ville) => `${count} εκδήλωση${count > 1 ? "εις" : ""} στην ${ville} αυτή την εβδομάδα`,
+    subject: (count, ville) => `${count} εκδήλωση${count > 1 ? "εις" : ""} στην ${ville} αυτή την εβδομάδα — Kamissa`,
     greeting: (nom) => `Γεια σου ${nom},`,
     intro: (ville) => `Ορίστε οι εκδηλώσεις στην ${ville} για τις επόμενες 7 μέρες:`,
     communityLine: (matches, messages, ville) => {

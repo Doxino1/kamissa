@@ -17,7 +17,7 @@ function FR() {
       <section>
         <h2 className="font-medium">Éditeur du site</h2>
         <p className="mt-2 text-foreground-muted">
-          Le site « Assistant pour artistes » est édité à titre non professionnel, personnel et bénévole, par une
+          Le site Kamissa est édité à titre non professionnel, personnel et bénévole, par une
           personne physique désignée par le pseudonyme <strong className="text-foreground">Doxino</strong>.
         </p>
         <p className="mt-2 text-foreground-muted">
@@ -91,7 +91,7 @@ function EN() {
       <section>
         <h2 className="font-medium">Site publisher</h2>
         <p className="mt-2 text-foreground-muted">
-          The site &ldquo;Assistant pour artistes&rdquo; is published on a non-professional, personal, voluntary
+          The site Kamissa is published on a non-professional, personal, voluntary
           basis by an individual identified by the pseudonym <strong className="text-foreground">Doxino</strong>.
         </p>
         <p className="mt-2 text-foreground-muted">
@@ -162,7 +162,7 @@ function EL() {
       <section>
         <h2 className="font-medium">Εκδότης του ιστότοπου</h2>
         <p className="mt-2 text-foreground-muted">
-          Ο ιστότοπος «Assistant pour artistes» εκδίδεται σε μη επαγγελματική, προσωπική και εθελοντική βάση από
+          Ο ιστότοπος Kamissa εκδίδεται σε μη επαγγελματική, προσωπική και εθελοντική βάση από
           φυσικό πρόσωπο που αναφέρεται με το ψευδώνυμο <strong className="text-foreground">Doxino</strong>.
         </p>
         <p className="mt-2 text-foreground-muted">

@@ -36,9 +36,9 @@ function icsContent(event: ArtEvent): string {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Assistant Artistes//FR",
+    "PRODID:-//Kamissa//FR",
     "BEGIN:VEVENT",
-    `UID:${event.id}@assistant-artistes`,
+    `UID:${event.id}@kamissa`,
     `DTSTAMP:${toIcsUtc(new Date())}`,
     `DTSTART:${toIcsUtc(start)}`,
     `DTEND:${toIcsUtc(end)}`,

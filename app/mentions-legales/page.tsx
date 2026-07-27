@@ -1,7 +1,7 @@
 import { MentionsLegalesContent } from "@/components/legal/MentionsLegalesContent";
 
 export const metadata = {
-  title: "Mentions légales — Assistant pour artistes",
+  title: "Mentions légales — Kamissa",
 };
 
 export default function MentionsLegalesPage() {

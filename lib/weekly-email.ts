@@ -145,7 +145,7 @@ export async function sendWeeklyEmails({ dryRun, onLog }: SendWeeklyEmailsOption
   const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
+  const FROM_EMAIL = `Kamissa <${process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev"}>`;
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {

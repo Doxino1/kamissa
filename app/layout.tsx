@@ -16,7 +16,7 @@ const comfortaa = Comfortaa({
 });
 
 export const metadata: Metadata = {
-  title: "Assistant pour artistes",
+  title: "Kamissa",
   description: "Événements, matching et communauté pour artistes à Paris et Athènes",
 };
 

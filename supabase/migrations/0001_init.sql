@@ -1,4 +1,4 @@
--- Assistant pour artistes — schéma initial MVP
+-- Kamissa — schéma initial MVP
 -- Champ `city` en texte libre partout (pas de tables par ville) pour permettre
 -- l'ajout facile de nouvelles villes après Paris/Athènes.
 

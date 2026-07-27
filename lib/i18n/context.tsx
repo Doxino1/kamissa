@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Dictionary, Locale, LOCALES, dictionaries } from "./dictionary";
 
-const STORAGE_KEY = "assistant-artistes:locale";
+const STORAGE_KEY = "kamissa:locale";
 
 function detectBrowserLocale(): Locale {
   if (typeof navigator === "undefined") return "fr";

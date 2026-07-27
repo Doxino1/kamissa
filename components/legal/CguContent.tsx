@@ -17,7 +17,7 @@ function FR() {
       <section>
         <h2 className="font-medium">Objet</h2>
         <p className="mt-2 text-foreground-muted">
-          « Assistant pour artistes » est un service gratuit qui centralise la découverte d&rsquo;événements
+          Kamissa est un service gratuit qui centralise la découverte d&rsquo;événements
           artistiques, la mise en relation entre artistes et une communauté locale, à Paris et à Athènes.
           L&rsquo;utilisation du site implique l&rsquo;acceptation pleine et entière des présentes conditions.
         </p>
@@ -90,7 +90,7 @@ function EN() {
       <section>
         <h2 className="font-medium">Purpose</h2>
         <p className="mt-2 text-foreground-muted">
-          &ldquo;Assistant pour artistes&rdquo; is a free service that centralizes the discovery of art events,
+          Kamissa is a free service that centralizes the discovery of art events,
           connects artists with each other, and hosts a local community, in Paris and Athens. Using the site
           means fully accepting these terms.
         </p>
@@ -163,7 +163,7 @@ function EL() {
       <section>
         <h2 className="font-medium">Αντικείμενο</h2>
         <p className="mt-2 text-foreground-muted">
-          Το «Assistant pour artistes» είναι μια δωρεάν υπηρεσία που συγκεντρώνει την ανακάλυψη καλλιτεχνικών
+          Το Kamissa είναι μια δωρεάν υπηρεσία που συγκεντρώνει την ανακάλυψη καλλιτεχνικών
           εκδηλώσεων, τη σύνδεση μεταξύ καλλιτεχνών και μια τοπική κοινότητα, στο Παρίσι και την Αθήνα. Η χρήση
           του ιστότοπου συνεπάγεται την πλήρη αποδοχή των παρόντων όρων.
         </p>
