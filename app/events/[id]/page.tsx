@@ -10,6 +10,7 @@ import { EventTypeBadge } from "@/components/EventTypeBadge";
 import { CostBadge } from "@/components/CostBadge";
 import { useEvents } from "@/lib/use-events";
 import { formatInVille } from "@/lib/timezone";
+import { localizedTitle, localizedDescription } from "@/lib/localize-event";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { useGoingFollows } from "@/lib/use-going-follows";
 import { createClient } from "@/lib/supabase/client";
@@ -84,12 +85,12 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         <span>{t.villeLabels[event.ville]}</span>
       </div>
 
-      <h1 className="mt-3 text-2xl font-semibold">{event.titre}</h1>
+      <h1 className="mt-3 text-2xl font-semibold">{localizedTitle(event, locale)}</h1>
       <p className="mt-1 text-sm text-foreground-muted">{date}</p>
       <p className="mt-1 text-sm text-foreground-muted">{event.lieu}</p>
       {event.coutDetail && <p className="mt-1 text-sm text-foreground-muted">{event.coutDetail}</p>}
 
-      <p className="mt-6 text-base leading-relaxed">{event.description}</p>
+      <p className="mt-6 text-base leading-relaxed">{localizedDescription(event, locale)}</p>
 
       {event.type === "annonce" && (
         <p className="mt-4 rounded-lg bg-foreground/5 px-3 py-2 text-xs text-foreground-muted">

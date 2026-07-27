@@ -26,6 +26,10 @@ export interface ArtEvent {
   lng?: number;
   coutType?: CoutType | null;
   coutDetail?: string | null;
+  titreEn?: string | null;
+  titreEl?: string | null;
+  descriptionEn?: string | null;
+  descriptionEl?: string | null;
 }
 
 // Valeurs canoniques stockées en base — l'affichage localisé vit dans

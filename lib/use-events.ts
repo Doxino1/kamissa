@@ -23,7 +23,7 @@ export function useEvents(): UseEventsResult {
     supabase
       .from("events")
       .select(
-        "id, titre, description, type, sous_type, discipline, ville, date, lieu, lat, lng, cout_type, cout_detail"
+        "id, titre, description, type, sous_type, discipline, ville, date, lieu, lat, lng, cout_type, cout_detail, titre_en, titre_el, description_en, description_el"
       )
       .eq("statut", "publie")
       .order("date", { ascending: true })

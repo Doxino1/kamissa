@@ -14,6 +14,10 @@ interface EventRow {
   lng: number | null;
   cout_type: ArtEvent["coutType"] | null;
   cout_detail: string | null;
+  titre_en: string | null;
+  titre_el: string | null;
+  description_en: string | null;
+  description_el: string | null;
 }
 
 export function mapEventRow(row: EventRow): ArtEvent {
@@ -31,5 +35,9 @@ export function mapEventRow(row: EventRow): ArtEvent {
     lng: row.lng ?? undefined,
     coutType: row.cout_type ?? null,
     coutDetail: row.cout_detail ?? null,
+    titreEn: row.titre_en,
+    titreEl: row.titre_el,
+    descriptionEn: row.description_en,
+    descriptionEl: row.description_el,
   };
 }

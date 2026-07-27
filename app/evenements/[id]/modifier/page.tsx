@@ -17,6 +17,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
   const [notAllowed, setNotAllowed] = useState(false);
   const [initial, setInitial] = useState<EventFormValues | null>(null);
   const [withdrawing, setWithdrawing] = useState(false);
+  const [wasPublished, setWasPublished] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -35,7 +36,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
       const { data, error } = await supabase
         .from("events")
         .select(
-          "titre, description, type, sous_type, discipline, ville, date, lieu, soumis_par, cout_type, cout_detail"
+          "titre, description, type, sous_type, discipline, ville, date, lieu, soumis_par, cout_type, cout_detail, statut"
         )
         .eq("id", id)
         .single();
@@ -51,6 +52,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
       const ville = data.ville as Ville;
       const { date, time } = utcIsoToZonedParts(data.date, VILLE_TIMEZONES[ville]);
 
+      setWasPublished(data.statut === "publie");
       setInitial({
         titre: data.titre,
         description: data.description ?? "",
@@ -93,6 +95,14 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
         cout_detail: costEligible ? values.coutDetail || null : null,
       })
       .eq("id", id);
+
+    if (!error && wasPublished) {
+      fetch("/api/events/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: [id] }),
+      }).catch(() => {});
+    }
 
     return { error: error ? error.message : null };
   }

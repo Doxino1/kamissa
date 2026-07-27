@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ArtEvent, Ville } from "@/lib/types";
 import { formatInVille } from "@/lib/timezone";
+import { localizedTitle } from "@/lib/localize-event";
 import { useLocale } from "@/lib/i18n/context";
 
 // Petits points pleins plutôt que la grosse épingle par défaut de Leaflet —
@@ -34,7 +35,7 @@ export function EventMap({ events, ville }: { events: ArtEvent[]; ville: Ville }
           {withCoords.map((event) => (
             <CircleMarker key={event.id} center={[event.lat, event.lng]} radius={7} pathOptions={DOT_STYLE}>
               <Popup>
-                <Link href={`/events/${event.id}`}>{event.titre}</Link>
+                <Link href={`/events/${event.id}`}>{localizedTitle(event, locale)}</Link>
                 <br />
                 {formatInVille(
                   event.date,

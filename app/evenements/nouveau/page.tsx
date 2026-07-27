@@ -93,11 +93,18 @@ export default function NouvelEvenementPage() {
     const { data: inserted, error: insertError } = await supabase
       .from("events")
       .insert(rows)
-      .select("statut");
+      .select("id, statut");
 
     if (insertError) return { error: insertError.message };
 
     const autoPublished = inserted?.[0]?.statut === "publie";
+    if (autoPublished) {
+      fetch("/api/events/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: inserted!.map((r) => r.id) }),
+      }).catch(() => {});
+    }
     return { error: null, successMessage: autoPublished ? t.submission.submittedTrusted : t.submission.submitted };
   }
 

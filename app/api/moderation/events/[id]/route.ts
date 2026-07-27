@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireModerator } from "@/lib/moderation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { translateEventBatch } from "@/lib/translate";
 
 export async function PATCH(
   _req: NextRequest,
@@ -17,6 +18,8 @@ export async function PATCH(
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
+  await translateEventBatch([id]);
 
   return NextResponse.json({ ok: true });
 }

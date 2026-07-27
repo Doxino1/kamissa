@@ -3,15 +3,15 @@
 import { CalendarPlus, Download } from "lucide-react";
 import { ArtEvent } from "@/lib/types";
 import { downloadIcs, googleCalendarUrl } from "@/lib/calendar";
-import { useT } from "@/lib/i18n/context";
+import { useLocale } from "@/lib/i18n/context";
 
 export function CalendarButtons({ event }: { event: ArtEvent }) {
-  const t = useT();
+  const { locale, t } = useLocale();
 
   return (
     <div className="flex gap-2">
       <a
-        href={googleCalendarUrl(event)}
+        href={googleCalendarUrl(event, locale)}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-1.5 rounded-lg border border-foreground/20 px-3 py-1.5 text-xs hover:border-foreground/40"
@@ -21,7 +21,7 @@ export function CalendarButtons({ event }: { event: ArtEvent }) {
       </a>
       <button
         type="button"
-        onClick={() => downloadIcs(event)}
+        onClick={() => downloadIcs(event, locale)}
         className="flex items-center gap-1.5 rounded-lg border border-foreground/20 px-3 py-1.5 text-xs hover:border-foreground/40"
       >
         <Download size={14} strokeWidth={1.75} />

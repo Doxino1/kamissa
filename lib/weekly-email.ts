@@ -4,6 +4,7 @@ import { formatInVille } from "./timezone.ts";
 import { LOCALES, dictionaries } from "./i18n/dictionary.ts";
 import type { Locale } from "./i18n/dictionary.ts";
 import type { ArtEvent, Ville } from "./types.ts";
+import { localizedTitle } from "./localize-event.ts";
 
 interface ProfileRow {
   id: string;
@@ -34,6 +35,10 @@ interface EventRow {
   ville: string;
   date: string;
   lieu: string | null;
+  titre_en: string | null;
+  titre_el: string | null;
+  description_en: string | null;
+  description_el: string | null;
 }
 
 function resolveLocale(langue: string | null): Locale {
@@ -58,7 +63,9 @@ function eventHtml(event: EventRow, locale: Locale, siteUrl: string | undefined)
     locale
   );
   const link = siteUrl ? `${siteUrl}/events/${event.id}` : null;
-  const titreSafe = escapeHtml(event.titre);
+  const titreSafe = escapeHtml(
+    localizedTitle({ titre: event.titre, titreEn: event.titre_en, titreEl: event.titre_el }, locale)
+  );
   const titre = link ? `<a href="${escapeHtml(link)}">${titreSafe}</a>` : titreSafe;
   const lieu = event.lieu ? escapeHtml(event.lieu) : "";
 
@@ -173,7 +180,7 @@ export async function sendWeeklyEmails({ dryRun, onLog }: SendWeeklyEmailsOption
       .eq("recoit_email_hebdo", true),
     supabase
       .from("events")
-      .select("id, titre, description, type, discipline, ville, date, lieu")
+      .select("id, titre, description, type, discipline, ville, date, lieu, titre_en, titre_el, description_en, description_el")
       .eq("statut", "publie")
       .gte("date", now.toISOString())
       .lt("date", in7Days.toISOString())

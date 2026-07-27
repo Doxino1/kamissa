@@ -6,6 +6,7 @@ import { EventTypeBadge } from "./EventTypeBadge";
 import { CostBadge } from "./CostBadge";
 import { ArtEvent } from "@/lib/types";
 import { formatInVille } from "@/lib/timezone";
+import { localizedTitle } from "@/lib/localize-event";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { useLocale } from "@/lib/i18n/context";
 
@@ -30,7 +31,7 @@ export function EventCard({ event }: { event: ArtEvent }) {
           </div>
           <span>{date}</span>
         </div>
-        <h3 className="mt-2 font-medium">{event.titre}</h3>
+        <h3 className="mt-2 font-medium">{localizedTitle(event, locale)}</h3>
         <p className="mt-1 text-sm text-foreground-muted">
           {t.villeLabels[event.ville]} · {t.disciplineLabels[event.discipline] ?? event.discipline}
         </p>
