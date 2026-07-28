@@ -70,6 +70,10 @@ export interface Dictionary {
     editLink: string;
     withdrawLink: string;
     withdrawConfirm: string;
+    greeting: (hour: number, nom: string) => string;
+    highlightThisWeek: (count: number, ville: string) => string;
+    highlightGoing: (titre: string, date: string) => string;
+    highlightMatch: string;
   };
 
   saveButtons: {
@@ -418,6 +422,10 @@ export const fr: Dictionary = {
     editLink: "Modifier",
     withdrawLink: "Retirer",
     withdrawConfirm: "Retirer cet événement ? C'est définitif, impossible de revenir en arrière.",
+    greeting: (hour, nom) => (hour < 18 ? `Bonjour ${nom} 👋` : `Bonsoir ${nom} 👋`),
+    highlightThisWeek: (count, ville) => `${count} événement${count > 1 ? "s" : ""} cette semaine à ${ville}`,
+    highlightGoing: (titre, date) => `Prochain événement : ${titre} · ${date}`,
+    highlightMatch: "Nouvelle suggestion de matching :",
   },
   saveButtons: {
     sauvegarder: "Sauvegarder",
@@ -769,6 +777,11 @@ export const en: Dictionary = {
     editLink: "Edit",
     withdrawLink: "Withdraw",
     withdrawConfirm: "Withdraw this event? This can't be undone.",
+    greeting: (hour, nom) =>
+      hour < 12 ? `Good morning, ${nom} 👋` : hour < 18 ? `Good afternoon, ${nom} 👋` : `Good evening, ${nom} 👋`,
+    highlightThisWeek: (count, ville) => `${count} event${count > 1 ? "s" : ""} this week in ${ville}`,
+    highlightGoing: (titre, date) => `Next event: ${titre} · ${date}`,
+    highlightMatch: "New matching suggestion:",
   },
   saveButtons: {
     sauvegarder: "Save",
@@ -1117,6 +1130,11 @@ export const el: Dictionary = {
     editLink: "Επεξεργασία",
     withdrawLink: "Απόσυρση",
     withdrawConfirm: "Απόσυρση αυτής της εκδήλωσης; Δεν μπορεί να αναιρεθεί.",
+    greeting: (hour, nom) => (hour < 18 ? `Καλημέρα ${nom} 👋` : `Καλησπέρα ${nom} 👋`),
+    highlightThisWeek: (count, ville) =>
+      `${count} εκδήλωση${count > 1 ? "εις" : ""} αυτή την εβδομάδα στην ${ville}`,
+    highlightGoing: (titre, date) => `Επόμενη εκδήλωση: ${titre} · ${date}`,
+    highlightMatch: "Νέα πρόταση αντιστοίχισης:",
   },
   saveButtons: {
     sauvegarder: "Αποθήκευση",

@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { List, CalendarDays, Map as MapIcon, Bookmark, Store, Filter, X, Plus, ChevronDown } from "lucide-react";
+import { List, CalendarDays, Map as MapIcon, Bookmark, Store, Filter, X, Plus } from "lucide-react";
 import { EventCard } from "@/components/EventCard";
 import { EventCalendar } from "@/components/EventCalendar";
+import { HomeGreeting } from "@/components/HomeGreeting";
 import { useEvents } from "@/lib/use-events";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { createClient } from "@/lib/supabase/client";
@@ -121,6 +122,12 @@ export default function EvenementsPage() {
     .filter((e) => saved[e.id] === "je_viens")
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+  const weekFromNow = now + 7 * 24 * 60 * 60 * 1000;
+  const eventsThisWeekCount = allEvents.filter(
+    (e) => e.ville === ville && new Date(e.date).getTime() >= now && new Date(e.date).getTime() <= weekFromNow
+  ).length;
+  const nextGoingEvent = goingEvents.find((e) => new Date(e.date).getTime() >= now) ?? null;
+
   return (
     <div className="relative mx-auto w-full max-w-2xl px-4 py-8">
       <div className="flex items-center justify-between gap-2">
@@ -132,14 +139,15 @@ export default function EvenementsPage() {
         )}
       </div>
 
-      {!showSaved && (
-        <button
-          onClick={() => setFiltersOpen(true)}
-          className="mt-1 flex items-center gap-0.5 text-sm text-foreground-muted hover:text-foreground"
-        >
-          {t.villeLabels[ville]}
-          <ChevronDown size={14} strokeWidth={1.75} />
-        </button>
+      {!showSaved && userId && (
+        <div className="mt-4">
+          <HomeGreeting
+            userId={userId}
+            ville={ville}
+            eventsThisWeekCount={eventsThisWeekCount}
+            nextGoingEvent={nextGoingEvent}
+          />
+        </div>
       )}
 
       <div className="mt-4 flex items-center justify-between gap-2">
@@ -280,6 +288,7 @@ export default function EvenementsPage() {
 
           {filtersOpen && (
             <div className="mb-6 rounded-lg bg-surface p-3 shadow-soft">
+              <p className="mb-1 px-1 text-xs font-medium text-foreground-muted">{t.profil.ville}</p>
               <div className="mb-2 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {VILLES.map((v) => (
                   <button
