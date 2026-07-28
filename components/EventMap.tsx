@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { ArtEvent, Ville } from "@/lib/types";
 import { formatInVille } from "@/lib/timezone";
 import { localizedTitle } from "@/lib/localize-event";
+import { TILE_URL, TILE_SUBDOMAINS, TILE_ATTRIBUTION } from "@/lib/map-tiles";
 import { useLocale } from "@/lib/i18n/context";
 
 // Petits points pleins plutôt que la grosse épingle par défaut de Leaflet —
@@ -28,10 +29,7 @@ export function EventMap({ events, ville }: { events: ArtEvent[]; ville: Ville }
     <div>
       <div className="overflow-hidden rounded-lg border border-foreground/10" style={{ height: 420 }}>
         <MapContainer center={CITY_CENTER[ville]} zoom={12} style={{ height: "100%", width: "100%" }}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+          <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} subdomains={TILE_SUBDOMAINS} />
           {withCoords.map((event) => (
             <CircleMarker key={event.id} center={[event.lat, event.lng]} radius={7} pathOptions={DOT_STYLE}>
               <Popup>

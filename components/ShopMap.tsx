@@ -3,6 +3,7 @@
 import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Ville } from "@/lib/types";
+import { TILE_URL, TILE_SUBDOMAINS, TILE_ATTRIBUTION } from "@/lib/map-tiles";
 import { useT } from "@/lib/i18n/context";
 
 // Petits points pleins plutôt que la grosse épingle par défaut de Leaflet —
@@ -34,10 +35,7 @@ export function ShopMap({ shops, ville }: { shops: Shop[]; ville: Ville }) {
     <div>
       <div className="overflow-hidden rounded-lg border border-foreground/10" style={{ height: 420 }}>
         <MapContainer center={CITY_CENTER[ville]} zoom={12} style={{ height: "100%", width: "100%" }}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+          <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} subdomains={TILE_SUBDOMAINS} />
           {withCoords.map((shop) => (
             <CircleMarker key={shop.id} center={[shop.lat, shop.lng]} radius={7} pathOptions={DOT_STYLE}>
               <Popup>
