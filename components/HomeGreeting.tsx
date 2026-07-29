@@ -83,6 +83,14 @@ export function HomeGreeting({
   const { locale, t } = useLocale();
   const [nom, setNom] = useState<string | null>(null);
   const [newMatch, setNewMatch] = useState<NewMatch | null>(null);
+  const [hour, setHour] = useState(() => new Date().getHours());
+
+  // La salutation dépend de l'heure — sans ça, un onglet resté ouvert
+  // n'affiche jamais "Bonsoir" une fois le soir venu.
+  useEffect(() => {
+    const interval = setInterval(() => setHour(new Date().getHours()), 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -105,7 +113,6 @@ export function HomeGreeting({
 
   if (nom === null) return null;
 
-  const hour = new Date().getHours();
   const hasHighlights = eventsThisWeekCount > 0 || nextGoingEvent !== null || newMatch !== null;
 
   return (

@@ -158,7 +158,7 @@ export default function EvenementsPage() {
             href="/boutiques"
             aria-label={t.shops.title}
             title={t.shops.title}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-foreground/20 text-foreground-muted hover:text-foreground"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-foreground/20 text-foreground-muted hover:text-foreground md:hidden"
           >
             <Store size={16} strokeWidth={1.75} />
           </Link>
@@ -166,55 +166,63 @@ export default function EvenementsPage() {
       </div>
 
       {!showSaved && (
-        <div className="md:flex md:h-[calc(100vh-11rem)] md:items-stretch md:overflow-hidden md:rounded-2xl md:border md:border-foreground/10 md:shadow-soft">
-          <div className="md:h-full md:w-[42%] md:shrink-0 md:overflow-y-auto md:p-4">
-            {userId && (
-              <div className="mt-4 md:mt-0">
-                <HomeGreeting
-                  userId={userId}
+        <>
+          <div className="mt-4 md:hidden">
+            <EventFilterBar filters={filters} />
+          </div>
+
+          <div className="hidden md:mb-4 md:mt-4 md:flex md:justify-center">
+            <div className="w-full max-w-xl">
+              <EventFilterBar filters={filters} />
+            </div>
+          </div>
+
+          <div className="md:flex md:h-[calc(100vh-14rem)] md:items-stretch md:overflow-hidden md:rounded-2xl md:border md:border-foreground/10 md:shadow-soft">
+            <div className="md:h-full md:w-[42%] md:shrink-0 md:overflow-y-auto md:p-4">
+              {userId && (
+                <div className="mt-4 md:mt-0">
+                  <HomeGreeting
+                    userId={userId}
+                    ville={ville}
+                    eventsThisWeekCount={eventsThisWeekCount}
+                    nextGoingEvent={nextGoingEvent}
+                  />
+                </div>
+              )}
+
+              {showList && (
+                <div className="flex flex-col gap-3">
+                  {loading && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}
+                  {error && <p className="text-sm text-red-600">{t.evenements.loadError(error)}</p>}
+                  {!loading && !error && events.length === 0 && (
+                    <p className="text-sm text-foreground-muted">{t.evenements.noResults}</p>
+                  )}
+                  {events.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      highlighted={hoveredEventId === event.id}
+                      onMouseEnter={() => setHoveredEventId(event.id)}
+                      onMouseLeave={() => setHoveredEventId(null)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {showMap && (
+              <div className="mt-4 md:mt-0 md:h-full md:flex-1">
+                <EventMap
+                  key={ville}
+                  events={events}
                   ville={ville}
-                  eventsThisWeekCount={eventsThisWeekCount}
-                  nextGoingEvent={nextGoingEvent}
+                  hoveredEventId={hoveredEventId}
+                  onHoverEvent={setHoveredEventId}
                 />
               </div>
             )}
-
-            <div className="mt-4">
-              <EventFilterBar filters={filters} />
-            </div>
-
-            {showList && (
-              <div className="flex flex-col gap-3">
-                {loading && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}
-                {error && <p className="text-sm text-red-600">{t.evenements.loadError(error)}</p>}
-                {!loading && !error && events.length === 0 && (
-                  <p className="text-sm text-foreground-muted">{t.evenements.noResults}</p>
-                )}
-                {events.map((event) => (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    highlighted={hoveredEventId === event.id}
-                    onMouseEnter={() => setHoveredEventId(event.id)}
-                    onMouseLeave={() => setHoveredEventId(null)}
-                  />
-                ))}
-              </div>
-            )}
           </div>
-
-          {showMap && (
-            <div className="mt-4 md:mt-0 md:h-full md:flex-1">
-              <EventMap
-                key={ville}
-                events={events}
-                ville={ville}
-                hoveredEventId={hoveredEventId}
-                onHoverEvent={setHoveredEventId}
-              />
-            </div>
-          )}
-        </div>
+        </>
       )}
 
       {showSaved && (
@@ -312,9 +320,10 @@ export default function EvenementsPage() {
           href="/evenements/nouveau"
           aria-label={t.evenements.proposer}
           title={t.evenements.proposer}
-          className="fixed bottom-24 right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-soft transition hover:opacity-90"
+          className="fixed bottom-24 right-4 z-[1000] flex items-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground shadow-soft transition hover:opacity-90 md:bottom-8 md:right-8"
         >
-          <Plus size={26} strokeWidth={2} />
+          <Plus size={20} strokeWidth={2} />
+          {t.evenements.proposer}
         </Link>
       )}
     </div>
