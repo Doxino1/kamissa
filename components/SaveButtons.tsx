@@ -18,7 +18,7 @@ export function SaveButtons({ status, onChange }: SaveButtonsProps) {
         onClick={() => onChange(status === "sauvegarde" ? null : "sauvegarde")}
         className={`rounded-lg border px-3 py-1 text-sm transition ${
           status === "sauvegarde"
-            ? "border-accent bg-accent text-accent-foreground"
+            ? "border-accent-secondary bg-accent-secondary text-accent-secondary-foreground"
             : "border-foreground/20 hover:border-foreground/40"
         }`}
       >

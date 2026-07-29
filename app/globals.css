@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8f4;
-  --surface: #f2efe9;
-  --foreground: #2b2724;
-  --foreground-muted: #8a8580;
-  --border: #e5e1d8;
-  --accent: #c4622d;
+  --background: #f9f6f0;
+  --surface: #efe8d8;
+  --foreground: #201c16;
+  --foreground-muted: #6b655c;
+  --border: #ddd2ba;
+  --accent: #b0451c;
   --accent-foreground: #ffffff;
+  --accent-secondary: #3f6b52;
+  --accent-secondary-foreground: #ffffff;
 
   /* Un seul font rond et chaleureux partout — pas de pairing serif/sans. */
   --font-display: var(--font-sans);
@@ -45,6 +47,8 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-secondary-foreground: var(--accent-secondary-foreground);
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
 
