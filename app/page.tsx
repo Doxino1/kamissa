@@ -44,6 +44,7 @@ export default function EvenementsPage() {
   const [checkingUser, setCheckingUser] = useState(true);
   const [submissions, setSubmissions] = useState<MySubmission[] | null>(null);
   const [now] = useState(() => Date.now());
+  const [hoveredEventId, setHoveredEventId] = useState<string | null>(null);
 
   const filters = useEventFilters(allEvents, now);
   const { ville, events } = filters;
@@ -96,7 +97,7 @@ export default function EvenementsPage() {
   const showMap = isDesktop || view === "carte";
 
   return (
-    <div className="relative mx-auto w-full max-w-2xl px-4 py-8 md:max-w-5xl">
+    <div className="relative mx-auto w-full max-w-2xl px-4 py-8 md:max-w-6xl">
       <div className="flex items-center justify-between gap-2">
         <h1 className="font-display text-xl font-semibold">{t.nav.evenements}</h1>
         {!checkingUser && !userId && (
@@ -165,10 +166,10 @@ export default function EvenementsPage() {
       </div>
 
       {!showSaved && (
-        <div className="md:flex md:items-start md:gap-6">
-          <div className="md:min-w-0 md:flex-1">
+        <div className="md:flex md:h-[calc(100vh-11rem)] md:items-stretch md:overflow-hidden md:rounded-2xl md:border md:border-foreground/10 md:shadow-soft">
+          <div className="md:h-full md:w-[42%] md:shrink-0 md:overflow-y-auto md:p-4">
             {userId && (
-              <div className="mt-4">
+              <div className="mt-4 md:mt-0">
                 <HomeGreeting
                   userId={userId}
                   ville={ville}
@@ -190,15 +191,27 @@ export default function EvenementsPage() {
                   <p className="text-sm text-foreground-muted">{t.evenements.noResults}</p>
                 )}
                 {events.map((event) => (
-                  <EventCard key={event.id} event={event} />
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    highlighted={hoveredEventId === event.id}
+                    onMouseEnter={() => setHoveredEventId(event.id)}
+                    onMouseLeave={() => setHoveredEventId(null)}
+                  />
                 ))}
               </div>
             )}
           </div>
 
           {showMap && (
-            <div className="mt-4 md:sticky md:top-20 md:mt-0 md:w-[380px] md:shrink-0">
-              <EventMap key={ville} events={events} ville={ville} />
+            <div className="mt-4 md:mt-0 md:h-full md:flex-1">
+              <EventMap
+                key={ville}
+                events={events}
+                ville={ville}
+                hoveredEventId={hoveredEventId}
+                onHoverEvent={setHoveredEventId}
+              />
             </div>
           )}
         </div>

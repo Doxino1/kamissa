@@ -10,7 +10,17 @@ import { localizedTitle } from "@/lib/localize-event";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { useLocale } from "@/lib/i18n/context";
 
-export function EventCard({ event }: { event: ArtEvent }) {
+export function EventCard({
+  event,
+  highlighted,
+  onMouseEnter,
+  onMouseLeave,
+}: {
+  event: ArtEvent;
+  highlighted?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+}) {
   const { saved, setStatus, canSave } = useSavedEvents();
   const { locale, t } = useLocale();
 
@@ -22,7 +32,13 @@ export function EventCard({ event }: { event: ArtEvent }) {
   );
 
   return (
-    <div className="rounded-lg bg-surface p-4 shadow-soft transition hover:-translate-y-0.5">
+    <div
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={`rounded-lg bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 ${
+        highlighted ? "ring-2 ring-accent" : ""
+      }`}
+    >
       <Link href={`/events/${event.id}`} className="block">
         <div className="flex items-center justify-between gap-2 text-xs text-foreground-muted">
           <div className="flex items-center gap-1.5">
