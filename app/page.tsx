@@ -97,7 +97,7 @@ export default function EvenementsPage() {
   const showMap = isDesktop || view === "carte";
 
   return (
-    <div className="relative mx-auto w-full max-w-2xl px-4 py-8 md:max-w-6xl">
+    <div className="relative mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-6 md:py-6">
       <div className="flex items-center justify-between gap-2">
         <h1 className="font-display text-xl font-semibold">{t.nav.evenements}</h1>
         {!checkingUser && !userId && (
