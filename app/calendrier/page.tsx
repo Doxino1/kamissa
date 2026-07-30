@@ -16,7 +16,7 @@ export default function CalendrierPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <h1 className="font-display text-xl font-semibold">{t.calendar.tab}</h1>
+      <h1 className="font-display text-xl font-black">{t.calendar.tab}</h1>
 
       <div className="mt-4">
         <EventFilterBar filters={filters} />

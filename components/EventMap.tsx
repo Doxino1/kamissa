@@ -20,8 +20,8 @@ import { Locale } from "@/lib/i18n/dictionary";
 // plusieurs événements proches restent lisibles au lieu de se chevaucher. Le
 // marqueur survolé (depuis la carte ou depuis la liste) grossit légèrement
 // pour confirmer visuellement la correspondance liste <-> carte.
-const DOT_STYLE = { color: "#ffffff", weight: 1.5, fillColor: "#b0451c", fillOpacity: 0.9 };
-const DOT_STYLE_HOVERED = { color: "#ffffff", weight: 2, fillColor: "#b0451c", fillOpacity: 1 };
+const DOT_STYLE = { color: "#ffffff", weight: 1.5, fillColor: "#c06722", fillOpacity: 0.9 };
+const DOT_STYLE_HOVERED = { color: "#ffffff", weight: 2, fillColor: "#c06722", fillOpacity: 1 };
 const RADIUS = 7;
 const RADIUS_HOVERED = 10;
 

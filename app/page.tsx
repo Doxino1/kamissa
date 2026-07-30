@@ -134,7 +134,7 @@ export default function EvenementsPage() {
   return (
     <div className="relative mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-6 md:py-4">
       <div className="flex items-center justify-between gap-2 md:hidden">
-        <h1 className="font-display text-xl font-semibold">{t.nav.evenements}</h1>
+        <h1 className="font-display text-xl font-black">{t.nav.evenements}</h1>
         {!checkingUser && !userId && (
           <Link href="/login" className="text-sm text-accent hover:opacity-80">
             {t.nav.connexion}
@@ -217,7 +217,7 @@ export default function EvenementsPage() {
 
       <div className="md:flex md:h-[calc(100vh-10rem)] md:flex-col md:overflow-hidden md:rounded-2xl md:border md:border-foreground/10 md:shadow-soft">
         <div className="hidden shrink-0 items-center justify-between border-b border-foreground/10 px-4 py-3 md:flex">
-          <h2 className="font-display text-lg font-semibold">{t.nav.evenements}</h2>
+          <h2 className="font-display text-lg font-black">{t.nav.evenements}</h2>
           {!checkingUser && !userId ? (
             <Link href="/login" className="text-sm text-accent hover:opacity-80">
               {t.nav.connexion}
@@ -413,7 +413,7 @@ export default function EvenementsPage() {
           onClick={() => setShowAddEventModal(true)}
           aria-label={t.evenements.proposer}
           title={t.evenements.proposer}
-          className="fixed bottom-24 right-4 z-[1000] flex items-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground shadow-soft transition hover:opacity-90 md:bottom-8 md:right-8"
+          className="fixed bottom-24 right-4 z-[1000] flex items-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground shadow-soft transition hover:bg-accent-hover md:bottom-8 md:right-8"
         >
           <Plus size={20} strokeWidth={2} />
           {t.evenements.proposer}

@@ -107,7 +107,7 @@ export default function ModerationPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.moderation.title}</h1>
+      <h1 className="text-xl font-black">{t.moderation.title}</h1>
 
       {error && <p className="mt-6 text-sm text-red-600">{t.moderation.loadError(error)}</p>}
       {events === null && !error && <p className="mt-6 text-sm text-foreground-muted">{t.common.loading}</p>}
@@ -144,7 +144,7 @@ export default function ModerationPage() {
                 type="button"
                 disabled={busyId === event.id}
                 onClick={() => handlePublish(event.id)}
-                className="rounded-lg bg-accent px-3 py-1 text-sm text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+                className="rounded-lg bg-accent px-3 py-1 text-sm text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
               >
                 {t.moderation.publish}
               </button>
@@ -194,7 +194,7 @@ export default function ModerationPage() {
                 type="button"
                 disabled={busyId === shop.id}
                 onClick={() => handlePublishShop(shop.id)}
-                className="rounded-lg bg-accent px-3 py-1 text-sm text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+                className="rounded-lg bg-accent px-3 py-1 text-sm text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
               >
                 {t.moderation.publish}
               </button>

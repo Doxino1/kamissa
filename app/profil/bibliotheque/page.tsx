@@ -99,7 +99,7 @@ export default function BibliothequePage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.library.title}</h1>
+      <h1 className="text-xl font-black">{t.library.title}</h1>
       <p className="mt-1 text-sm text-foreground-muted">{t.library.subtitle}</p>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-foreground/10 p-4">
@@ -128,7 +128,7 @@ export default function BibliothequePage() {
         <button
           type="submit"
           disabled={saving}
-          className="self-start rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+          className="self-start rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
         >
           {saving ? "…" : t.library.add}
         </button>

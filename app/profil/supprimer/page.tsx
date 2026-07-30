@@ -35,7 +35,7 @@ export default function SupprimerComptePage() {
 
   return (
     <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-semibold text-red-600">{t.account.deleteAccount}</h1>
+      <h1 className="text-xl font-black text-red-600">{t.account.deleteAccount}</h1>
       <p className="mt-3 text-sm text-foreground/70">{t.account.deleteWarning}</p>
 
       <label className="mt-6 block text-sm text-foreground-muted">

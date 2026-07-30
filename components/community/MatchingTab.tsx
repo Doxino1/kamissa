@@ -267,7 +267,7 @@ export function MatchingTab() {
             <button
               type="button"
               onClick={handlePropose}
-              className="flex-1 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90"
+              className="flex-1 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover"
             >
               {t.matching.propose}
             </button>
@@ -304,7 +304,7 @@ export function MatchingTab() {
           <Link
             href={`/artistes/${matched.id}`}
             onClick={() => setMatched(null)}
-            className="mt-4 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90"
+            className="mt-4 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover"
           >
             {t.matching.matchedCta}
           </Link>

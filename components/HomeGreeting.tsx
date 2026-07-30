@@ -139,7 +139,7 @@ export function HomeGreeting({
       </svg>
 
       <div className="relative">
-        <p className="font-display text-lg font-semibold">{t.evenements.greeting(hour, nom)}</p>
+        <p className="font-display text-lg font-black">{t.evenements.greeting(hour, nom)}</p>
 
         {hasHighlights && (
           <div className="mt-2 flex flex-col gap-1 text-sm text-foreground-muted">

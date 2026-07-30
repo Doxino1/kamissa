@@ -25,9 +25,9 @@ export function Modal({
 
   return (
     <div className="fixed inset-0 z-[1050] flex items-start justify-center overflow-y-auto bg-foreground/40 p-4 py-8 md:items-center">
-      <div className="w-full max-w-md rounded-2xl bg-background p-5 shadow-soft">
+      <div className="w-full max-w-md rounded-2xl bg-background p-5 shadow-modal">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="font-display text-lg font-semibold">{title}</h2>
+          <h2 className="font-display text-lg font-black">{title}</h2>
           <button
             type="button"
             onClick={onClose}

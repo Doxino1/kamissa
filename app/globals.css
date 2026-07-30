@@ -6,12 +6,16 @@
   --foreground: #201c16;
   --foreground-muted: #6b655c;
   --border: #ddd2ba;
-  --accent: #b0451c;
+  --accent: #c06722;
+  --accent-hover: #a95a1c;
   --accent-foreground: #ffffff;
   --accent-secondary: #3f6b52;
   --accent-secondary-foreground: #ffffff;
 
-  /* Un seul font rond et chaleureux partout — pas de pairing serif/sans. */
+  /* Un seul font partout — pas de pairing serif/sans. Fraunces ne couvre pas
+     le grec ; Noto Serif prend le relais pour ces caractères (voir
+     layout.tsx) sans casser l'unité visuelle serif de l'app. */
+  --font-sans: var(--font-fraunces), var(--font-noto-serif);
   --font-display: var(--font-sans);
 
   /* Badges de catégorie d'événement — un ton pastel distinct par type,
@@ -36,7 +40,12 @@
   --badge-paid-fg: #4c5a73;
 
   /* Ombre douce "bubbly" — sous les cartes et le bouton flottant. */
-  --shadow-soft: 0 2px 8px rgba(43, 39, 36, 0.06), 0 8px 24px rgba(43, 39, 36, 0.08);
+  --shadow-soft: 0 2px 8px rgba(32, 28, 22, 0.06), 0 8px 24px rgba(32, 28, 22, 0.08);
+  /* Ombres teintées au survol des cartes — argile pour les événements,
+     sauge pour les boutiques — et ombre plus marquée pour les modales. */
+  --shadow-event-hover: 0 8px 24px rgba(192, 103, 34, 0.12);
+  --shadow-shop-hover: 0 8px 24px rgba(63, 107, 82, 0.14);
+  --shadow-modal: 0 20px 60px rgba(32, 28, 22, 0.25);
 }
 
 @theme inline {
@@ -46,6 +55,7 @@
   --color-foreground-muted: var(--foreground-muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-secondary: var(--accent-secondary);
   --color-accent-secondary-foreground: var(--accent-secondary-foreground);
@@ -78,6 +88,9 @@
   --radius-2xl: 1.75rem;
 
   --shadow-soft: var(--shadow-soft);
+  --shadow-event-hover: var(--shadow-event-hover);
+  --shadow-shop-hover: var(--shadow-shop-hover);
+  --shadow-modal: var(--shadow-modal);
 }
 
 body {
@@ -88,6 +101,18 @@ body {
 
 .shadow-soft {
   box-shadow: var(--shadow-soft);
+}
+
+.hover\:shadow-event-hover:hover {
+  box-shadow: var(--shadow-event-hover);
+}
+
+.hover\:shadow-shop-hover:hover {
+  box-shadow: var(--shadow-shop-hover);
+}
+
+.shadow-modal {
+  box-shadow: var(--shadow-modal);
 }
 
 :focus-visible {

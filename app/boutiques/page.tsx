@@ -123,7 +123,7 @@ export default function BoutiquesPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.shops.title}</h1>
+      <h1 className="text-xl font-black">{t.shops.title}</h1>
 
       <div className="mb-6 mt-6 flex gap-2">
         <button onClick={() => setTab("liste")} className={pillClass(tab === "liste")}>
@@ -170,7 +170,7 @@ export default function BoutiquesPage() {
             )}
             {!loadingShown &&
               filtered.slice(0, visibleCount).map((shop) => (
-                <div key={shop.id} className="rounded-lg bg-surface p-4 shadow-soft">
+                <div key={shop.id} className="rounded-lg bg-surface p-4 shadow-soft transition hover:shadow-shop-hover">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="font-medium">{shop.nom}</h3>
                     {shop.statut === "en_attente" && (
@@ -247,7 +247,7 @@ export default function BoutiquesPage() {
           onClick={() => setShowAddModal(true)}
           aria-label={t.shops.addShop}
           title={t.shops.addShop}
-          className="fixed bottom-24 right-4 z-[1000] flex items-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground shadow-soft transition hover:opacity-90 md:bottom-8 md:right-8"
+          className="fixed bottom-24 right-4 z-[1000] flex items-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground shadow-soft transition hover:bg-accent-hover md:bottom-8 md:right-8"
         >
           {t.shops.addShop}
         </button>

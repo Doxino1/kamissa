@@ -53,7 +53,7 @@ export default function UtilisateursBloquesPage() {
 
   return (
     <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.safety.blockedUsersTitle}</h1>
+      <h1 className="text-xl font-black">{t.safety.blockedUsersTitle}</h1>
 
       <div className="mt-6 flex flex-col gap-2">
         {blocked === null && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}

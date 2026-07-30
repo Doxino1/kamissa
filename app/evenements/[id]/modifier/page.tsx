@@ -134,7 +134,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
 
   return (
     <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.evenements.editLink}</h1>
+      <h1 className="text-xl font-black">{t.evenements.editLink}</h1>
 
       <EventForm
         initial={initial}

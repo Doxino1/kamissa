@@ -14,7 +14,7 @@ import { useT } from "@/lib/i18n/context";
 
 // Petits points pleins plutôt que la grosse épingle par défaut de Leaflet —
 // plusieurs boutiques proches restent lisibles au lieu de se chevaucher.
-const DOT_STYLE = { color: "#ffffff", weight: 1.5, fillColor: "#b0451c", fillOpacity: 0.9 };
+const DOT_STYLE = { color: "#ffffff", weight: 1.5, fillColor: "#c06722", fillOpacity: 0.9 };
 
 const CITY_CENTER: Record<Ville, [number, number]> = {
   Paris: [48.8566, 2.3522],

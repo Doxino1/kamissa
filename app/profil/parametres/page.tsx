@@ -337,7 +337,7 @@ export default function ParametresPage() {
         <button
           type="submit"
           disabled={saving}
-          className="mt-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+          className="mt-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
         >
           {saving ? "…" : t.profil.save}
         </button>

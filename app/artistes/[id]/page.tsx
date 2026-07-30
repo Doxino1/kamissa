@@ -147,7 +147,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h1 className="flex items-center gap-1.5 text-xl font-semibold">
+          <h1 className="flex items-center gap-1.5 text-xl font-black">
             {profile.nom}
             {profile.verified && (profile.type_profil === "galerie" || profile.type_profil === "institution") && (
               <span title={t.artiste.verified}>
@@ -166,7 +166,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
             className={`rounded-lg border px-4 py-1.5 text-sm font-medium transition ${
               following
                 ? "border-foreground/20 hover:border-foreground/40"
-                : "border-accent bg-accent text-accent-foreground hover:opacity-90"
+                : "border-accent bg-accent text-accent-foreground hover:bg-accent-hover"
             }`}
           >
             {following ? t.artiste.unfollow : t.artiste.follow}

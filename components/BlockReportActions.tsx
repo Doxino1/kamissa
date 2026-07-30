@@ -108,7 +108,7 @@ export function BlockReportActions({ targetUserId, targetName, onBlocked, classN
             <button
               type="submit"
               disabled={busy}
-              className="rounded-lg bg-accent px-3 py-1 text-xs text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+              className="rounded-lg bg-accent px-3 py-1 text-xs text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
             >
               {busy ? "…" : t.safety.reportSubmit}
             </button>

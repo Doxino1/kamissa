@@ -103,7 +103,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.portfolio.title}</h1>
+      <h1 className="text-xl font-black">{t.portfolio.title}</h1>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-foreground/10 p-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.portfolio.addTitle}</h2>
@@ -139,7 +139,7 @@ export default function PortfolioPage() {
         <button
           type="submit"
           disabled={saving}
-          className="self-start rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+          className="self-start rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
         >
           {saving ? "…" : t.portfolio.add}
         </button>

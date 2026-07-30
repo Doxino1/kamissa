@@ -43,7 +43,7 @@ export function EventCard({
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`rounded-lg bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 ${
+      className={`rounded-lg bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-event-hover ${
         highlighted ? "ring-2 ring-accent" : ""
       }`}
     >

@@ -57,7 +57,7 @@ export default function NouvelEvenementPage() {
 
   return (
     <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.submission.title}</h1>
+      <h1 className="text-xl font-black">{t.submission.title}</h1>
       <p className="mt-1 text-sm text-foreground-muted">{t.submission.subtitle}</p>
 
       <EventForm

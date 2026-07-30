@@ -65,7 +65,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-semibold">{t.resetPassword.title}</h1>
+      <h1 className="text-xl font-black">{t.resetPassword.title}</h1>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">
         <input
@@ -92,7 +92,7 @@ export default function ResetPasswordPage() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+          className="mt-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
         >
           {loading ? "…" : t.resetPassword.submit}
         </button>

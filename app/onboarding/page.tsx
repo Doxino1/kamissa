@@ -221,7 +221,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={goNext}
               disabled={step === 2 && disciplines.length === 0}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90 disabled:opacity-40"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-40"
             >
               {t.onboarding.next}
             </button>
@@ -230,7 +230,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={finish}
               disabled={saving}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
             >
               {saving ? "…" : t.onboarding.finish}
             </button>
