@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { BlockReportActions } from "@/components/BlockReportActions";
 import { ContactLinks } from "@/components/ContactLinks";
+import { sendNotification } from "@/lib/notify";
 import { ProfileType } from "@/lib/types";
 
 interface PublicProfile {
@@ -120,6 +121,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
       await supabase.from("follows").insert({ follower_id: viewerId, followed_id: id });
       setFollowing(true);
       setFollowerCount((c) => c + 1);
+      sendNotification({ userId: id, actorId: viewerId, type: "follower" }).catch(() => {});
     }
   }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Share2 } from "lucide-react";
 import { SaveButtons } from "./SaveButtons";
 import { EventTypeBadge } from "./EventTypeBadge";
 import { CostBadge } from "./CostBadge";
@@ -9,6 +10,7 @@ import { formatInVille } from "@/lib/timezone";
 import { localizedTitle } from "@/lib/localize-event";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { useLocale } from "@/lib/i18n/context";
+import { useToast } from "@/lib/toast-context";
 
 export function EventCard({
   event,
@@ -23,6 +25,12 @@ export function EventCard({
 }) {
   const { saved, setStatus, canSave } = useSavedEvents();
   const { locale, t } = useLocale();
+  const { showToast } = useToast();
+
+  function handleShare() {
+    const url = `${window.location.origin}/events/${event.id}`;
+    navigator.clipboard.writeText(url).then(() => showToast(t.toast.linkCopied));
+  }
 
   const date = formatInVille(
     event.date,
@@ -52,7 +60,7 @@ export function EventCard({
           {t.villeLabels[event.ville]} · {t.disciplineLabels[event.discipline] ?? event.discipline}
         </p>
       </Link>
-      <div className="mt-3">
+      <div className="mt-3 flex items-center justify-between gap-2">
         {canSave ? (
           <SaveButtons status={saved[event.id]} onChange={(status) => setStatus(event.id, status)} />
         ) : (
@@ -60,6 +68,15 @@ export function EventCard({
             {t.saveButtons.loginToSave}
           </Link>
         )}
+        <button
+          type="button"
+          onClick={handleShare}
+          aria-label={t.common.share}
+          title={t.common.share}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-foreground-muted transition hover:text-foreground"
+        >
+          <Share2 size={15} strokeWidth={1.75} />
+        </button>
       </div>
     </div>
   );

@@ -44,6 +44,38 @@ export interface Dictionary {
     profileNotFound: string;
     public: string;
     prive: string;
+    loadMore: string;
+    share: string;
+  };
+
+  toast: {
+    linkCopied: string;
+    eventAdded: string;
+    shopAdded: string;
+  };
+
+  profileBanner: {
+    message: string;
+    cta: string;
+  };
+
+  notifications: {
+    title: string;
+    empty: string;
+    markAllRead: string;
+    typeFollower: (nom: string) => string;
+    typeMatch: (nom: string) => string;
+    typeComment: (nom: string) => string;
+    prefsTitle: string;
+    prefsFollowers: string;
+    prefsMatching: string;
+    prefsComments: string;
+  };
+
+  modal: {
+    addEventTitle: string;
+    addShopTitle: string;
+    close: string;
   };
 
   evenements: {
@@ -185,6 +217,14 @@ export interface Dictionary {
     noResults: string;
     contact: string;
     noContact: string;
+    pass: string;
+    propose: string;
+    historyTitle: string;
+    undo: string;
+    matchedTitle: string;
+    matchedBody: (nom: string) => string;
+    matchedCta: string;
+    noMoreCandidates: string;
   };
 
   communaute: {
@@ -285,6 +325,8 @@ export interface Dictionary {
     disciplineLabel: string;
     submitPending: string;
     loginToPropose: string;
+    searchPlaceholder: string;
+    allCategories: string;
   };
 
   calendar: {
@@ -397,6 +439,34 @@ export const fr: Dictionary = {
     profileNotFound: "Profil introuvable.",
     public: "Public",
     prive: "Privé",
+    loadMore: "Charger plus",
+    share: "Partager",
+  },
+  toast: {
+    linkCopied: "Lien copié ✓",
+    eventAdded: "Événement ajouté ✓",
+    shopAdded: "Boutique ajoutée ✓",
+  },
+  profileBanner: {
+    message: "Complétez votre profil pour être visible dans la Communauté.",
+    cta: "Compléter",
+  },
+  notifications: {
+    title: "Notifications",
+    empty: "Aucune notification pour l'instant.",
+    markAllRead: "Tout marquer comme lu",
+    typeFollower: (nom) => `${nom} a commencé à te suivre.`,
+    typeMatch: (nom) => `Nouvelle suggestion de matching : ${nom}.`,
+    typeComment: (nom) => `${nom} a commenté ton post.`,
+    prefsTitle: "Notifications",
+    prefsFollowers: "Nouveaux abonnés",
+    prefsMatching: "Suggestions de matching",
+    prefsComments: "Commentaires sur mes posts",
+  },
+  modal: {
+    addEventTitle: "Ajouter un événement",
+    addShopTitle: "Ajouter une boutique",
+    close: "Fermer",
   },
   evenements: {
     tabTous: "Tous",
@@ -537,6 +607,14 @@ export const fr: Dictionary = {
     noResults: "Personne à te proposer pour l'instant — reviens bientôt.",
     contact: "Contacter",
     noContact: "Pas de contact renseigné",
+    pass: "Passer",
+    propose: "Proposer un échange",
+    historyTitle: "Actions récentes",
+    undo: "Annuler",
+    matchedTitle: "Ça matche !",
+    matchedBody: (nom) => `Toi et ${nom} avez proposé un échange chacun de votre côté.`,
+    matchedCta: "Voir le profil",
+    noMoreCandidates: "Plus personne à te proposer pour l'instant — reviens bientôt.",
   },
   communaute: {
     title: (ville) => `Communauté ${ville}`,
@@ -640,6 +718,8 @@ export const fr: Dictionary = {
     disciplineLabel: "Discipline",
     submitPending: "Merci ! Ta boutique sera visible après validation par un modérateur.",
     loginToPropose: "pour proposer une boutique.",
+    searchPlaceholder: "Rechercher une boutique…",
+    allCategories: "Toutes catégories",
   },
   calendar: {
     tab: "Calendrier",
@@ -752,6 +832,34 @@ export const en: Dictionary = {
     profileNotFound: "Profile not found.",
     public: "Public",
     prive: "Private",
+    loadMore: "Load more",
+    share: "Share",
+  },
+  toast: {
+    linkCopied: "Link copied ✓",
+    eventAdded: "Event added ✓",
+    shopAdded: "Shop added ✓",
+  },
+  profileBanner: {
+    message: "Complete your profile to be visible in the Community.",
+    cta: "Complete",
+  },
+  notifications: {
+    title: "Notifications",
+    empty: "No notifications yet.",
+    markAllRead: "Mark all as read",
+    typeFollower: (nom) => `${nom} started following you.`,
+    typeMatch: (nom) => `New matching suggestion: ${nom}.`,
+    typeComment: (nom) => `${nom} commented on your post.`,
+    prefsTitle: "Notifications",
+    prefsFollowers: "New followers",
+    prefsMatching: "Matching suggestions",
+    prefsComments: "Comments on my posts",
+  },
+  modal: {
+    addEventTitle: "Add an event",
+    addShopTitle: "Add a shop",
+    close: "Close",
   },
   evenements: {
     tabTous: "All",
@@ -892,6 +1000,14 @@ export const en: Dictionary = {
     noResults: "No one to suggest just yet — check back soon.",
     contact: "Contact",
     noContact: "No contact info provided",
+    pass: "Pass",
+    propose: "Propose an exchange",
+    historyTitle: "Recent actions",
+    undo: "Undo",
+    matchedTitle: "It's a match!",
+    matchedBody: (nom) => `You and ${nom} both proposed an exchange.`,
+    matchedCta: "View profile",
+    noMoreCandidates: "No one else to suggest right now — check back soon.",
   },
   communaute: {
     title: (ville) => `${ville} Community`,
@@ -993,6 +1109,8 @@ export const en: Dictionary = {
     disciplineLabel: "Discipline",
     submitPending: "Thanks! Your shop will show up once a moderator approves it.",
     loginToPropose: "to suggest a shop.",
+    searchPlaceholder: "Search a shop…",
+    allCategories: "All categories",
   },
   calendar: {
     tab: "Calendar",
@@ -1105,6 +1223,34 @@ export const el: Dictionary = {
     profileNotFound: "Το προφίλ δεν βρέθηκε.",
     public: "Δημόσιο",
     prive: "Ιδιωτικό",
+    loadMore: "Φόρτωση περισσότερων",
+    share: "Κοινοποίηση",
+  },
+  toast: {
+    linkCopied: "Ο σύνδεσμος αντιγράφηκε ✓",
+    eventAdded: "Η εκδήλωση προστέθηκε ✓",
+    shopAdded: "Το κατάστημα προστέθηκε ✓",
+  },
+  profileBanner: {
+    message: "Συμπλήρωσε το προφίλ σου για να είσαι ορατός/ή στην Κοινότητα.",
+    cta: "Συμπλήρωση",
+  },
+  notifications: {
+    title: "Ειδοποιήσεις",
+    empty: "Καμία ειδοποίηση ακόμη.",
+    markAllRead: "Σήμανση όλων ως αναγνωσμένα",
+    typeFollower: (nom) => `Ο/Η ${nom} άρχισε να σε ακολουθεί.`,
+    typeMatch: (nom) => `Νέα πρόταση αντιστοίχισης: ${nom}.`,
+    typeComment: (nom) => `Ο/Η ${nom} σχολίασε το post σου.`,
+    prefsTitle: "Ειδοποιήσεις",
+    prefsFollowers: "Νέοι ακόλουθοι",
+    prefsMatching: "Προτάσεις αντιστοίχισης",
+    prefsComments: "Σχόλια στα posts μου",
+  },
+  modal: {
+    addEventTitle: "Προσθήκη εκδήλωσης",
+    addShopTitle: "Προσθήκη καταστήματος",
+    close: "Κλείσιμο",
   },
   evenements: {
     tabTous: "Όλες",
@@ -1250,6 +1396,14 @@ export const el: Dictionary = {
     noResults: "Κανείς για πρόταση αυτή τη στιγμή — ξαναπέρασε σύντομα.",
     contact: "Επικοινωνία",
     noContact: "Δεν έχει δοθεί στοιχείο επικοινωνίας",
+    pass: "Παράλειψη",
+    propose: "Πρόταση ανταλλαγής",
+    historyTitle: "Πρόσφατες ενέργειες",
+    undo: "Αναίρεση",
+    matchedTitle: "Ταίριασμα!",
+    matchedBody: (nom) => `Εσύ και ο/η ${nom} προτείνατε ανταλλαγή ο καθένας από την πλευρά του.`,
+    matchedCta: "Προβολή προφίλ",
+    noMoreCandidates: "Κανείς άλλος για πρόταση αυτή τη στιγμή — ξαναπέρασε σύντομα.",
   },
   communaute: {
     title: (ville) => `Κοινότητα ${ville}`,
@@ -1347,6 +1501,8 @@ export const el: Dictionary = {
     disciplineLabel: "Ειδικότητα",
     submitPending: "Ευχαριστούμε! Το κατάστημα θα εμφανιστεί μετά την έγκριση από συντονιστή.",
     loginToPropose: "για να προτείνεις ένα κατάστημα.",
+    searchPlaceholder: "Αναζήτηση καταστήματος…",
+    allCategories: "Όλες οι κατηγορίες",
   },
   calendar: {
     tab: "Ημερολόγιο",

@@ -4,6 +4,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { TopNav } from "@/components/TopNav";
 import { PublicFooter } from "@/components/PublicFooter";
 import { LocaleProvider } from "@/lib/i18n/context";
+import { ToastProvider } from "@/lib/toast-context";
 import { createClient } from "@/lib/supabase/server";
 import "./globals.css";
 
@@ -35,10 +36,12 @@ export default async function RootLayout({
     <html lang="fr" className={`${comfortaa.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <LocaleProvider>
-          <TopNav show={!!user} />
-          <div className={`flex-1 ${user ? "pb-24 md:pb-0" : ""}`}>{children}</div>
-          <BottomNav show={!!user} />
-          {!user && <PublicFooter />}
+          <ToastProvider>
+            <TopNav show={!!user} userId={user?.id ?? null} />
+            <div className={`flex-1 ${user ? "pb-24 md:pb-0" : ""}`}>{children}</div>
+            <BottomNav show={!!user} />
+            {!user && <PublicFooter />}
+          </ToastProvider>
         </LocaleProvider>
       </body>
     </html>

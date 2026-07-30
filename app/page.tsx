@@ -3,18 +3,25 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { List, Map as MapIcon, Bookmark, Store, Plus } from "lucide-react";
+import { List, Map as MapIcon, Bookmark, Store, Plus, X } from "lucide-react";
 import { EventCard } from "@/components/EventCard";
 import { EventFilterBar } from "@/components/EventFilterBar";
 import { HomeGreeting } from "@/components/HomeGreeting";
+import { CardSkeleton } from "@/components/CardSkeleton";
+import { AddEventModal } from "@/components/AddEventModal";
+import { NotificationBell } from "@/components/NotificationBell";
 import { useEvents } from "@/lib/use-events";
 import { useEventFilters } from "@/lib/use-event-filters";
 import { useMediaQuery } from "@/lib/use-media-query";
+import { useMinimumLoading } from "@/lib/use-minimum-loading";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { createClient } from "@/lib/supabase/client";
 import { formatInVille } from "@/lib/timezone";
 import { useT } from "@/lib/i18n/context";
 import { Ville } from "@/lib/types";
+
+const PAGE_SIZE = 6;
+const PROFILE_BANNER_KEY = "kamissa_hide_profile_banner";
 
 const EventMap = dynamic(() => import("@/components/EventMap").then((m) => m.EventMap), {
   ssr: false,
@@ -45,23 +52,51 @@ export default function EvenementsPage() {
   const [submissions, setSubmissions] = useState<MySubmission[] | null>(null);
   const [now] = useState(() => Date.now());
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [profileIncomplete, setProfileIncomplete] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(true);
 
   const filters = useEventFilters(allEvents, now);
-  const { ville, events } = filters;
+  const { ville, types, disciplines, cout, query, events } = filters;
+  const loadingShown = useMinimumLoading(loading);
 
   useEffect(() => {
     let active = true;
     createClient()
       .auth.getUser()
-      .then(({ data: { user } }) => {
+      .then(async ({ data: { user } }) => {
         if (!active) return;
         setUserId(user?.id ?? null);
         setCheckingUser(false);
+        if (!user) return;
+
+        setBannerDismissed(window.localStorage.getItem(`${PROFILE_BANNER_KEY}_${user.id}`) === "1");
+
+        const { data } = await createClient()
+          .from("profiles")
+          .select("bio, disciplines")
+          .eq("id", user.id)
+          .single();
+        if (!active || !data) return;
+        setProfileIncomplete(!data.bio && (data.disciplines ?? []).length === 0);
       });
     return () => {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    function sync() {
+      setVisibleCount(PAGE_SIZE);
+    }
+    sync();
+  }, [ville, types, disciplines, cout, query]);
+
+  function dismissProfileBanner() {
+    setBannerDismissed(true);
+    if (userId) window.localStorage.setItem(`${PROFILE_BANNER_KEY}_${userId}`, "1");
+  }
 
   useEffect(() => {
     if (!showSaved || !userId) return;
@@ -142,6 +177,7 @@ export default function EvenementsPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          <NotificationBell userId={userId} />
           <button
             onClick={() => setShowSaved((s) => !s)}
             aria-label={t.evenements.tabMes}
@@ -206,6 +242,25 @@ export default function EvenementsPage() {
         {!showSaved && (
           <div className="md:flex md:min-h-0 md:flex-1 md:items-stretch">
             <div className="md:h-full md:w-[42%] md:shrink-0 md:overflow-y-auto md:p-4">
+              {userId && profileIncomplete && !bannerDismissed && (
+                <div className="mt-4 flex items-start justify-between gap-2 rounded-lg bg-badge-open-call-bg p-3 text-sm text-badge-open-call-fg md:mt-0">
+                  <p>
+                    {t.profileBanner.message}{" "}
+                    <Link href="/profil/parametres" className="font-medium underline">
+                      {t.profileBanner.cta} →
+                    </Link>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={dismissProfileBanner}
+                    aria-label={t.modal.close}
+                    className="shrink-0 opacity-70 hover:opacity-100"
+                  >
+                    <X size={16} strokeWidth={1.75} />
+                  </button>
+                </div>
+              )}
+
               {userId && (
                 <div className="mt-4 md:mt-0">
                   <HomeGreeting
@@ -219,20 +274,30 @@ export default function EvenementsPage() {
 
               {showList && (
                 <div className="flex flex-col gap-3">
-                  {loading && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}
+                  {loadingShown && <CardSkeleton />}
                   {error && <p className="text-sm text-red-600">{t.evenements.loadError(error)}</p>}
-                  {!loading && !error && events.length === 0 && (
+                  {!loadingShown && !error && events.length === 0 && (
                     <p className="text-sm text-foreground-muted">{t.evenements.noResults}</p>
                   )}
-                  {events.map((event) => (
-                    <EventCard
-                      key={event.id}
-                      event={event}
-                      highlighted={hoveredEventId === event.id}
-                      onMouseEnter={() => setHoveredEventId(event.id)}
-                      onMouseLeave={() => setHoveredEventId(null)}
-                    />
-                  ))}
+                  {!loadingShown &&
+                    events.slice(0, visibleCount).map((event) => (
+                      <EventCard
+                        key={event.id}
+                        event={event}
+                        highlighted={hoveredEventId === event.id}
+                        onMouseEnter={() => setHoveredEventId(event.id)}
+                        onMouseLeave={() => setHoveredEventId(null)}
+                      />
+                    ))}
+                  {!loadingShown && events.length > visibleCount && (
+                    <button
+                      type="button"
+                      onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                      className="self-center rounded-lg border border-foreground/20 px-4 py-2 text-sm hover:border-foreground/40"
+                    >
+                      {t.common.loadMore}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -343,16 +408,19 @@ export default function EvenementsPage() {
       </div>
 
       {userId && (
-        <Link
-          href="/evenements/nouveau"
+        <button
+          type="button"
+          onClick={() => setShowAddEventModal(true)}
           aria-label={t.evenements.proposer}
           title={t.evenements.proposer}
           className="fixed bottom-24 right-4 z-[1000] flex items-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground shadow-soft transition hover:opacity-90 md:bottom-8 md:right-8"
         >
           <Plus size={20} strokeWidth={2} />
           {t.evenements.proposer}
-        </Link>
+        </button>
       )}
+
+      {showAddEventModal && <AddEventModal onClose={() => setShowAddEventModal(false)} />}
     </div>
   );
 }

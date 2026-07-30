@@ -34,6 +34,9 @@ export default function ParametresPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isModerator, setIsModerator] = useState(false);
   const [recoitEmailHebdo, setRecoitEmailHebdo] = useState(true);
+  const [notifFollowers, setNotifFollowers] = useState(true);
+  const [notifMatching, setNotifMatching] = useState(true);
+  const [notifComments, setNotifComments] = useState(true);
 
   useEffect(() => {
     let active = true;
@@ -56,7 +59,7 @@ export default function ParametresPage() {
         supabase
           .from("profiles")
           .select(
-            "nom, ville, disciplines, type_profil, bio, email_contact, instagram_handle, tiktok_handle, twitter_handle, is_moderator, recoit_email_hebdo"
+            "nom, ville, disciplines, type_profil, bio, email_contact, instagram_handle, tiktok_handle, twitter_handle, is_moderator, recoit_email_hebdo, notif_followers, notif_matching, notif_comments"
           )
           .eq("id", user.id)
           .single(),
@@ -79,6 +82,9 @@ export default function ParametresPage() {
         setTwitterHandle(data.twitter_handle ?? "");
         setIsModerator(data.is_moderator === true);
         setRecoitEmailHebdo(data.recoit_email_hebdo !== false);
+        setNotifFollowers(data.notif_followers !== false);
+        setNotifMatching(data.notif_matching !== false);
+        setNotifComments(data.notif_comments !== false);
       }
       if (!tagsError && tags) {
         setMatchingTags(tags.map((row) => row.tag as MatchingTag));
@@ -97,6 +103,17 @@ export default function ParametresPage() {
     setRecoitEmailHebdo(value);
     const supabase = createClient();
     await supabase.from("profiles").update({ recoit_email_hebdo: value }).eq("id", userId);
+  }
+
+  async function handleToggleNotifPref(
+    column: "notif_followers" | "notif_matching" | "notif_comments",
+    setter: (value: boolean) => void,
+    value: boolean
+  ) {
+    if (!userId) return;
+    setter(value);
+    const supabase = createClient();
+    await supabase.from("profiles").update({ [column]: value }).eq("id", userId);
   }
 
   function toggleDiscipline(d: string) {
@@ -376,6 +393,38 @@ export default function ParametresPage() {
               }`}
             />
           </button>
+        </div>
+      </div>
+
+      <div className="mt-8 border-t border-foreground/10 pt-4">
+        <h2 className="text-sm font-medium text-foreground-muted">{t.notifications.prefsTitle}</h2>
+        <div className="mt-3 flex flex-col gap-3">
+          {(
+            [
+              ["notif_followers", t.notifications.prefsFollowers, notifFollowers, setNotifFollowers],
+              ["notif_matching", t.notifications.prefsMatching, notifMatching, setNotifMatching],
+              ["notif_comments", t.notifications.prefsComments, notifComments, setNotifComments],
+            ] as const
+          ).map(([column, label, checked, setter]) => (
+            <div key={column} className="flex items-center justify-between gap-2">
+              <span className="text-sm text-foreground-muted">{label}</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={checked}
+                onClick={() => handleToggleNotifPref(column, setter, !checked)}
+                className={`relative h-[18px] w-8 shrink-0 rounded-full transition ${
+                  checked ? "bg-accent" : "bg-foreground/20"
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 h-[14px] w-[14px] rounded-full bg-background transition ${
+                    checked ? "left-[16px]" : "left-0.5"
+                  }`}
+                />
+              </button>
+            </div>
+          ))}
         </div>
       </div>
 

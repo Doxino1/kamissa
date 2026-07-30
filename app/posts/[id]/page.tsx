@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { BlockReportActions } from "@/components/BlockReportActions";
+import { sendNotification } from "@/lib/notify";
 
 interface PostDetail {
   id: string;
@@ -92,6 +93,10 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
     const supabase = createClient();
     await supabase.from("comments").insert({ post_id: id, user_id: userId, texte: texte.trim() });
+
+    if (post) {
+      sendNotification({ userId: post.user_id, actorId: userId, type: "comment", postId: id }).catch(() => {});
+    }
 
     setSending(false);
     setTexte("");

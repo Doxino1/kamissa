@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Store, User } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
+import { NotificationBell } from "./NotificationBell";
 
-export function TopNav({ show }: { show: boolean }) {
+export function TopNav({ show, userId }: { show: boolean; userId: string | null }) {
   const t = useT();
   const pathname = usePathname();
 
@@ -42,6 +43,7 @@ export function TopNav({ show }: { show: boolean }) {
         </nav>
 
         <div className="flex items-center gap-2 border-l border-foreground/10 pl-4">
+          <NotificationBell userId={userId} />
           <Link
             href="/boutiques"
             aria-label={t.shops.title}
