@@ -63,13 +63,13 @@ export default function UtilisateursBloquesPage() {
         {(blocked ?? []).map((b) => (
           <div
             key={b.blocked_id}
-            className="flex items-center justify-between rounded-lg border border-foreground/10 p-3"
+            className="flex items-center justify-between rounded-lg border border-border p-3"
           >
             <span className="text-sm">{b.blocked_nom || "—"}</span>
             <button
               type="button"
               onClick={() => handleUnblock(b.blocked_id)}
-              className="rounded-lg border border-foreground/20 px-3 py-1 text-xs hover:border-foreground/40"
+              className="rounded-lg border border-border px-3 py-1 text-xs hover:border-foreground/40"
             >
               {t.safety.unblock}
             </button>

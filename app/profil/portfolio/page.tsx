@@ -105,7 +105,7 @@ export default function PortfolioPage() {
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
       <h1 className="text-xl font-black">{t.portfolio.title}</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-foreground/10 p-4">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.portfolio.addTitle}</h2>
         <input
           type="text"
@@ -113,21 +113,21 @@ export default function PortfolioPage() {
           placeholder={t.portfolio.titre}
           value={titre}
           onChange={(e) => setTitre(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <input
           type="text"
           placeholder={t.portfolio.technique}
           value={technique}
           onChange={(e) => setTechnique(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <input
           type="number"
           placeholder={t.portfolio.annee}
           value={annee}
           onChange={(e) => setAnnee(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <input
           type="file"
@@ -150,7 +150,7 @@ export default function PortfolioPage() {
           <p className="col-span-full text-sm text-foreground-muted">{t.portfolio.empty}</p>
         )}
         {(items ?? []).map((item) => (
-          <div key={item.id} className="rounded-lg border border-foreground/10 p-2">
+          <div key={item.id} className="rounded-lg border border-border p-2">
             {item.image_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.image_url} alt={item.titre} className="aspect-square w-full rounded object-cover" />

@@ -27,10 +27,10 @@ const VILLES: Ville[] = ["Paris", "Athènes"];
 const BCP47_TAGS: Record<string, string> = { fr: "fr-FR", en: "en-US", el: "el-GR" };
 
 function pillClass(active: boolean) {
-  return `rounded-lg border px-4 py-1.5 text-sm transition ${
+  return `rounded-full border px-4 py-2 text-sm font-bold transition ${
     active
-      ? "border-accent bg-accent text-accent-foreground"
-      : "border-foreground/20 hover:border-foreground/40"
+      ? "border-transparent bg-accent text-accent-foreground"
+      : "border-border bg-transparent text-foreground"
   }`;
 }
 
@@ -232,7 +232,7 @@ export function CommunityChatTab() {
         ))}
       </div>
 
-      <h2 className="font-display text-lg font-medium">
+      <h2 className="mt-5 text-[22px] font-black">
         {t.communaute.title(ville ? (t.villeLabels[ville] ?? ville) : "")}
       </h2>
 
@@ -249,19 +249,19 @@ export function CommunityChatTab() {
               const replies = repliesByParent.get(m.id) ?? [];
               const nom = m.profiles?.nom || t.communaute.anonyme;
               return (
-                <div key={m.id} className="rounded-lg border border-foreground/10 p-3">
-                  <div className="flex items-baseline justify-between gap-2 text-xs text-foreground-muted">
-                    <Link href={`/artistes/${m.user_id}`} className="font-medium text-foreground hover:underline">
+                <div key={m.id} className="rounded-lg border border-border bg-surface px-[18px] py-4">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <Link href={`/artistes/${m.user_id}`} className="text-sm font-bold">
                       {nom}
                     </Link>
-                    <span>{formatDate(m.date)}</span>
+                    <span className="text-xs text-foreground-muted">{formatDate(m.date)}</span>
                   </div>
-                  <p className="mt-1 text-sm">{m.texte}</p>
-                  <div className="mt-2 flex items-center gap-3 text-xs">
+                  <p className="mt-1.5 text-sm">{m.texte}</p>
+                  <div className="mt-2 flex items-center gap-3.5 text-xs">
                     <button
                       type="button"
                       onClick={() => setReplyingTo({ id: m.id, nom })}
-                      className="text-foreground-muted hover:text-foreground"
+                      className="font-semibold text-accent-secondary"
                     >
                       {t.communaute.reply}
                     </button>
@@ -279,7 +279,7 @@ export function CommunityChatTab() {
                       <button
                         type="button"
                         onClick={() => toggleThread(m.id)}
-                        className="flex items-center gap-1 text-xs font-medium text-accent hover:opacity-80"
+                        className="flex items-center gap-1 text-xs font-semibold text-badge-residency-fg"
                       >
                         {t.communaute.repliesToggle(replies.length)}
                         <ChevronDown
@@ -289,21 +289,21 @@ export function CommunityChatTab() {
                         />
                       </button>
                       {expandedThreads.has(m.id) && (
-                        <div className="mt-2 flex flex-col gap-2 border-l-2 border-foreground/10 pl-3">
+                        <div className="mt-2 flex flex-col gap-2 border-l-2 border-border pl-3.5">
                           {replies.map((r) => {
                             const replyNom = r.profiles?.nom || t.communaute.anonyme;
                             return (
-                              <div key={r.id} className="rounded-lg bg-surface p-2.5">
-                                <div className="flex items-baseline justify-between gap-2 text-xs text-foreground-muted">
+                              <div key={r.id}>
+                                <div className="flex items-baseline justify-between gap-2">
                                   <Link
                                     href={`/artistes/${r.user_id}`}
-                                    className="font-medium text-foreground hover:underline"
+                                    className="text-[13px] font-bold"
                                   >
                                     {replyNom}
                                   </Link>
-                                  <span>{formatDate(r.date)}</span>
+                                  <span className="text-[11px] text-foreground-muted">{formatDate(r.date)}</span>
                                 </div>
-                                <p className="mt-1 text-sm">{r.texte}</p>
+                                <p className="text-[13px]">{r.texte}</p>
                                 {userId && r.user_id !== userId && (
                                   <BlockReportActions
                                     targetUserId={r.user_id}
@@ -338,19 +338,19 @@ export function CommunityChatTab() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className={`flex gap-2 ${replyingTo ? "mt-2" : "mt-6"}`}>
+          <form onSubmit={handleSubmit} className={`flex gap-2.5 ${replyingTo ? "mt-2" : "mt-3.5"}`}>
             <input
               type="text"
               required
               placeholder={t.communaute.placeholder}
               value={texte}
               onChange={(e) => setTexte(e.target.value)}
-              className="flex-1 rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+              className="flex-1 rounded-full border border-border bg-background px-[18px] py-3 text-sm outline-none"
             />
             <button
               type="submit"
               disabled={sending}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
+              className="rounded-full bg-accent px-6 text-sm font-bold text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
             >
               {sending ? "…" : t.communaute.send}
             </button>

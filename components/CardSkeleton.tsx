@@ -2,14 +2,10 @@ export function CardSkeleton({ count = 3 }: { count?: number }) {
   return (
     <>
       {Array.from({ length: count }, (_, i) => (
-        <div key={i} className="animate-pulse rounded-lg bg-surface p-4 shadow-soft">
-          <div className="flex items-center justify-between gap-2">
-            <div className="h-4 w-20 rounded-full bg-foreground/10" />
-            <div className="h-3 w-16 rounded bg-foreground/10" />
-          </div>
-          <div className="mt-3 h-4 w-3/4 rounded bg-foreground/10" />
-          <div className="mt-2 h-3 w-1/2 rounded bg-foreground/10" />
-          <div className="mt-4 h-7 w-24 rounded-lg bg-foreground/10" />
+        <div key={i} className="rounded-lg border border-border bg-surface px-5 py-[18px]">
+          <div className="h-[18px] w-20 animate-pulse rounded-full bg-border" />
+          <div className="mt-3.5 h-4 w-[70%] animate-pulse rounded-md bg-border" />
+          <div className="mt-2 h-3 w-1/2 animate-pulse rounded-md bg-border" />
         </div>
       ))}
     </>

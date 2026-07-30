@@ -94,7 +94,7 @@ export default function MesPostsPage() {
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
       <h1 className="text-xl font-black">{t.posts.title}</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-foreground/10 p-4">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4">
         <input
           type="file"
           accept="image/*"
@@ -107,7 +107,7 @@ export default function MesPostsPage() {
           value={legende}
           onChange={(e) => setLegende(e.target.value)}
           rows={2}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button

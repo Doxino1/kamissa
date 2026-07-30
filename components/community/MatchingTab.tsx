@@ -224,74 +224,77 @@ export function MatchingTab() {
       )}
 
       {current && (
-        <div className="mx-auto max-w-sm">
-          <div className="overflow-hidden rounded-2xl bg-surface shadow-soft">
-            <div className="flex h-36 items-center justify-center bg-accent/20">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent text-2xl font-semibold text-accent-foreground">
+        <div className="mx-auto max-w-[360px]">
+          <div className="overflow-hidden rounded-[28px] border border-border bg-surface">
+            <div
+              className="flex h-[220px] items-center justify-center"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(135deg, #fcefd1, #fcefd1 10px, #f5e2ae 10px, #f5e2ae 20px)",
+              }}
+            >
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-background/70 text-2xl font-bold">
                 {current.nom.charAt(0).toUpperCase()}
               </div>
             </div>
-            <div className="p-4">
+            <div className="px-[22px] pb-6 pt-5">
               <div className="flex items-center justify-between gap-2">
-                <Link href={`/artistes/${current.id}`} className="font-medium hover:underline">
+                <Link href={`/artistes/${current.id}`} className="text-lg font-bold">
                   {current.nom}
                 </Link>
                 <span className="text-xs text-foreground-muted">{t.profileTypeLabels[current.typeProfil]}</span>
               </div>
-              <p className="mt-1 text-sm text-foreground-muted">
+              <p className="mt-0.5 text-sm text-foreground-muted">
                 {current.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
                 {ville ? ` · ${t.villeLabels[ville]}` : ""}
               </p>
-              {current.bio && <p className="mt-2 text-sm">{current.bio}</p>}
-              <div className="mt-3 flex flex-wrap gap-1">
+              {current.bio && <p className="mt-3 text-sm">{current.bio}</p>}
+              <div className="mt-1 flex flex-wrap gap-1.5">
                 {current.sharedTags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-foreground/5 px-2 py-0.5 text-xs text-foreground-muted"
+                    className="mt-2 inline-block rounded-full bg-badge-workshop-bg px-3 py-1 text-xs font-bold text-badge-workshop-fg"
                   >
                     {t.matchingTagLabels[tag]}
                   </span>
                 ))}
               </div>
+              <div className="mt-5 flex gap-2.5">
+                <button
+                  type="button"
+                  onClick={handlePass}
+                  className="flex-1 rounded-full border-[1.5px] border-border py-3 text-sm font-bold text-foreground-muted transition"
+                >
+                  {t.matching.pass}
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePropose}
+                  className="flex-1 rounded-full bg-accent py-3 text-sm font-bold text-accent-foreground transition hover:bg-accent-hover"
+                >
+                  {t.matching.propose}
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div className="mt-4 flex gap-3">
-            <button
-              type="button"
-              onClick={handlePass}
-              className="flex-1 rounded-lg border border-foreground/20 px-4 py-2 text-sm font-medium transition hover:border-foreground/40"
-            >
-              {t.matching.pass}
-            </button>
-            <button
-              type="button"
-              onClick={handlePropose}
-              className="flex-1 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover"
-            >
-              {t.matching.propose}
-            </button>
           </div>
         </div>
       )}
 
       {history.length > 0 && (
-        <div className="mx-auto mt-8 max-w-sm">
-          <h2 className="text-sm font-medium text-foreground-muted">{t.matching.historyTitle}</h2>
-          <ul className="mt-2 flex flex-col gap-1.5">
+        <div className="mx-auto mt-5 max-w-[360px]">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold text-foreground-muted">{t.matching.historyTitle}</h2>
+            <button type="button" onClick={handleUndo} className="text-xs font-bold text-accent">
+              {t.matching.undo}
+            </button>
+          </div>
+          <ul className="mt-1 flex flex-col">
             {[...history].reverse().map((entry, i) => (
               <li
                 key={`${entry.candidateId}-${history.length - i}`}
-                className="flex items-center justify-between gap-2 text-sm"
+                className="border-b border-border py-1.5 text-sm"
               >
-                <span className="text-foreground-muted">
-                  {entry.action === "pass" ? t.matching.pass : t.matching.propose} — {entry.nom}
-                </span>
-                {i === 0 && (
-                  <button type="button" onClick={handleUndo} className="text-xs text-accent hover:underline">
-                    {t.matching.undo}
-                  </button>
-                )}
+                {entry.action === "pass" ? t.matching.pass : t.matching.propose} — {entry.nom}
               </li>
             ))}
           </ul>
@@ -304,7 +307,7 @@ export function MatchingTab() {
           <Link
             href={`/artistes/${matched.id}`}
             onClick={() => setMatched(null)}
-            className="mt-4 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover"
+            className="mt-4 inline-block w-full rounded-full bg-accent py-3 text-center text-sm font-bold text-accent-foreground transition hover:bg-accent-hover"
           >
             {t.matching.matchedCta}
           </Link>

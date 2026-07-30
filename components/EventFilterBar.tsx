@@ -1,6 +1,6 @@
 "use client";
 
-import { Filter, X } from "lucide-react";
+import { Filter, Search, X } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { CoutType, DISCIPLINES, EventType, Ville } from "@/lib/types";
 import type { EventFilters } from "@/lib/use-event-filters";
@@ -8,10 +8,10 @@ import type { EventFilters } from "@/lib/use-event-filters";
 const VILLES: Ville[] = ["Paris", "Athènes"];
 
 function pillClass(active: boolean) {
-  return `rounded-lg border px-4 py-1.5 text-sm transition ${
+  return `rounded-full border px-4 py-2 text-sm font-bold transition ${
     active
-      ? "border-accent bg-accent text-accent-foreground"
-      : "border-foreground/20 hover:border-foreground/40"
+      ? "border-transparent bg-accent text-accent-foreground"
+      : "border-border bg-transparent text-foreground"
   }`;
 }
 
@@ -42,25 +42,28 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
 
   return (
     <>
-      <div className={`flex items-center gap-2 ${activeFilterCount > 0 || filtersOpen ? "mb-2" : "mb-6"}`}>
-        <input
-          type="search"
-          placeholder={t.evenements.searchPlaceholder}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
+      <div className={`flex items-center gap-2.5 ${activeFilterCount > 0 || filtersOpen ? "mb-2" : "mb-6"}`}>
+        <div className="flex flex-1 items-center gap-2.5 rounded-full border border-border bg-background/70 px-[18px] py-3">
+          <Search size={17} strokeWidth={2} className="shrink-0 text-foreground-muted" />
+          <input
+            type="search"
+            placeholder={t.evenements.searchPlaceholder}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full bg-transparent text-sm outline-none"
+          />
+        </div>
         <button
           onClick={() => setFiltersOpen((o) => !o)}
           aria-label={t.evenements.filtersButton}
           title={t.evenements.filtersButton}
-          className={`relative shrink-0 rounded-lg border p-2 transition ${
+          className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition ${
             filtersOpen
-              ? "border-accent bg-accent text-accent-foreground"
-              : "border-foreground/20 hover:border-foreground/40"
+              ? "border-transparent bg-accent text-accent-foreground"
+              : "border-border bg-background text-foreground"
           }`}
         >
-          <Filter size={16} strokeWidth={1.75} />
+          <Filter size={17} strokeWidth={2} />
           {activeFilterCount > 0 && (
             <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-medium text-accent-foreground">
               {activeFilterCount}
@@ -75,7 +78,7 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
             <button
               key={v}
               onClick={() => setTypes((prev) => toggleValue(prev, v))}
-              className="flex items-center gap-1 rounded-full border border-foreground/20 px-3 py-1 text-xs hover:border-foreground/40"
+              className="flex items-center gap-1 rounded-full border border-border px-3 py-1 text-xs hover:border-foreground/40"
             >
               {t.eventTypeLabels[v]}
               <X size={12} strokeWidth={2} />
@@ -85,7 +88,7 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
             <button
               key={d}
               onClick={() => setDisciplines((prev) => toggleValue(prev, d))}
-              className="flex items-center gap-1 rounded-full border border-foreground/20 px-3 py-1 text-xs hover:border-foreground/40"
+              className="flex items-center gap-1 rounded-full border border-border px-3 py-1 text-xs hover:border-foreground/40"
             >
               {t.disciplineLabels[d] ?? d}
               <X size={12} strokeWidth={2} />
@@ -94,7 +97,7 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
           {cout && (
             <button
               onClick={() => setCout("")}
-              className="flex items-center gap-1 rounded-full border border-foreground/20 px-3 py-1 text-xs hover:border-foreground/40"
+              className="flex items-center gap-1 rounded-full border border-border px-3 py-1 text-xs hover:border-foreground/40"
             >
               {t.coutLabels[cout]}
               <X size={12} strokeWidth={2} />
@@ -104,7 +107,7 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
       )}
 
       {filtersOpen && (
-        <div className="mb-6 rounded-lg bg-surface p-3 shadow-soft">
+        <div className="mb-6 rounded-lg border border-border bg-surface p-4">
           <p className="mb-1 px-1 text-xs font-medium text-foreground-muted">{t.profil.ville}</p>
           <div className="mb-2 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {VILLES.map((v) => (

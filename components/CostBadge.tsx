@@ -12,7 +12,7 @@ export function CostBadge({ type }: { type: CoutType }) {
   const t = useT();
 
   return (
-    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${STYLES[type]}`}>
+    <span className={`rounded-full px-3 py-1 text-xs font-bold ${STYLES[type]}`}>
       {t.coutLabels[type]}
     </span>
   );

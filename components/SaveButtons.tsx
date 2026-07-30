@@ -12,14 +12,14 @@ export function SaveButtons({ status, onChange }: SaveButtonsProps) {
   const t = useT();
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-1 gap-2.5">
       <button
         type="button"
         onClick={() => onChange(status === "sauvegarde" ? null : "sauvegarde")}
-        className={`rounded-lg border px-3 py-1 text-sm transition ${
+        className={`flex-1 rounded-full border-[1.5px] border-accent-secondary px-0 py-2.5 text-sm font-bold transition ${
           status === "sauvegarde"
-            ? "border-accent-secondary bg-accent-secondary text-accent-secondary-foreground"
-            : "border-foreground/20 hover:border-foreground/40"
+            ? "bg-accent-secondary text-accent-secondary-foreground"
+            : "bg-transparent text-accent-secondary"
         }`}
       >
         {status === "sauvegarde" ? t.saveButtons.sauvegarde : t.saveButtons.sauvegarder}
@@ -27,10 +27,8 @@ export function SaveButtons({ status, onChange }: SaveButtonsProps) {
       <button
         type="button"
         onClick={() => onChange(status === "je_viens" ? null : "je_viens")}
-        className={`rounded-lg border px-3 py-1 text-sm transition ${
-          status === "je_viens"
-            ? "border-accent bg-accent text-accent-foreground"
-            : "border-foreground/20 hover:border-foreground/40"
+        className={`flex-1 rounded-full border-[1.5px] border-accent px-0 py-2.5 text-sm font-bold transition ${
+          status === "je_viens" ? "bg-accent text-accent-foreground" : "bg-transparent text-accent"
         }`}
       >
         {status === "je_viens" ? t.saveButtons.jeViensActif : t.saveButtons.jeViens}

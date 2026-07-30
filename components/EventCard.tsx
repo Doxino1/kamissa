@@ -43,8 +43,8 @@ export function EventCard({
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`rounded-lg bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-event-hover ${
-        highlighted ? "ring-2 ring-accent" : ""
+      className={`rounded-lg border bg-surface p-5 transition ${
+        highlighted ? "border-accent/40 shadow-event-hover" : "border-border"
       }`}
     >
       <Link href={`/events/${event.id}`} className="block">
@@ -55,16 +55,19 @@ export function EventCard({
           </div>
           <span>{date}</span>
         </div>
-        <h3 className="mt-2 font-medium">{localizedTitle(event, locale)}</h3>
+        <h3 className="mt-2.5 text-[17px] font-bold">{localizedTitle(event, locale)}</h3>
         <p className="mt-1 text-sm text-foreground-muted">
           {t.villeLabels[event.ville]} · {t.disciplineLabels[event.discipline] ?? event.discipline}
         </p>
       </Link>
-      <div className="mt-3 flex items-center justify-between gap-2">
+      <div className="mt-3.5 flex items-center gap-2.5">
         {canSave ? (
           <SaveButtons status={saved[event.id]} onChange={(status) => setStatus(event.id, status)} />
         ) : (
-          <Link href="/login" className="text-xs text-foreground/40 hover:text-foreground-muted">
+          <Link
+            href="/login"
+            className="flex-1 text-xs text-foreground/40 hover:text-foreground-muted"
+          >
             {t.saveButtons.loginToSave}
           </Link>
         )}
@@ -73,9 +76,9 @@ export function EventCard({
           onClick={handleShare}
           aria-label={t.common.share}
           title={t.common.share}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-foreground-muted transition hover:text-foreground"
+          className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-border text-foreground-muted transition hover:text-foreground"
         >
-          <Share2 size={15} strokeWidth={1.75} />
+          <Share2 size={14} strokeWidth={2} />
         </button>
       </div>
     </div>

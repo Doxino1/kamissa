@@ -205,7 +205,7 @@ export default function ParametresPage() {
             required
             value={nom}
             onChange={(e) => setNom(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
           />
         </label>
 
@@ -214,7 +214,7 @@ export default function ParametresPage() {
           <select
             value={ville}
             onChange={(e) => setVille(e.target.value as Ville)}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
           >
             {VILLES.map((v) => (
               <option key={v} value={v}>
@@ -229,7 +229,7 @@ export default function ParametresPage() {
           <select
             value={typeProfil}
             onChange={(e) => setTypeProfil(e.target.value as ProfileType)}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
           >
             {PROFILE_TYPES.map((pt) => (
               <option key={pt} value={pt}>
@@ -250,7 +250,7 @@ export default function ParametresPage() {
                 className={`rounded-lg border px-3 py-1 text-sm transition ${
                   disciplines.includes(d)
                     ? "border-accent bg-accent text-accent-foreground"
-                    : "border-foreground/20 hover:border-foreground/40"
+                    : "border-border hover:border-foreground/40"
                 }`}
               >
                 {t.disciplineLabels[d]}
@@ -265,7 +265,7 @@ export default function ParametresPage() {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={4}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
           />
         </label>
 
@@ -280,7 +280,7 @@ export default function ParametresPage() {
                 className={`rounded-lg border px-3 py-1 text-sm transition ${
                   matchingTags.includes(tag)
                     ? "border-accent bg-accent text-accent-foreground"
-                    : "border-foreground/20 hover:border-foreground/40"
+                    : "border-border hover:border-foreground/40"
                 }`}
               >
                 {t.matchingTagLabels[tag]}
@@ -297,7 +297,7 @@ export default function ParametresPage() {
             value={emailContact}
             onChange={(e) => setEmailContact(e.target.value)}
             placeholder={t.profil.emailContactPlaceholder}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
           />
         </label>
         <label className="text-sm text-foreground-muted">
@@ -307,7 +307,7 @@ export default function ParametresPage() {
             value={instagramHandle}
             onChange={(e) => setInstagramHandle(e.target.value.replace(/^@/, ""))}
             placeholder={t.profil.socialPlaceholder}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
           />
         </label>
         <label className="text-sm text-foreground-muted">
@@ -317,7 +317,7 @@ export default function ParametresPage() {
             value={tiktokHandle}
             onChange={(e) => setTiktokHandle(e.target.value.replace(/^@/, ""))}
             placeholder={t.profil.socialPlaceholder}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
           />
         </label>
         <label className="text-sm text-foreground-muted">
@@ -327,7 +327,7 @@ export default function ParametresPage() {
             value={twitterHandle}
             onChange={(e) => setTwitterHandle(e.target.value.replace(/^@/, ""))}
             placeholder={t.profil.socialPlaceholder}
-            className="mt-1 w-full rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
           />
         </label>
 
@@ -343,7 +343,7 @@ export default function ParametresPage() {
         </button>
       </form>
 
-      <div className="mt-8 border-t border-foreground/10 pt-4">
+      <div className="mt-8 border-t border-border pt-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.profil.languageLabel}</h2>
         <div className="mt-2 flex gap-2">
           {LOCALES.map((l) => (
@@ -353,7 +353,7 @@ export default function ParametresPage() {
               className={`rounded-lg border px-3 py-1.5 text-sm transition ${
                 locale === l
                   ? "border-accent bg-accent text-accent-foreground"
-                  : "border-foreground/20 hover:border-foreground/40"
+                  : "border-border hover:border-foreground/40"
               }`}
             >
               {LOCALE_LABELS[l]}
@@ -362,7 +362,7 @@ export default function ParametresPage() {
         </div>
       </div>
 
-      <div className="mt-8 border-t border-foreground/10 pt-4">
+      <div className="mt-8 border-t border-border pt-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.profil.weeklyEmailTitle}</h2>
         <div className="mt-3 rounded-lg bg-surface p-4 shadow-soft">
           <p className="text-xs text-foreground/50">{t.weeklyEmail.subject(3, t.villeLabels[ville])}</p>
@@ -383,20 +383,20 @@ export default function ParametresPage() {
             role="switch"
             aria-checked={recoitEmailHebdo}
             onClick={() => handleToggleEmailHebdo(!recoitEmailHebdo)}
-            className={`relative h-[18px] w-8 shrink-0 rounded-full transition ${
-              recoitEmailHebdo ? "bg-accent" : "bg-foreground/20"
+            className={`relative h-[26px] w-11 shrink-0 rounded-full transition ${
+              recoitEmailHebdo ? "bg-accent" : "bg-border"
             }`}
           >
             <span
-              className={`absolute top-0.5 h-[14px] w-[14px] rounded-full bg-background transition ${
-                recoitEmailHebdo ? "left-[16px]" : "left-0.5"
+              className={`absolute top-[3px] h-5 w-5 rounded-full bg-background shadow-sm transition ${
+                recoitEmailHebdo ? "left-[21px]" : "left-[3px]"
               }`}
             />
           </button>
         </div>
       </div>
 
-      <div className="mt-8 border-t border-foreground/10 pt-4">
+      <div className="mt-8 border-t border-border pt-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.notifications.prefsTitle}</h2>
         <div className="mt-3 flex flex-col gap-3">
           {(
@@ -413,13 +413,13 @@ export default function ParametresPage() {
                 role="switch"
                 aria-checked={checked}
                 onClick={() => handleToggleNotifPref(column, setter, !checked)}
-                className={`relative h-[18px] w-8 shrink-0 rounded-full transition ${
-                  checked ? "bg-accent" : "bg-foreground/20"
+                className={`relative h-[26px] w-11 shrink-0 rounded-full transition ${
+                  checked ? "bg-accent" : "bg-border"
                 }`}
               >
                 <span
-                  className={`absolute top-0.5 h-[14px] w-[14px] rounded-full bg-background transition ${
-                    checked ? "left-[16px]" : "left-0.5"
+                  className={`absolute top-[3px] h-5 w-5 rounded-full bg-background shadow-sm transition ${
+                    checked ? "left-[21px]" : "left-[3px]"
                   }`}
                 />
               </button>
@@ -428,7 +428,7 @@ export default function ParametresPage() {
         </div>
       </div>
 
-      <div className="mt-8 border-t border-foreground/10 pt-4">
+      <div className="mt-8 border-t border-border pt-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.profil.accountSectionTitle}</h2>
         <p className="mt-2 text-sm text-foreground-muted">{userEmail}</p>
         {isModerator && (
@@ -451,12 +451,12 @@ export default function ParametresPage() {
         </Link>
       </div>
 
-      <div className="mt-8 border-t border-foreground/10 pt-4">
+      <div className="mt-8 border-t border-border pt-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.account.exportData}</h2>
         <p className="mt-1 text-xs text-foreground/50">{t.account.exportHint}</p>
         <a
           href="/api/account/export"
-          className="mt-2 inline-block rounded-lg border border-foreground/20 px-4 py-2 text-sm hover:border-foreground/40"
+          className="mt-2 inline-block rounded-lg border border-border px-4 py-2 text-sm hover:border-foreground/40"
         >
           {t.account.exportButton}
         </a>
@@ -468,7 +468,7 @@ export default function ParametresPage() {
         </Link>
       </div>
 
-      <div className="mt-8 border-t border-foreground/10 pt-4">
+      <div className="mt-8 border-t border-border pt-4">
         <h2 className="text-sm font-medium text-foreground-muted">{t.profil.legalLinksTitle}</h2>
         <div className="mt-2 flex flex-col gap-1.5 text-sm">
           <Link href="/mentions-legales" className="text-foreground/70 underline hover:text-foreground">

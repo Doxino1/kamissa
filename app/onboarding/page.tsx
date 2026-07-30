@@ -13,7 +13,7 @@ function chipClass(active: boolean) {
   return `rounded-lg border px-3 py-1 text-sm transition ${
     active
       ? "border-accent bg-accent text-accent-foreground"
-      : "border-foreground/20 hover:border-foreground/40"
+      : "border-border hover:border-foreground/40"
   }`;
 }
 
@@ -119,7 +119,7 @@ export default function OnboardingPage() {
                 className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
                   ville === v
                     ? "border-accent bg-accent text-accent-foreground"
-                    : "border-foreground/20 hover:border-foreground/40"
+                    : "border-border hover:border-foreground/40"
                 }`}
               >
                 {t.villeLabels[v]}
@@ -155,7 +155,7 @@ export default function OnboardingPage() {
                 className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
                   typeProfil === pt
                     ? "border-accent bg-accent text-accent-foreground"
-                    : "border-foreground/20 hover:border-foreground/40"
+                    : "border-border hover:border-foreground/40"
                 }`}
               >
                 {t.profileTypeLabels[pt]}
@@ -183,7 +183,7 @@ export default function OnboardingPage() {
         <div className="mt-6">
           <h1 className="font-display text-xl font-medium">{t.onboarding.step5Title}</h1>
           <p className="mt-1 text-sm text-foreground-muted">{t.onboarding.step5Intro}</p>
-          <div className="mt-4 rounded-lg border border-foreground/10 p-4">
+          <div className="mt-4 rounded-lg border border-border p-4">
             <p className="text-xs text-foreground/50">{t.weeklyEmail.subject(3, t.villeLabels[ville])}</p>
             <p className="mt-3 text-sm font-medium">{t.weeklyEmail.greeting(nom || "…")}</p>
             <p className="mt-2 text-sm text-foreground/70">{t.weeklyEmail.intro(t.villeLabels[ville])}</p>

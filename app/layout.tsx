@@ -45,7 +45,7 @@ export default async function RootLayout({
         <LocaleProvider>
           <ToastProvider>
             <TopNav show={!!user} userId={user?.id ?? null} />
-            <div className={`flex-1 ${user ? "pb-24 md:pb-0" : ""}`}>{children}</div>
+            <div className={`flex-1 ${user ? "pb-16 md:pb-0" : ""}`}>{children}</div>
             <BottomNav show={!!user} />
             {!user && <PublicFooter />}
           </ToastProvider>

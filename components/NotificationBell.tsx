@@ -42,43 +42,55 @@ export function NotificationBell({ userId }: { userId: string | null }) {
         onClick={() => setOpen((o) => !o)}
         aria-label={t.notifications.title}
         title={t.notifications.title}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-foreground/20 text-foreground-muted transition hover:text-foreground"
+        className="relative flex h-[42px] w-[42px] items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:bg-surface"
       >
-        <Bell size={16} strokeWidth={1.75} />
+        <Bell size={19} strokeWidth={2} />
         {unreadCount > 0 && (
-          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-accent" />
+          <span className="absolute right-1.5 top-1.5 h-[9px] w-[9px] rounded-full border-2 border-background bg-badge-open-call-fg" />
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 z-[1050] mt-2 w-72 rounded-2xl border border-foreground/10 bg-background p-2 shadow-soft">
-          <div className="flex items-center justify-between gap-2 px-2 py-1">
-            <span className="text-sm font-medium">{t.notifications.title}</span>
+        <div className="absolute right-0 z-[1050] mt-2 w-80 overflow-hidden rounded-2xl border border-border bg-background shadow-modal">
+          <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3.5">
+            <span className="text-sm font-bold">{t.notifications.title}</span>
             {unreadCount > 0 && (
-              <button type="button" onClick={markAllRead} className="text-xs text-accent hover:underline">
+              <button
+                type="button"
+                onClick={markAllRead}
+                className="text-xs font-bold text-accent-secondary"
+              >
                 {t.notifications.markAllRead}
               </button>
             )}
           </div>
 
           {notifications.length === 0 && (
-            <p className="px-2 py-3 text-sm text-foreground-muted">{t.notifications.empty}</p>
+            <p className="px-5 py-8 text-center text-sm text-foreground-muted">{t.notifications.empty}</p>
           )}
 
-          <div className="mt-1 flex max-h-80 flex-col gap-0.5 overflow-y-auto">
+          <div className="flex max-h-80 flex-col overflow-y-auto">
             {notifications.map((n) => (
               <Link
                 key={n.id}
                 href={notificationHref(n)}
                 onClick={() => setOpen(false)}
-                className={`rounded-lg px-2 py-2 text-sm transition hover:bg-surface ${
-                  n.read ? "text-foreground-muted" : "font-medium text-foreground"
+                className={`border-b border-border px-4 py-3 text-[13px] transition hover:bg-surface ${
+                  n.read ? "" : "bg-badge-open-call-bg/20"
                 }`}
               >
                 {label(n)}
               </Link>
             ))}
           </div>
+
+          <Link
+            href="/profil/parametres"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-3 text-xs font-bold"
+          >
+            {t.notifications.prefsTitle}
+          </Link>
         </div>
       )}
     </div>

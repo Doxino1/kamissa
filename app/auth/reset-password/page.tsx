@@ -75,7 +75,7 @@ export default function ResetPasswordPage() {
           placeholder={t.resetPassword.nouveauMotDePasse}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <input
           type="password"
@@ -84,7 +84,7 @@ export default function ResetPasswordPage() {
           placeholder={t.resetPassword.confirmerMotDePasse}
           value={confirmation}
           onChange={(e) => setConfirmation(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
 
         {error && <p className="text-sm text-red-600">{error}</p>}

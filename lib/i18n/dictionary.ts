@@ -46,6 +46,7 @@ export interface Dictionary {
     prive: string;
     loadMore: string;
     share: string;
+    allCities: string;
   };
 
   toast: {
@@ -441,6 +442,7 @@ export const fr: Dictionary = {
     prive: "Privé",
     loadMore: "Charger plus",
     share: "Partager",
+    allCities: "Toutes les villes",
   },
   toast: {
     linkCopied: "Lien copié ✓",
@@ -834,6 +836,7 @@ export const en: Dictionary = {
     prive: "Private",
     loadMore: "Load more",
     share: "Share",
+    allCities: "All cities",
   },
   toast: {
     linkCopied: "Link copied ✓",
@@ -1225,6 +1228,7 @@ export const el: Dictionary = {
     prive: "Ιδιωτικό",
     loadMore: "Φόρτωση περισσότερων",
     share: "Κοινοποίηση",
+    allCities: "Όλες οι πόλεις",
   },
   toast: {
     linkCopied: "Ο σύνδεσμος αντιγράφηκε ✓",

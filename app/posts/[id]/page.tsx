@@ -169,7 +169,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
             placeholder={t.posts.addComment}
             value={texte}
             onChange={(e) => setTexte(e.target.value)}
-            className="flex-1 rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className="flex-1 rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
           />
           <button
             type="submit"

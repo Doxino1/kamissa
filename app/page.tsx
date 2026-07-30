@@ -142,50 +142,15 @@ export default function EvenementsPage() {
         )}
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-2 md:hidden">
-        <div className="flex items-center gap-1 rounded-full bg-surface p-1">
-          <button
-            onClick={() => {
-              setShowSaved(false);
-              setView("liste");
-            }}
-            aria-label={t.evenements.tabTous}
-            title={t.evenements.tabTous}
-            className={`flex items-center justify-center rounded-full p-2 transition ${
-              !showSaved && view === "liste"
-                ? "bg-accent text-accent-foreground"
-                : "text-foreground-muted hover:text-foreground"
-            }`}
-          >
-            <List size={18} strokeWidth={1.75} />
-          </button>
-          <button
-            onClick={() => {
-              setShowSaved(false);
-              setView("carte");
-            }}
-            aria-label={t.evenements.tabCarte}
-            title={t.evenements.tabCarte}
-            className={`flex items-center justify-center rounded-full p-2 transition ${
-              !showSaved && view === "carte"
-                ? "bg-accent text-accent-foreground"
-                : "text-foreground-muted hover:text-foreground"
-            }`}
-          >
-            <MapIcon size={18} strokeWidth={1.75} />
-          </button>
-        </div>
-
+      <div className="mt-4 flex items-center justify-end gap-2 md:hidden">
         <div className="flex items-center gap-2">
           <NotificationBell userId={userId} />
           <button
             onClick={() => setShowSaved((s) => !s)}
             aria-label={t.evenements.tabMes}
             title={t.evenements.tabMes}
-            className={`flex h-9 w-9 items-center justify-center rounded-full transition ${
-              showSaved
-                ? "bg-accent text-accent-foreground"
-                : "border border-foreground/20 text-foreground-muted hover:text-foreground"
+            className={`flex h-9 w-9 items-center justify-center rounded-full border transition ${
+              showSaved ? "border-transparent bg-accent text-accent-foreground" : "border-border text-foreground"
             }`}
           >
             <Bookmark size={16} strokeWidth={1.75} />
@@ -194,7 +159,7 @@ export default function EvenementsPage() {
             href="/boutiques"
             aria-label={t.shops.title}
             title={t.shops.title}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-foreground/20 text-foreground-muted hover:text-foreground md:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground md:hidden"
           >
             <Store size={16} strokeWidth={1.75} />
           </Link>
@@ -215,8 +180,8 @@ export default function EvenementsPage() {
         </>
       )}
 
-      <div className="md:flex md:h-[calc(100vh-10rem)] md:flex-col md:overflow-hidden md:rounded-2xl md:border md:border-foreground/10 md:shadow-soft">
-        <div className="hidden shrink-0 items-center justify-between border-b border-foreground/10 px-4 py-3 md:flex">
+      <div className="md:flex md:h-[calc(100vh-10rem)] md:flex-col md:overflow-hidden md:rounded-2xl md:border md:border-border md:shadow-soft">
+        <div className="hidden shrink-0 items-center justify-between border-b border-border px-4 py-3 md:flex">
           <h2 className="font-display text-lg font-black">{t.nav.evenements}</h2>
           {!checkingUser && !userId ? (
             <Link href="/login" className="text-sm text-accent hover:opacity-80">
@@ -227,10 +192,8 @@ export default function EvenementsPage() {
               onClick={() => setShowSaved((s) => !s)}
               aria-label={t.evenements.tabMes}
               title={t.evenements.tabMes}
-              className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition ${
-                showSaved
-                  ? "bg-accent text-accent-foreground"
-                  : "border border-foreground/20 text-foreground-muted hover:text-foreground"
+              className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${
+                showSaved ? "border-transparent bg-accent text-accent-foreground" : "border-border text-foreground"
               }`}
             >
               <Bookmark size={16} strokeWidth={1.75} />
@@ -243,10 +206,10 @@ export default function EvenementsPage() {
           <div className="md:flex md:min-h-0 md:flex-1 md:items-stretch">
             <div className="md:h-full md:w-[42%] md:shrink-0 md:overflow-y-auto md:p-4">
               {userId && profileIncomplete && !bannerDismissed && (
-                <div className="mt-4 flex items-start justify-between gap-2 rounded-lg bg-badge-open-call-bg p-3 text-sm text-badge-open-call-fg md:mt-0">
+                <div className="mt-4 flex items-start justify-between gap-3 rounded-lg border border-badge-open-call-fg/25 bg-badge-open-call-bg px-[18px] py-3.5 text-sm md:mt-0">
                   <p>
                     {t.profileBanner.message}{" "}
-                    <Link href="/profil/parametres" className="font-medium underline">
+                    <Link href="/profil/parametres" className="font-bold text-accent">
                       {t.profileBanner.cta} →
                     </Link>
                   </p>
@@ -293,7 +256,7 @@ export default function EvenementsPage() {
                     <button
                       type="button"
                       onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                      className="self-center rounded-lg border border-foreground/20 px-4 py-2 text-sm hover:border-foreground/40"
+                      className="self-center rounded-full border border-border px-[22px] py-2.5 text-sm font-bold"
                     >
                       {t.common.loadMore}
                     </button>
@@ -303,7 +266,7 @@ export default function EvenementsPage() {
             </div>
 
             {showMap && (
-              <div className="mt-4 md:mt-0 md:h-full md:flex-1">
+              <div className="relative mt-4 md:mt-0 md:h-full md:flex-1">
                 <EventMap
                   key={ville}
                   events={events}
@@ -311,6 +274,18 @@ export default function EvenementsPage() {
                   hoveredEventId={hoveredEventId}
                   onHoverEvent={setHoveredEventId}
                 />
+                {userId && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAddEventModal(true)}
+                    aria-label={t.evenements.proposer}
+                    title={t.evenements.proposer}
+                    className="absolute bottom-6 right-6 z-[1000] flex items-center gap-2 rounded-full bg-accent px-[22px] py-3.5 text-sm font-bold text-accent-foreground shadow-event-hover transition hover:bg-accent-hover"
+                  >
+                    <Plus size={20} strokeWidth={2} />
+                    {t.evenements.proposer}
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -407,16 +382,23 @@ export default function EvenementsPage() {
         )}
       </div>
 
-      {userId && (
+      {!showSaved && (
         <button
           type="button"
-          onClick={() => setShowAddEventModal(true)}
-          aria-label={t.evenements.proposer}
-          title={t.evenements.proposer}
-          className="fixed bottom-24 right-4 z-[1000] flex items-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground shadow-soft transition hover:bg-accent-hover md:bottom-8 md:right-8"
+          onClick={() => setView((v) => (v === "liste" ? "carte" : "liste"))}
+          className="fixed bottom-20 left-1/2 z-[500] flex -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-[22px] py-3 text-sm font-bold text-background shadow-modal md:hidden"
         >
-          <Plus size={20} strokeWidth={2} />
-          {t.evenements.proposer}
+          {view === "liste" ? (
+            <>
+              <MapIcon size={16} strokeWidth={2} />
+              {t.evenements.tabCarte}
+            </>
+          ) : (
+            <>
+              <List size={16} strokeWidth={2} />
+              {t.evenements.tabTous}
+            </>
+          )}
         </button>
       )}
 

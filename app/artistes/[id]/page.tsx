@@ -165,7 +165,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
             onClick={toggleFollow}
             className={`rounded-lg border px-4 py-1.5 text-sm font-medium transition ${
               following
-                ? "border-foreground/20 hover:border-foreground/40"
+                ? "border-border hover:border-foreground/40"
                 : "border-accent bg-accent text-accent-foreground hover:bg-accent-hover"
             }`}
           >
@@ -205,7 +205,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
       {profile.portfolio_public || isOwn ? (
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {portfolio.map((item) => (
-            <div key={item.id} className="rounded-lg border border-foreground/10 p-2">
+            <div key={item.id} className="rounded-lg border border-border p-2">
               {item.image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={item.image_url} alt={item.titre} className="aspect-square w-full rounded object-cover" />

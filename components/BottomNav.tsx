@@ -19,26 +19,22 @@ export function BottomNav({ show }: { show: boolean }) {
   ];
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-4 md:hidden">
-      <nav className="flex items-center gap-1 rounded-full bg-surface p-1.5 shadow-soft">
-        {items.map(({ href, label, Icon }) => {
-          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ${
-                active
-                  ? "bg-accent text-accent-foreground"
-                  : "text-foreground-muted hover:text-foreground"
-              }`}
-            >
-              <Icon size={18} strokeWidth={1.75} />
-              <span>{label}</span>
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t border-border bg-background md:hidden">
+      {items.map(({ href, label, Icon }) => {
+        const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+        return (
+          <Link
+            key={href}
+            href={href}
+            className={`flex flex-col items-center gap-[3px] px-2.5 py-1 transition ${
+              active ? "text-accent" : "text-foreground-muted"
+            }`}
+          >
+            <Icon size={20} strokeWidth={2} />
+            <span className="text-[10px]">{label}</span>
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

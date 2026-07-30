@@ -9,10 +9,10 @@ import { MatchingTab } from "@/components/community/MatchingTab";
 type Tab = "communaute" | "artistes" | "matching";
 
 function tabClass(active: boolean) {
-  return `rounded-lg border px-4 py-1.5 text-sm transition ${
+  return `rounded-full border px-5 py-2.5 text-sm font-bold transition ${
     active
-      ? "border-accent bg-accent text-accent-foreground"
-      : "border-foreground/20 hover:border-foreground/40"
+      ? "border-transparent bg-accent text-accent-foreground"
+      : "border-border bg-transparent text-foreground"
   }`;
 }
 

@@ -67,7 +67,7 @@ export function ShopMap({ shops, ville }: { shops: Shop[]; ville: Ville }) {
 
   return (
     <div>
-      <div className="overflow-hidden rounded-lg border border-foreground/10" style={{ height: 420 }}>
+      <div className="overflow-hidden rounded-lg border border-border" style={{ height: 420 }}>
         <MapContainer center={CITY_CENTER[ville]} zoom={12} style={{ height: "100%", width: "100%" }}>
           <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} subdomains={TILE_SUBDOMAINS} />
           <ClusterLayer shops={withCoords} />

@@ -102,21 +102,21 @@ export default function BibliothequePage() {
       <h1 className="text-xl font-black">{t.library.title}</h1>
       <p className="mt-1 text-sm text-foreground-muted">{t.library.subtitle}</p>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-foreground/10 p-4">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4">
         <input
           type="text"
           required
           placeholder={t.library.titre}
           value={titre}
           onChange={(e) => setTitre(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <textarea
           placeholder={t.library.contenu}
           value={contenu}
           onChange={(e) => setContenu(e.target.value)}
           rows={3}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <input
           type="file"
@@ -139,7 +139,7 @@ export default function BibliothequePage() {
           <p className="text-sm text-foreground-muted">{t.library.empty}</p>
         )}
         {(items ?? []).map((item) => (
-          <div key={item.id} className="rounded-lg border border-foreground/10 p-4">
+          <div key={item.id} className="rounded-lg border border-border p-4">
             {item.image_url && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.image_url} alt={item.titre} className="mb-2 max-h-48 rounded object-cover" />

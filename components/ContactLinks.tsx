@@ -54,7 +54,7 @@ export function ContactLinks({ email, instagram, tiktok, twitter }: ContactLinks
           target={item.key === "email" ? undefined : "_blank"}
           rel={item.key === "email" ? undefined : "noreferrer"}
           title={item.label}
-          className="rounded-lg border border-foreground/20 p-1.5 text-foreground/70 transition hover:border-foreground/40 hover:text-foreground"
+          className="rounded-lg border border-border p-1.5 text-foreground/70 transition hover:border-foreground/40 hover:text-foreground"
         >
           {item.icon}
         </a>

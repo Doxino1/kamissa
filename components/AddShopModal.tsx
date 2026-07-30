@@ -77,12 +77,12 @@ export function AddShopModal({
           placeholder={t.shops.nom}
           value={nom}
           onChange={(e) => setNom(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <select
           value={shopVille}
           onChange={(e) => setShopVille(e.target.value as Ville)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
         >
           {(["Paris", "Athènes"] as Ville[]).map((v) => (
             <option key={v} value={v}>
@@ -94,7 +94,7 @@ export function AddShopModal({
           aria-label={t.shops.disciplineLabel}
           value={discipline}
           onChange={(e) => setDiscipline(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
         >
           {DISCIPLINES.map((d) => (
             <option key={d} value={d}>
@@ -107,21 +107,21 @@ export function AddShopModal({
           placeholder={t.shops.adresse}
           value={adresse}
           onChange={(e) => setAdresse(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <textarea
           placeholder={t.shops.description}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={2}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         <input
           type="url"
           placeholder={t.shops.lien}
           value={lien}
           onChange={(e) => setLien(e.target.value)}
-          className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button

@@ -14,7 +14,7 @@ export function CalendarButtons({ event }: { event: ArtEvent }) {
         href={googleCalendarUrl(event, locale)}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-1.5 rounded-lg border border-foreground/20 px-3 py-1.5 text-xs hover:border-foreground/40"
+        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs hover:border-foreground/40"
       >
         <CalendarPlus size={14} strokeWidth={1.75} />
         {t.eventDetail.addToGoogleCalendar}
@@ -22,7 +22,7 @@ export function CalendarButtons({ event }: { event: ArtEvent }) {
       <button
         type="button"
         onClick={() => downloadIcs(event, locale)}
-        className="flex items-center gap-1.5 rounded-lg border border-foreground/20 px-3 py-1.5 text-xs hover:border-foreground/40"
+        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs hover:border-foreground/40"
       >
         <Download size={14} strokeWidth={1.75} />
         {t.eventDetail.addToAppleCalendar}

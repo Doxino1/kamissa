@@ -33,8 +33,8 @@ function initials(nom: string) {
 }
 
 function tabClass(active: boolean) {
-  return `flex-1 flex items-center justify-center gap-1.5 border-b-2 py-2 text-sm font-medium transition ${
-    active ? "border-accent text-foreground" : "border-transparent text-foreground/50 hover:text-foreground/70"
+  return `flex-1 flex items-center justify-center gap-1.5 border-b-[3px] py-2.5 text-sm font-bold transition ${
+    active ? "border-accent text-foreground" : "border-transparent text-foreground-muted"
   }`;
 }
 
@@ -142,43 +142,43 @@ export default function ProfilPage() {
           href="/profil/parametres"
           aria-label={t.profil.settingsLink}
           title={t.profil.settingsLink}
-          className="rounded-lg border border-foreground/20 p-1.5 hover:border-foreground/40"
+          className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-border"
         >
-          <Settings size={18} strokeWidth={1.75} />
+          <Settings size={17} strokeWidth={2} />
         </Link>
       </div>
 
       {/* En-tête */}
       <div className="flex flex-col items-center text-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent font-display text-lg font-medium text-accent-foreground">
+        <div className="flex h-[84px] w-[84px] items-center justify-center rounded-full bg-accent font-display text-[30px] font-bold text-accent-foreground">
           {initials(nom)}
         </div>
-        <p className="mt-2 text-base font-medium">{nom}</p>
-        <span className="mt-1.5 rounded-full bg-foreground/5 px-2.5 py-0.5 text-xs text-foreground/70">
+        <p className="mt-1.5 text-xl font-black">{nom}</p>
+        <span className="mt-1.5 rounded-full border border-border bg-surface px-3.5 py-1 text-xs font-bold text-foreground-muted">
           {t.profileTypeLabels[typeProfil]}
         </span>
-        <p className="mt-2 text-sm text-foreground-muted">
+        <p className="mt-1.5 text-sm font-bold text-accent-secondary">
           {disciplines.map((d) => t.disciplineLabels[d] ?? d).join(" · ")}
         </p>
 
-        <div className="mt-3.5 flex gap-6">
-          <div className="text-center">
-            <p className="text-sm font-semibold">{posts.length}</p>
-            <p className="text-xs text-foreground/50">{t.profil.postsLabel}</p>
+        <div className="mt-[18px] flex gap-9">
+          <div className="flex flex-col items-center gap-0.5">
+            <p className="text-base font-bold">{posts.length}</p>
+            <p className="text-xs text-foreground-muted">{t.profil.postsLabel}</p>
           </div>
-          <div className="text-center">
-            <p className="text-sm font-semibold">{followerCount}</p>
-            <p className="text-xs text-foreground/50">{t.profil.followersLabel}</p>
+          <div className="flex flex-col items-center gap-0.5">
+            <p className="text-base font-bold">{followerCount}</p>
+            <p className="text-xs text-foreground-muted">{t.profil.followersLabel}</p>
           </div>
-          <div className="text-center">
-            <p className="text-sm font-semibold">{followingCount}</p>
-            <p className="text-xs text-foreground/50">{t.profil.followingLabel}</p>
+          <div className="flex flex-col items-center gap-0.5">
+            <p className="text-base font-bold">{followingCount}</p>
+            <p className="text-xs text-foreground-muted">{t.profil.followingLabel}</p>
           </div>
         </div>
       </div>
 
       {/* Onglets */}
-      <div className="mt-6 flex border-b border-foreground/10">
+      <div className="mt-7 flex border-b border-border">
         <button onClick={() => setTab("posts")} className={tabClass(tab === "posts")}>
           {t.profil.postsLabel}
         </button>
@@ -224,7 +224,7 @@ export default function ProfilPage() {
 
           <div className="flex flex-col gap-2">
             {portfolio.map((item) => (
-              <div key={item.id} className="flex gap-2.5 rounded-lg bg-surface p-2.5">
+              <div key={item.id} className="flex gap-2.5 rounded-lg border border-border bg-surface p-2.5">
                 {item.image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={item.image_url} alt={item.titre} className="h-[52px] w-[52px] shrink-0 rounded object-cover" />
@@ -241,7 +241,7 @@ export default function ProfilPage() {
             ))}
             <Link
               href="/profil/portfolio"
-              className="rounded-lg border border-foreground/20 py-2 text-center text-sm hover:border-foreground/40"
+              className="rounded-lg border border-border py-2 text-center text-sm hover:border-foreground/40"
             >
               + {t.portfolio.addPiece}
             </Link>
@@ -252,20 +252,20 @@ export default function ProfilPage() {
       {/* Bibliothèque privée */}
       <Link
         href="/profil/bibliotheque"
-        className="mt-6 flex items-start gap-2 rounded-lg bg-surface p-3 transition hover:bg-foreground/5"
+        className="mt-5 flex items-center gap-3 rounded-lg border border-border bg-surface px-5 py-4 transition"
       >
-        <Lock size={16} strokeWidth={1.75} className="mt-0.5 shrink-0 text-foreground/70" />
+        <Lock size={18} strokeWidth={2} className="shrink-0" />
         <span>
-          <p className="text-sm text-foreground/70">{t.library.title}</p>
-          <p className="mt-1 text-xs text-foreground/50">{t.library.subtitle}</p>
+          <p className="text-sm font-bold">{t.library.title}</p>
+          <p className="mt-0.5 text-xs text-foreground-muted">{t.library.subtitle}</p>
         </span>
       </Link>
 
       {/* Bio */}
       {bio && (
-        <div className="mt-3 rounded-lg bg-surface p-3">
-          <p className="text-sm text-foreground-muted">{t.profil.bio}</p>
-          <p className="mt-1 text-sm leading-relaxed">{bio}</p>
+        <div className="mt-3.5 rounded-lg border border-border bg-surface px-5 py-4">
+          <p className="text-sm font-bold">{t.profil.bio}</p>
+          <p className="mt-1 text-sm text-foreground-muted">{bio}</p>
         </div>
       )}
     </div>
