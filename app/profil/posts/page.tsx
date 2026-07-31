@@ -100,7 +100,7 @@ export default function MesPostsPage() {
           accept="image/*"
           required
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="text-sm"
+          className="text-sm text-foreground-muted file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-bold file:text-foreground hover:file:bg-background"
         />
         <textarea
           placeholder={t.posts.legende}
