@@ -12,11 +12,11 @@
   --accent-secondary: #3f6b52;
   --accent-secondary-foreground: #ffffff;
 
-  /* Un seul font partout — pas de pairing serif/sans. Fraunces ne couvre pas
-     le grec ; Noto Serif prend le relais pour ces caractères (voir
-     layout.tsx) sans casser l'unité visuelle serif de l'app. */
-  --font-sans: var(--font-fraunces), var(--font-noto-serif);
-  --font-display: var(--font-sans);
+  /* Pairing corps/titres : Figtree (corps) + Caprasimo (titres, display).
+     Aucun des deux ne couvre le grec ; Noto Sans prend le relais pour ces
+     caractères dans les deux rôles (voir layout.tsx). */
+  --font-sans: var(--font-figtree), var(--font-noto-sans);
+  --font-display: var(--font-caprasimo), var(--font-noto-sans);
 
   /* Badges de catégorie d'événement — un ton pastel distinct par type,
      jamais de texte noir sur fond coloré. */
