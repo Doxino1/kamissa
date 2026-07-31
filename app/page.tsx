@@ -167,20 +167,20 @@ export default function EvenementsPage() {
       </div>
 
       {!showSaved && (
-        <>
-          <div className="mt-4 md:hidden">
-            <EventFilterBar filters={filters} />
-          </div>
+        <div className="mt-4 md:hidden">
+          <EventFilterBar filters={filters} />
+        </div>
+      )}
 
-          <div className="hidden md:mb-3 md:flex md:justify-center">
+      <div className="md:flex md:h-[calc(100vh-10rem)] md:flex-col md:overflow-hidden md:rounded-2xl md:border md:border-border md:shadow-soft">
+        {!showSaved && (
+          <div className="hidden md:flex md:justify-center md:px-4 md:pt-4">
             <div className="w-full max-w-xl">
               <EventFilterBar filters={filters} />
             </div>
           </div>
-        </>
-      )}
+        )}
 
-      <div className="md:flex md:h-[calc(100vh-10rem)] md:flex-col md:overflow-hidden md:rounded-2xl md:border md:border-border md:shadow-soft">
         <div className="hidden shrink-0 items-center justify-between border-b border-border px-4 py-3 md:flex">
           <h2 className="font-display text-lg font-black">{t.nav.evenements}</h2>
           {!checkingUser && !userId ? (
