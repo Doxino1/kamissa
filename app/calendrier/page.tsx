@@ -15,7 +15,7 @@ export default function CalendrierPage() {
   const { ville, events } = filters;
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
+    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-6 md:py-4">
       <h1 className="font-display text-xl font-black">{t.calendar.tab}</h1>
 
       <div className="mt-4">

@@ -21,7 +21,7 @@ export default function CommunautePage() {
   const [tab, setTab] = useState<Tab>("communaute");
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
+    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-6 md:py-4">
       <div className="mb-6 flex gap-2">
         <button onClick={() => setTab("communaute")} className={tabClass(tab === "communaute")}>
           {t.nav.communaute}

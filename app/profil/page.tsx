@@ -129,14 +129,14 @@ export default function ProfilPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-sm px-4 py-8">
+      <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-2xl md:px-8 md:py-10">
         <p className="text-sm text-foreground-muted">{t.common.loading}</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8">
+    <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-2xl md:px-8 md:py-10">
       <div className="flex justify-end">
         <Link
           href="/profil/parametres"
