@@ -98,11 +98,11 @@ export default function BibliothequePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
+    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
       <h1 className="text-xl font-black">{t.library.title}</h1>
       <p className="mt-1 text-sm text-foreground-muted">{t.library.subtitle}</p>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
         <input
           type="text"
           required
@@ -134,15 +134,15 @@ export default function BibliothequePage() {
         </button>
       </form>
 
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="mt-6 flex flex-col gap-3 md:grid md:grid-cols-3 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
         {items !== null && items.length === 0 && (
-          <p className="text-sm text-foreground-muted">{t.library.empty}</p>
+          <p className="col-span-full text-sm text-foreground-muted">{t.library.empty}</p>
         )}
         {(items ?? []).map((item) => (
           <div key={item.id} className="rounded-lg border border-border p-4">
             {item.image_url && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={item.image_url} alt={item.titre} className="mb-2 max-h-48 rounded object-cover" />
+              <img src={item.image_url} alt={item.titre} className="mb-2 max-h-48 rounded object-cover md:aspect-square md:max-h-none md:w-full" />
             )}
             <h3 className="font-medium">{item.titre}</h3>
             {item.contenu && <p className="mt-1 text-sm text-foreground/70">{item.contenu}</p>}

@@ -91,10 +91,10 @@ export default function MesPostsPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
+    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
       <h1 className="text-xl font-black">{t.posts.title}</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
         <input
           type="file"
           accept="image/*"
@@ -119,7 +119,7 @@ export default function MesPostsPage() {
         </button>
       </form>
 
-      <div className="mt-6 grid grid-cols-3 gap-1">
+      <div className="mt-6 grid grid-cols-3 gap-1 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
         {posts !== null && posts.length === 0 && (
           <p className="col-span-full text-sm text-foreground-muted">{t.posts.empty}</p>
         )}

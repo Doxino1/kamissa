@@ -33,7 +33,7 @@ function initials(nom: string) {
 }
 
 function tabClass(active: boolean) {
-  return `flex-1 flex items-center justify-center gap-1.5 border-b-[3px] py-2.5 text-sm font-bold transition ${
+  return `flex-1 flex items-center justify-center gap-1.5 border-b-[3px] py-2.5 text-sm font-bold transition md:flex-none md:pb-3 md:pt-0 md:text-[15px] ${
     active ? "border-accent text-foreground" : "border-transparent text-foreground-muted"
   }`;
 }
@@ -129,14 +129,14 @@ export default function ProfilPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-2xl md:px-8 md:py-10">
+      <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
         <p className="text-sm text-foreground-muted">{t.common.loading}</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-2xl md:px-8 md:py-10">
+    <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
       <div className="flex justify-end">
         <Link
           href="/profil/parametres"
@@ -178,7 +178,7 @@ export default function ProfilPage() {
       </div>
 
       {/* Onglets */}
-      <div className="mt-7 flex border-b border-border">
+      <div className="mt-7 flex border-b border-border md:mt-[30px] md:gap-7">
         <button onClick={() => setTab("posts")} className={tabClass(tab === "posts")}>
           {t.profil.postsLabel}
         </button>
@@ -194,7 +194,7 @@ export default function ProfilPage() {
             <Toggle checked={postsPublic} onChange={(v) => setVisibility("posts_public", v)} />
           </div>
 
-          <div className="grid grid-cols-3 gap-1">
+          <div className="grid grid-cols-3 gap-1 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
             <Link
               href="/profil/posts"
               className="flex aspect-square items-center justify-center rounded border-[1.5px] border-dashed border-foreground/25 text-foreground/40 hover:border-foreground/40"
@@ -222,14 +222,14 @@ export default function ProfilPage() {
             <Toggle checked={portfolioPublic} onChange={(v) => setVisibility("portfolio_public", v)} />
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 md:grid md:grid-cols-3 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
             {portfolio.map((item) => (
-              <div key={item.id} className="flex gap-2.5 rounded-lg border border-border bg-surface p-2.5">
+              <div key={item.id} className="flex gap-2.5 rounded-lg border border-border bg-surface p-2.5 md:flex-col">
                 {item.image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={item.image_url} alt={item.titre} className="h-[52px] w-[52px] shrink-0 rounded object-cover" />
+                  <img src={item.image_url} alt={item.titre} className="h-[52px] w-[52px] shrink-0 rounded object-cover md:aspect-square md:h-auto md:w-full" />
                 ) : (
-                  <div className="h-[52px] w-[52px] shrink-0 rounded bg-foreground/10" />
+                  <div className="h-[52px] w-[52px] shrink-0 rounded bg-foreground/10 md:aspect-square md:h-auto md:w-full" />
                 )}
                 <div>
                   <p className="text-sm font-medium">{item.titre}</p>
@@ -241,7 +241,7 @@ export default function ProfilPage() {
             ))}
             <Link
               href="/profil/portfolio"
-              className="rounded-lg border border-border py-2 text-center text-sm hover:border-foreground/40"
+              className="rounded-lg border border-border py-2 text-center text-sm hover:border-foreground/40 md:col-span-full"
             >
               + {t.portfolio.addPiece}
             </Link>

@@ -102,10 +102,10 @@ export default function PortfolioPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
+    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
       <h1 className="text-xl font-black">{t.portfolio.title}</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
         <h2 className="text-sm font-medium text-foreground-muted">{t.portfolio.addTitle}</h2>
         <input
           type="text"
@@ -145,7 +145,7 @@ export default function PortfolioPage() {
         </button>
       </form>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
         {items !== null && items.length === 0 && (
           <p className="col-span-full text-sm text-foreground-muted">{t.portfolio.empty}</p>
         )}

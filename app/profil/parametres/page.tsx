@@ -182,14 +182,14 @@ export default function ParametresPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-sm px-4 py-8">
+      <div className="mx-auto w-full max-w-sm px-4 py-8 md:mx-0 md:max-w-[480px] md:px-8 md:pb-[60px] md:pt-7">
         <p className="text-sm text-foreground-muted">{t.common.loading}</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8">
+    <div className="mx-auto w-full max-w-sm px-4 py-8 md:mx-0 md:max-w-[480px] md:px-8 md:pb-[60px] md:pt-7">
       <Link href="/profil" className="flex items-center gap-1 text-sm text-foreground-muted hover:text-foreground">
         <ArrowLeft size={14} strokeWidth={1.75} />
         {t.nav.profil}
