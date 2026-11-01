@@ -127,7 +127,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
   if (notAllowed || !initial) {
     return (
       <div className="mx-auto w-full max-w-sm px-4 py-8">
-        <p className="text-sm text-red-600">404</p>
+        <p className="text-sm text-danger">404</p>
       </div>
     );
   }
@@ -146,7 +146,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
             type="button"
             onClick={handleWithdraw}
             disabled={withdrawing}
-            className="mt-1 self-start text-sm text-red-600 hover:underline disabled:opacity-50"
+            className="mt-1 self-start text-sm text-danger hover:underline disabled:opacity-50"
           >
             {withdrawing ? "…" : t.evenements.withdrawLink}
           </button>

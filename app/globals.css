@@ -1,95 +1,85 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f9f6f0;
-  --surface: #efe8d8;
-  --foreground: #201c16;
-  --foreground-muted: #6b655c;
-  --border: #ddd2ba;
-  --accent: #c06722;
-  --accent-hover: #a95a1c;
-  --accent-foreground: #ffffff;
-  --accent-secondary: #3f6b52;
+  /* Direction « Racines » (design/racines/README.md) : fond papier, encre
+     presque noire, filets fins ; les actions principales sont des pilules
+     noires, la sauge foncée marque les états validés (inscrit, suivi). */
+  --background: #fdfcf9;
+  --surface: #efeadf;
+  --surface-hover: #f6f2ea;
+  --surface-selected: #f2ede2;
+  --placeholder: #ece7dc;
+  --foreground: #12110e;
+  --foreground-muted: #6e6a61;
+  --muted-strong: #8f8a7f;
+  --text-soft: #3d3a34;
+  --border: #e4dfd4;
+  --toggle-off: #cfc9bd;
+  --accent: #12110e;
+  --accent-hover: #3d3a34;
+  --accent-foreground: #fdfcf9;
+  --accent-secondary: #46684a;
   --accent-secondary-foreground: #ffffff;
+  --danger: #9e3a1e;
+  --overlay: rgba(18, 17, 14, 0.45);
 
-  /* Pairing corps/titres : Figtree (corps) + Caprasimo (titres, display).
-     Aucun des deux ne couvre le grec ; Noto Sans prend le relais pour ces
-     caractères dans les deux rôles (voir layout.tsx). */
-  --font-sans: var(--font-figtree), var(--font-noto-sans);
-  --font-display: var(--font-caprasimo), var(--font-noto-sans);
+  /* Accents terre, un par catégorie d'événement : réservés au décor (carrés,
+     repères de carte, avatars), jamais comme couleur de texte. */
+  --cat-vernissage: #a3867d;
+  --cat-atelier: #cb9a56;
+  --cat-open-call: #337c83;
+  --cat-expo: #5a7580;
+  --cat-annonce: #9b8b73;
+  --cat-residence: #5f8763;
 
-  /* Badges de catégorie d'événement — un ton pastel distinct par type,
-     jamais de texte noir sur fond coloré. */
-  --badge-vernissage-bg: #f1e6fa;
-  --badge-vernissage-fg: #6b3fa0;
-  --badge-workshop-bg: #dff4ef;
-  --badge-workshop-fg: #22796b;
-  --badge-open-call-bg: #fce4dd;
-  --badge-open-call-fg: #c1502f;
-  --badge-expo-bg: #e3ecfc;
-  --badge-expo-fg: #3a5aa6;
-  --badge-annonce-bg: #fbe1ec;
-  --badge-annonce-fg: #a73d6c;
-  --badge-residency-bg: #fcefd1;
-  --badge-residency-fg: #a9720a;
+  /* Pairing corps/titres : Hanken Grotesk (corps) + Instrument Serif
+     (titres). Aucun des deux ne couvre le grec : Noto Sans prend le relais
+     pour le corps, Noto Serif pour les titres (voir layout.tsx). */
+  --font-sans: var(--font-hanken-grotesk), var(--font-noto-sans);
+  --font-display: var(--font-instrument-serif), var(--font-noto-serif);
 
-  /* Badges de coût — gratuit/payant, jamais de texte noir sur fond coloré. */
-  --badge-free-bg: #e1f5e5;
-  --badge-free-fg: #2f7d4f;
-  --badge-paid-bg: #e6eaf0;
-  --badge-paid-fg: #4c5a73;
-
-  /* Ombre douce "bubbly" — sous les cartes et le bouton flottant. */
-  --shadow-soft: 0 2px 8px rgba(32, 28, 22, 0.06), 0 8px 24px rgba(32, 28, 22, 0.08);
-  /* Ombres teintées au survol des cartes — argile pour les événements,
-     sauge pour les boutiques — et ombre plus marquée pour les modales. */
-  --shadow-event-hover: 0 8px 24px rgba(192, 103, 34, 0.12);
-  --shadow-shop-hover: 0 8px 24px rgba(63, 107, 82, 0.14);
-  --shadow-modal: 0 20px 60px rgba(32, 28, 22, 0.25);
+  /* Racines n'utilise pas d'ombre sur les cartes (le survol change le fond) ;
+     seules les modales gardent une ombre portée. */
+  --shadow-soft: none;
+  --shadow-modal: 0 30px 80px rgba(18, 17, 14, 0.3);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-selected: var(--surface-selected);
+  --color-placeholder: var(--placeholder);
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
+  --color-muted-strong: var(--muted-strong);
+  --color-text-soft: var(--text-soft);
   --color-border: var(--border);
+  --color-toggle-off: var(--toggle-off);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-secondary: var(--accent-secondary);
   --color-accent-secondary-foreground: var(--accent-secondary-foreground);
+  --color-danger: var(--danger);
+  --color-overlay: var(--overlay);
+  --color-cat-vernissage: var(--cat-vernissage);
+  --color-cat-atelier: var(--cat-atelier);
+  --color-cat-open-call: var(--cat-open-call);
+  --color-cat-expo: var(--cat-expo);
+  --color-cat-annonce: var(--cat-annonce);
+  --color-cat-residence: var(--cat-residence);
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
 
-  --color-badge-vernissage-bg: var(--badge-vernissage-bg);
-  --color-badge-vernissage-fg: var(--badge-vernissage-fg);
-  --color-badge-workshop-bg: var(--badge-workshop-bg);
-  --color-badge-workshop-fg: var(--badge-workshop-fg);
-  --color-badge-open-call-bg: var(--badge-open-call-bg);
-  --color-badge-open-call-fg: var(--badge-open-call-fg);
-  --color-badge-expo-bg: var(--badge-expo-bg);
-  --color-badge-expo-fg: var(--badge-expo-fg);
-  --color-badge-annonce-bg: var(--badge-annonce-bg);
-  --color-badge-annonce-fg: var(--badge-annonce-fg);
-  --color-badge-residency-bg: var(--badge-residency-bg);
-  --color-badge-residency-fg: var(--badge-residency-fg);
-  --color-badge-free-bg: var(--badge-free-bg);
-  --color-badge-free-fg: var(--badge-free-fg);
-  --color-badge-paid-bg: var(--badge-paid-bg);
-  --color-badge-paid-fg: var(--badge-paid-fg);
-
-  /* Coins beaucoup plus arrondis (esthétique "bubbly") — rounded-lg suffit
-     à rendre les boutons/badges compacts entièrement en pilule (le rayon
-     dépasse la moitié de leur hauteur, la valeur se clampe automatiquement),
-     tout en gardant un arrondi 20px+ raisonnable sur les cartes plus hautes. */
+  /* Arrondis hérités d'Argile et sauge : les écrans Racines utilisent des
+     pilules (rounded-full) et des angles droits ; ces valeurs ne servent plus
+     qu'aux pages pas encore repassées (détail d'événement, onboarding…). */
   --radius-lg: 1.25rem;
   --radius-xl: 1.5rem;
   --radius-2xl: 1.75rem;
 
   --shadow-soft: var(--shadow-soft);
-  --shadow-event-hover: var(--shadow-event-hover);
-  --shadow-shop-hover: var(--shadow-shop-hover);
   --shadow-modal: var(--shadow-modal);
 }
 
@@ -103,16 +93,62 @@ body {
   box-shadow: var(--shadow-soft);
 }
 
-.hover\:shadow-event-hover:hover {
-  box-shadow: var(--shadow-event-hover);
-}
-
-.hover\:shadow-shop-hover:hover {
-  box-shadow: var(--shadow-shop-hover);
-}
-
 .shadow-modal {
   box-shadow: var(--shadow-modal);
+}
+
+/* Carte Leaflet, direction Racines : repères carrés numérotés (lib/map-pins.ts),
+   groupes et bulles à angles droits. */
+.kamissa-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--background);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.kamissa-pin--active {
+  transform: scale(1.35);
+  box-shadow: 0 8px 20px rgba(18, 17, 14, 0.25);
+}
+
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: rgba(18, 17, 14, 0.15) !important;
+  border-radius: 0 !important;
+}
+
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+  border-radius: 0 !important;
+  font-family: var(--font-display) !important;
+  font-size: 16px;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-tooltip {
+  border-radius: 0 !important;
+  font-family: var(--font-sans);
+  color: var(--foreground);
+}
+
+.leaflet-bar,
+.leaflet-bar a {
+  border-radius: 0 !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--foreground-muted);
 }
 
 :focus-visible {

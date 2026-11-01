@@ -7,7 +7,8 @@ import { Lock, Settings } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { Toggle } from "@/components/Toggle";
-import { ProfileType } from "@/lib/types";
+import { serifTabClass, tabLabelClass, TAB_NUMBER } from "@/components/PageHeader";
+import { ProfileType, Ville } from "@/lib/types";
 
 type Tab = "posts" | "portfolio";
 
@@ -32,11 +33,17 @@ function initials(nom: string) {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-function tabClass(active: boolean) {
-  return `flex-1 flex items-center justify-center gap-1.5 border-b-[3px] py-2.5 text-sm font-bold transition md:flex-none md:pb-3 md:pt-0 md:text-[15px] ${
-    active ? "border-accent text-foreground" : "border-transparent text-foreground-muted"
-  }`;
-}
+const tabClass = (active: boolean) => serifTabClass(active, "md:text-[40px]");
+
+// Tons terre des cases du portfolio sans photo (dégradés de la maquette).
+const PORTFOLIO_TONES = [
+  "from-cat-expo to-[#3f5761]",
+  "from-cat-atelier to-[#a87b3e]",
+  "from-cat-residence to-accent-secondary",
+  "from-cat-annonce to-[#7d6f5a]",
+  "from-cat-vernissage to-[#86695f]",
+  "from-cat-open-call to-[#245d63]",
+];
 
 export default function ProfilPage() {
   const t = useT();
@@ -48,6 +55,7 @@ export default function ProfilPage() {
   const [typeProfil, setTypeProfil] = useState<ProfileType>("amateur");
   const [disciplines, setDisciplines] = useState<string[]>([]);
   const [bio, setBio] = useState("");
+  const [ville, setVille] = useState<Ville | null>(null);
   const [portfolioPublic, setPortfolioPublic] = useState(true);
   const [postsPublic, setPostsPublic] = useState(true);
 
@@ -102,6 +110,7 @@ export default function ProfilPage() {
         setTypeProfil(data.type_profil as ProfileType);
         setDisciplines(data.disciplines ?? []);
         setBio(data.bio ?? "");
+        setVille((data.ville as Ville) ?? null);
         setPortfolioPublic(data.portfolio_public);
         setPostsPublic(data.posts_public);
       }
@@ -129,145 +138,188 @@ export default function ProfilPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
+      <div className="mx-auto w-full max-w-[1240px] px-4 py-10 md:px-10">
         <p className="text-sm text-foreground-muted">{t.common.loading}</p>
       </div>
     );
   }
 
+  const disciplineLabels = disciplines.map((d) => t.disciplineLabels[d] ?? d);
+  const subtitle = [disciplineLabels.join(", ").toLowerCase(), ville ? t.villeLabels[ville] : null]
+    .filter(Boolean)
+    .join(", ");
+
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
-      <div className="flex justify-end">
-        <Link
-          href="/profil/parametres"
-          aria-label={t.profil.settingsLink}
-          title={t.profil.settingsLink}
-          className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-border"
-        >
-          <Settings size={17} strokeWidth={2} />
-        </Link>
-      </div>
-
-      {/* En-tête */}
-      <div className="flex flex-col items-center text-center">
-        <div className="flex h-[84px] w-[84px] items-center justify-center rounded-full bg-accent font-display text-[30px] font-bold text-accent-foreground">
-          {initials(nom)}
+    <div className="pb-16">
+      {/* Identité : nom en très grand, avatar posé dessus, carrés de couleur en décor. */}
+      <section className="relative mx-auto max-w-[1240px] px-4 pb-10 pt-8 text-center md:px-10 md:pt-14">
+        <div className="relative pt-[96px] md:min-h-[380px] md:pt-[92px]">
+          <div aria-hidden="true" className="hidden md:block">
+            <span className="absolute left-[4%] top-[30px] h-[110px] w-[150px] bg-gradient-to-br from-cat-expo to-[#3f5761]" />
+            <span className="absolute left-[16%] top-[230px] h-[150px] w-[120px] bg-gradient-to-br from-cat-atelier to-[#a87b3e]" />
+            <span className="absolute right-[6%] top-[10px] h-20 w-[110px] bg-gradient-to-br from-cat-annonce to-[#7d6f5a]" />
+            <span className="absolute right-[12%] top-[210px] h-[130px] w-[170px] bg-gradient-to-br from-cat-residence to-accent-secondary" />
+          </div>
+          <div
+            aria-hidden="true"
+            className="absolute left-1/2 top-0 flex h-[104px] w-[104px] -translate-x-1/2 items-center justify-center rounded-full border-[6px] border-background bg-cat-vernissage font-display text-5xl text-background md:h-[132px] md:w-[132px] md:text-[64px]"
+          >
+            {initials(nom)}
+          </div>
+          <h1 className="relative mt-6 break-words font-display text-[clamp(3.5rem,15vw,13.75rem)] uppercase leading-[0.82] tracking-[-0.02em] md:mt-[110px]">
+            {nom}
+          </h1>
+          {subtitle && (
+            <p className="relative mt-1.5 font-display text-[clamp(1.75rem,5.5vw,4.75rem)] italic leading-none">
+              {subtitle}
+            </p>
+          )}
         </div>
-        <p className="mt-1.5 text-xl font-black">{nom}</p>
-        <span className="mt-1.5 rounded-full border border-border bg-surface px-3.5 py-1 text-xs font-bold text-foreground-muted">
-          {t.profileTypeLabels[typeProfil]}
-        </span>
-        <p className="mt-1.5 text-sm font-bold text-accent-secondary">
-          {disciplines.map((d) => t.disciplineLabels[d] ?? d).join(" · ")}
-        </p>
-
-        <div className="mt-[18px] flex gap-9">
-          <div className="flex flex-col items-center gap-0.5">
-            <p className="text-base font-bold">{posts.length}</p>
-            <p className="text-xs text-foreground-muted">{t.profil.postsLabel}</p>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <p className="text-base font-bold">{followerCount}</p>
-            <p className="text-xs text-foreground-muted">{t.profil.followersLabel}</p>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <p className="text-base font-bold">{followingCount}</p>
-            <p className="text-xs text-foreground-muted">{t.profil.followingLabel}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Onglets */}
-      <div className="mt-7 flex border-b border-border md:mt-[30px] md:gap-7">
-        <button onClick={() => setTab("posts")} className={tabClass(tab === "posts")}>
-          {t.profil.postsLabel}
-        </button>
-        <button onClick={() => setTab("portfolio")} className={tabClass(tab === "portfolio")}>
-          {t.artiste.portfolio}
-        </button>
-      </div>
-
-      {tab === "posts" && (
-        <div className="mt-3">
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs text-foreground/50">{t.profil.postsSubtitle}</p>
-            <Toggle checked={postsPublic} onChange={(v) => setVisibility("posts_public", v)} />
-          </div>
-
-          <div className="grid grid-cols-3 gap-1 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
-            <Link
-              href="/profil/posts"
-              className="flex aspect-square items-center justify-center rounded border-[1.5px] border-dashed border-foreground/25 text-foreground/40 hover:border-foreground/40"
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <span className="rounded-full border border-foreground px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em]">
+            {t.profileTypeLabels[typeProfil]}
+          </span>
+          {disciplineLabels.map((d) => (
+            <span
+              key={d}
+              className="rounded-full bg-accent-secondary px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-accent-secondary-foreground"
             >
-              <span className="text-xl leading-none">+</span>
-            </Link>
-            {posts.map((post) => (
-              <Link key={post.id} href={`/posts/${post.id}`} className="aspect-square">
-                {post.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={post.image} alt={post.legende ?? ""} className="h-full w-full rounded object-cover" />
-                ) : (
-                  <div className="h-full w-full rounded bg-foreground/5" />
-                )}
-              </Link>
-            ))}
-          </div>
+              {d}
+            </span>
+          ))}
         </div>
-      )}
+      </section>
 
-      {tab === "portfolio" && (
-        <div className="mt-3">
-          <div className="mb-2.5 flex items-center justify-between">
-            <p className="text-xs text-foreground/50">{t.profil.portfolioSubtitle}</p>
-            <Toggle checked={portfolioPublic} onChange={(v) => setVisibility("portfolio_public", v)} />
+      {/* Chiffres, bio, accès aux paramètres. */}
+      <section className="mx-auto grid max-w-[1240px] gap-x-10 border-t border-border px-4 pb-14 pt-6 md:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] md:px-10">
+        <dl className="grid grid-cols-3 gap-3 pt-7">
+          {[
+            [t.profil.postsLabel, posts.length],
+            [t.profil.followersLabel, followerCount],
+            [t.profil.followingLabel, followingCount],
+          ].map(([label, value]) => (
+            <div key={label} className="flex flex-col-reverse">
+              <dt className="text-xs uppercase tracking-[0.1em] text-foreground-muted">{label}</dt>
+              <dd className="font-display text-[56px] leading-none md:text-[64px]">{value}</dd>
+            </div>
+          ))}
+        </dl>
+        {bio && (
+          <div className="pt-7">
+            <h2 className="mb-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-foreground-muted">
+              {t.profil.bio}
+            </h2>
+            <p className="font-display text-2xl leading-[1.2] md:text-[28px]">{bio}</p>
           </div>
+        )}
+        <div className="flex items-start pt-7">
+          <Link
+            href="/profil/parametres"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-foreground px-[22px] text-[13px] font-semibold uppercase tracking-[0.06em] text-background transition hover:bg-accent-hover"
+          >
+            <Settings size={15} strokeWidth={1.75} />
+            {t.profil.settingsLink}
+          </Link>
+        </div>
+      </section>
 
-          <div className="flex flex-col gap-2 md:grid md:grid-cols-3 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
-            {portfolio.map((item) => (
-              <div key={item.id} className="flex gap-2.5 rounded-lg border border-border bg-surface p-2.5 md:flex-col">
-                {item.image_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={item.image_url} alt={item.titre} className="h-[52px] w-[52px] shrink-0 rounded object-cover md:aspect-square md:h-auto md:w-full" />
-                ) : (
-                  <div className="h-[52px] w-[52px] shrink-0 rounded bg-foreground/10 md:aspect-square md:h-auto md:w-full" />
-                )}
-                <div>
-                  <p className="text-sm font-medium">{item.titre}</p>
-                  <p className="mt-0.5 text-xs text-foreground-muted">
-                    {[item.technique, item.annee].filter(Boolean).join(" · ")}
-                  </p>
-                </div>
-              </div>
-            ))}
+      {/* Œuvres : onglets numérotés ; la bibliothèque privée reste une page à part. */}
+      <section className="mx-auto max-w-[1240px] px-4 md:px-10">
+        <div
+          role="tablist"
+          className="flex flex-wrap gap-x-10 gap-y-2 border-b border-t border-b-border border-t-foreground py-[22px]"
+        >
+          <button role="tab" aria-selected={tab === "posts"} onClick={() => setTab("posts")} className={tabClass(tab === "posts")}>
+            <span className={TAB_NUMBER}>( 01 )</span>
+            <span className={tabLabelClass(tab === "posts")}>{t.profil.postsLabel}</span>
+          </button>
+          <button
+            role="tab"
+            aria-selected={tab === "portfolio"}
+            onClick={() => setTab("portfolio")}
+            className={tabClass(tab === "portfolio")}
+          >
+            <span className={TAB_NUMBER}>( 02 )</span>
+            <span className={tabLabelClass(tab === "portfolio")}>{t.artiste.portfolio}</span>
+          </button>
+          <Link href="/profil/bibliotheque" className={tabClass(false)}>
+            <span className={TAB_NUMBER}>( 03 )</span>
+            <Lock size={20} strokeWidth={1.5} className="self-center" />
+            {t.library.title}
+          </Link>
+        </div>
+
+        {tab === "posts" && (
+          <div className="mt-9">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="font-display text-[28px] leading-tight md:text-[34px]">{t.profil.postsSubtitle}</p>
+              <Toggle checked={postsPublic} onChange={(v) => setVisibility("posts_public", v)} />
+            </div>
+
+            <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] md:gap-7">
+              <Link
+                href="/profil/posts"
+                className="flex aspect-[4/5] flex-col items-center justify-center gap-2 border border-dashed border-foreground font-display text-[26px] transition hover:bg-surface-hover"
+              >
+                +
+              </Link>
+              {posts.map((post) => (
+                <Link key={post.id} href={`/posts/${post.id}`} className="aspect-[4/5]">
+                  {post.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={post.image} alt={post.legende ?? ""} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-full w-full bg-placeholder" />
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {tab === "portfolio" && (
+          <div className="mt-9">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="font-display text-[28px] leading-tight md:text-[34px]">{t.profil.portfolioSubtitle}</p>
+              <Toggle checked={portfolioPublic} onChange={(v) => setVisibility("portfolio_public", v)} />
+            </div>
+
+            <div className="mt-6 grid grid-cols-1 gap-x-7 gap-y-10 sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+              {portfolio.map((item, i) => (
+                <figure key={item.id} className="flex flex-col gap-3">
+                  {item.image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.image_url}
+                      alt={item.titre}
+                      className={`w-full object-cover ${i % 2 === 0 ? "aspect-[4/5]" : "aspect-square"}`}
+                    />
+                  ) : (
+                    <div
+                      aria-hidden="true"
+                      className={`w-full bg-gradient-to-br ${PORTFOLIO_TONES[i % PORTFOLIO_TONES.length]} ${
+                        i % 2 === 0 ? "aspect-[4/5]" : "aspect-square"
+                      }`}
+                    />
+                  )}
+                  <figcaption className="flex items-baseline justify-between gap-3">
+                    <span className="font-display text-[26px] leading-tight">{item.titre}</span>
+                    <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground-muted">
+                      {[item.technique, item.annee].filter(Boolean).join(" · ")}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
             <Link
               href="/profil/portfolio"
-              className="rounded-lg border border-border py-2 text-center text-sm hover:border-foreground/40 md:col-span-full"
+              className="mt-10 inline-flex min-h-11 items-center rounded-full border border-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] transition hover:bg-surface-hover"
             >
               + {t.portfolio.addPiece}
             </Link>
           </div>
-        </div>
-      )}
-
-      {/* Bibliothèque privée */}
-      <Link
-        href="/profil/bibliotheque"
-        className="mt-5 flex items-center gap-3 rounded-lg border border-border bg-surface px-5 py-4 transition"
-      >
-        <Lock size={18} strokeWidth={2} className="shrink-0" />
-        <span>
-          <p className="text-sm font-bold">{t.library.title}</p>
-          <p className="mt-0.5 text-xs text-foreground-muted">{t.library.subtitle}</p>
-        </span>
-      </Link>
-
-      {/* Bio */}
-      {bio && (
-        <div className="mt-3.5 rounded-lg border border-border bg-surface px-5 py-4">
-          <p className="text-sm font-bold">{t.profil.bio}</p>
-          <p className="mt-1 text-sm text-foreground-muted">{bio}</p>
-        </div>
-      )}
+        )}
+      </section>
     </div>
   );
 }

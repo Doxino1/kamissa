@@ -69,28 +69,28 @@ export function BlockReportActions({ targetUserId, targetName, onBlocked, classN
 
   return (
     <div className={className}>
-      <div className="flex gap-3 text-xs">
-        <button type="button" onClick={handleBlock} disabled={busy} className="text-foreground/50 hover:text-red-600">
+      <div className="flex gap-5 text-xs font-semibold uppercase tracking-[0.1em]">
+        <button type="button" onClick={handleBlock} disabled={busy} className="min-h-8 text-foreground-muted hover:text-danger">
           {t.safety.block}
         </button>
         <button
           type="button"
           onClick={() => setShowReport((v) => !v)}
           disabled={busy}
-          className="text-foreground/50 hover:text-red-600"
+          className="min-h-8 text-foreground-muted hover:text-danger"
         >
           {t.safety.report}
         </button>
       </div>
 
-      {message && <p className="mt-1 text-xs text-green-700">{message}</p>}
+      {message && <p className="mt-1 text-xs text-accent-secondary">{message}</p>}
 
       {showReport && (
-        <form onSubmit={handleReport} className="mt-2 flex flex-col gap-2 rounded-lg border border-border p-2">
+        <form onSubmit={handleReport} className="mt-3 flex flex-col gap-3 border-t border-border pt-3">
           <select
             value={motif}
             onChange={(e) => setMotif(e.target.value as ReportReason)}
-            className="rounded-lg border border-border bg-transparent px-2 py-1 text-xs"
+            className="min-h-10 border-0 border-b border-foreground bg-transparent font-display text-lg"
           >
             <option value="spam">{t.safety.reportReasonSpam}</option>
             <option value="comportement">{t.safety.reportReasonBehavior}</option>
@@ -102,20 +102,20 @@ export function BlockReportActions({ targetUserId, targetName, onBlocked, classN
             onChange={(e) => setDescription(e.target.value)}
             placeholder={t.safety.reportDescriptionPlaceholder}
             rows={2}
-            className="rounded-lg border border-border bg-transparent px-2 py-1 text-xs outline-none focus:border-foreground/50"
+            className="border border-border bg-transparent px-3 py-2 font-display text-lg outline-none focus:border-foreground"
           />
           <div className="flex gap-2">
             <button
               type="submit"
               disabled={busy}
-              className="rounded-lg bg-accent px-3 py-1 text-xs text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
+              className="min-h-9 rounded-full bg-foreground px-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover disabled:opacity-50"
             >
               {busy ? "…" : t.safety.reportSubmit}
             </button>
             <button
               type="button"
               onClick={() => setShowReport(false)}
-              className="rounded-lg border border-border px-3 py-1 text-xs hover:border-foreground/40"
+              className="min-h-9 rounded-full border border-border px-4 text-[11px] font-semibold uppercase tracking-[0.1em] hover:border-foreground"
             >
               {t.safety.cancel}
             </button>

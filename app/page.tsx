@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { List, Map as MapIcon, Bookmark, Store, Plus, X } from "lucide-react";
+import { List, Map as MapIcon, Store, Plus, X } from "lucide-react";
 import { EventCard } from "@/components/EventCard";
 import { EventFilterBar } from "@/components/EventFilterBar";
 import { HomeGreeting } from "@/components/HomeGreeting";
@@ -132,270 +132,262 @@ export default function EvenementsPage() {
   const showMap = isDesktop || view === "carte";
 
   return (
-    <div className="relative mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-6 md:py-4">
-      <div className="flex items-center justify-between gap-2 md:hidden">
-        <h1 className="font-display text-xl font-black">{t.nav.evenements}</h1>
-        {!checkingUser && !userId && (
-          <Link href="/login" className="text-sm text-accent hover:opacity-80">
+    <div className="relative pb-24 md:pb-12">
+      {/* Mobile : pas de barre du haut, les raccourcis notifications et
+          boutiques restent accessibles ici. */}
+      <div className="flex items-center justify-end gap-2 px-4 pt-4 md:hidden">
+        {!checkingUser && !userId ? (
+          <Link href="/login" className="text-xs font-semibold uppercase tracking-[0.1em] underline underline-offset-4">
             {t.nav.connexion}
           </Link>
+        ) : (
+          <>
+            <NotificationBell userId={userId} />
+            <Link
+              href="/boutiques"
+              aria-label={t.shops.title}
+              title={t.shops.title}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white text-foreground"
+            >
+              <Store size={17} strokeWidth={1.75} />
+            </Link>
+          </>
         )}
       </div>
 
-      <div className="mt-4 flex items-center justify-end gap-2 md:hidden">
-        <div className="flex items-center gap-2">
-          <NotificationBell userId={userId} />
-          <button
-            onClick={() => setShowSaved((s) => !s)}
-            aria-label={t.evenements.tabMes}
-            title={t.evenements.tabMes}
-            className={`flex h-9 w-9 items-center justify-center rounded-full border transition ${
-              showSaved ? "border-transparent bg-accent text-accent-foreground" : "border-border text-foreground"
-            }`}
-          >
-            <Bookmark size={16} strokeWidth={1.75} />
-          </button>
-          <Link
-            href="/boutiques"
-            aria-label={t.shops.title}
-            title={t.shops.title}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground md:hidden"
-          >
-            <Store size={16} strokeWidth={1.75} />
-          </Link>
+      {/* En-tête : grand titre, accroche, compteur de la semaine. */}
+      <section className="mx-auto flex max-w-[1360px] flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-foreground px-4 pt-4 md:px-10 md:pt-6">
+        <div className="pb-[18px]">
+          <HomeGreeting userId={userId} ville={ville} nextGoingEvent={nextGoingEvent}>
+            <h1 className="pt-[0.12em] font-display text-[clamp(3.25rem,12vw,7.5rem)] uppercase leading-[0.85]">
+              {t.nav.evenements}
+            </h1>
+            <p className="mt-2 font-display text-[clamp(1.375rem,4vw,2.25rem)] italic leading-tight">
+              {t.evenements.tagline}
+            </p>
+          </HomeGreeting>
         </div>
-      </div>
-
-      {!showSaved && (
-        <div className="mt-4 md:hidden">
-          <EventFilterBar filters={filters} />
-        </div>
-      )}
-
-      <div className="md:flex md:h-[calc(100vh-10rem)] md:flex-col md:overflow-hidden md:rounded-2xl md:border md:border-border md:shadow-soft">
-        {!showSaved && (
-          <div className="hidden md:flex md:justify-center md:px-4 md:pt-4">
-            <div className="w-full max-w-xl">
-              <EventFilterBar filters={filters} />
-            </div>
-          </div>
-        )}
-
-        <div className="hidden shrink-0 items-center justify-between border-b border-border px-4 py-3 md:flex">
-          <h2 className="font-display text-lg font-black">{t.nav.evenements}</h2>
+        <div className="pb-[22px] md:text-right">
+          <p className="font-display text-[clamp(3.5rem,9vw,6rem)] leading-[0.9]">{eventsThisWeekCount}</p>
+          <p className="mb-3.5 mt-1.5 text-xs uppercase tracking-[0.12em] text-foreground-muted">
+            {t.evenements.thisWeekLabel(eventsThisWeekCount, t.villeLabels[ville])}
+          </p>
           {!checkingUser && !userId ? (
-            <Link href="/login" className="text-sm text-accent hover:opacity-80">
+            <Link
+              href="/login"
+              className="hidden min-h-11 items-center rounded-full border border-foreground px-5 text-xs font-semibold uppercase tracking-[0.1em] md:inline-flex"
+            >
               {t.nav.connexion}
             </Link>
           ) : (
             <button
+              type="button"
               onClick={() => setShowSaved((s) => !s)}
-              aria-label={t.evenements.tabMes}
-              title={t.evenements.tabMes}
-              className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition ${
-                showSaved ? "border-transparent bg-accent text-accent-foreground" : "border-border text-foreground"
+              aria-pressed={showSaved}
+              className={`min-h-11 rounded-full border border-foreground px-5 text-xs font-semibold uppercase tracking-[0.1em] transition ${
+                showSaved ? "bg-foreground text-background" : "bg-transparent text-foreground hover:bg-surface-hover"
               }`}
             >
-              <Bookmark size={16} strokeWidth={1.75} />
               {t.evenements.tabMes}
             </button>
           )}
         </div>
+      </section>
 
-        {!showSaved && (
-          <div className="md:flex md:min-h-0 md:flex-1 md:items-stretch">
-            <div className="md:h-full md:w-[42%] md:shrink-0 md:overflow-y-auto md:p-4">
-              {userId && profileIncomplete && !bannerDismissed && (
-                <div className="mt-4 flex items-start justify-between gap-3 rounded-lg border border-badge-open-call-fg/25 bg-badge-open-call-bg px-[18px] py-3.5 text-sm md:mt-0">
-                  <p>
-                    {t.profileBanner.message}{" "}
-                    <Link href="/profil/parametres" className="font-bold text-accent">
-                      {t.profileBanner.cta} →
-                    </Link>
+      {!showSaved && (
+        <section className="mx-auto max-w-[1360px] border-b border-border px-4 py-[18px] md:px-10">
+          <EventFilterBar filters={filters} />
+        </section>
+      )}
+
+      {!showSaved && (
+        <main className="mx-auto max-w-[1360px] px-4 md:flex md:items-start md:gap-8 md:px-10">
+          <div className="min-w-0 md:w-[42%] md:max-w-[600px] md:shrink-0">
+            {userId && profileIncomplete && !bannerDismissed && (
+              <div className="flex items-center justify-between gap-3 border-b border-border py-3.5 text-sm">
+                <p>
+                  {t.profileBanner.message}{" "}
+                  <Link href="/profil/parametres" className="font-bold underline-offset-4 hover:underline">
+                    {t.profileBanner.cta} →
+                  </Link>
+                </p>
+                <button
+                  type="button"
+                  onClick={dismissProfileBanner}
+                  aria-label={t.modal.close}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center text-foreground-muted hover:text-foreground"
+                >
+                  <X size={16} strokeWidth={1.75} />
+                </button>
+              </div>
+            )}
+
+            {showList && (
+              <div className="flex flex-col">
+                {loadingShown && <CardSkeleton />}
+                {error && <p className="py-6 text-sm text-danger">{t.evenements.loadError(error)}</p>}
+                {!loadingShown && !error && events.length === 0 && (
+                  <p className="py-12 text-center font-display text-2xl italic text-foreground-muted md:text-[28px]">
+                    {t.evenements.noResults}
                   </p>
+                )}
+                {!loadingShown &&
+                  events.slice(0, visibleCount).map((event, i) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      index={i + 1}
+                      highlighted={hoveredEventId === event.id}
+                      onMouseEnter={() => setHoveredEventId(event.id)}
+                      onMouseLeave={() => setHoveredEventId(null)}
+                    />
+                  ))}
+                {!loadingShown && events.length > visibleCount && (
                   <button
                     type="button"
-                    onClick={dismissProfileBanner}
-                    aria-label={t.modal.close}
-                    className="shrink-0 opacity-70 hover:opacity-100"
+                    onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                    className="mt-5 min-h-11 self-start rounded-full border border-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] transition hover:bg-surface-hover"
                   >
-                    <X size={16} strokeWidth={1.75} />
-                  </button>
-                </div>
-              )}
-
-              {userId && (
-                <div className="mt-4 md:mt-0">
-                  <HomeGreeting
-                    userId={userId}
-                    ville={ville}
-                    eventsThisWeekCount={eventsThisWeekCount}
-                    nextGoingEvent={nextGoingEvent}
-                  />
-                </div>
-              )}
-
-              {showList && (
-                <div className="flex flex-col gap-3">
-                  {loadingShown && <CardSkeleton />}
-                  {error && <p className="text-sm text-red-600">{t.evenements.loadError(error)}</p>}
-                  {!loadingShown && !error && events.length === 0 && (
-                    <p className="text-sm text-foreground-muted">{t.evenements.noResults}</p>
-                  )}
-                  {!loadingShown &&
-                    events.slice(0, visibleCount).map((event) => (
-                      <EventCard
-                        key={event.id}
-                        event={event}
-                        highlighted={hoveredEventId === event.id}
-                        onMouseEnter={() => setHoveredEventId(event.id)}
-                        onMouseLeave={() => setHoveredEventId(null)}
-                      />
-                    ))}
-                  {!loadingShown && events.length > visibleCount && (
-                    <button
-                      type="button"
-                      onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                      className="self-center rounded-full border border-border px-[22px] py-2.5 text-sm font-bold"
-                    >
-                      {t.common.loadMore}
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {showMap && (
-              <div className="relative mt-4 md:mt-0 md:h-full md:flex-1">
-                <EventMap
-                  key={ville}
-                  events={events}
-                  ville={ville}
-                  hoveredEventId={hoveredEventId}
-                  onHoverEvent={setHoveredEventId}
-                />
-                {userId && (
-                  <button
-                    type="button"
-                    onClick={() => setShowAddEventModal(true)}
-                    aria-label={t.evenements.proposer}
-                    title={t.evenements.proposer}
-                    className="absolute bottom-6 right-6 z-[1000] flex items-center gap-2 rounded-full bg-accent px-[22px] py-3.5 text-sm font-bold text-accent-foreground shadow-event-hover transition hover:bg-accent-hover"
-                  >
-                    <Plus size={20} strokeWidth={2} />
-                    {t.evenements.proposer}
+                    {t.common.loadMore}
                   </button>
                 )}
               </div>
             )}
           </div>
-        )}
 
-        {showSaved && (
-          <div className="mt-4 md:mt-0 md:min-h-0 md:flex-1 md:overflow-y-auto md:p-4">
-            {checkingUser && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}
-
-            {!checkingUser && !userId && (
-              <p className="text-sm text-foreground-muted">
-                <Link href="/login" className="underline hover:text-foreground">
-                  {t.evenements.loginLink}
-                </Link>{" "}
-                {t.evenements.loginToSee}
+          {showMap && (
+            <div className="relative mt-4 md:sticky md:top-[104px] md:mt-6 md:h-[calc(100vh-128px)] md:min-h-[480px] md:flex-1">
+              <EventMap
+                key={ville}
+                events={events}
+                ville={ville}
+                hoveredEventId={hoveredEventId}
+                onHoverEvent={setHoveredEventId}
+              />
+              <p className="pointer-events-none absolute bottom-4 left-5 z-[500] hidden text-xs uppercase tracking-[0.12em] text-foreground-muted md:block">
+                ( {t.villeLabels[ville]} )
               </p>
-            )}
+              {userId && (
+                <button
+                  type="button"
+                  onClick={() => setShowAddEventModal(true)}
+                  aria-label={t.evenements.proposer}
+                  title={t.evenements.proposer}
+                  className="absolute bottom-6 right-6 z-[1000] flex min-h-14 items-center gap-2.5 rounded-full bg-foreground px-[26px] text-[13px] font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover"
+                >
+                  <Plus size={18} strokeWidth={2} />
+                  {t.evenements.proposer}
+                </button>
+              )}
+            </div>
+          )}
+        </main>
+      )}
 
-            {!checkingUser && userId && (
-              <>
-                <section>
-                  <h2 className="text-sm font-medium text-foreground-muted">{t.evenements.jeViens}</h2>
-                  <div className="mt-3 flex flex-col gap-3">
-                    {goingEvents.length === 0 && (
-                      <p className="text-sm text-foreground-muted">{t.evenements.noneYet}</p>
-                    )}
-                    {goingEvents.map((event) => (
-                      <EventCard key={event.id} event={event} />
-                    ))}
-                  </div>
-                </section>
+      {showSaved && (
+        <main className="mx-auto max-w-[1360px] px-4 md:px-10">
+          {checkingUser && <p className="py-6 text-sm text-foreground-muted">{t.common.loading}</p>}
 
-                <section className="mt-8">
-                  <h2 className="text-sm font-medium text-foreground-muted">{t.evenements.sauvegardes}</h2>
-                  <div className="mt-3 flex flex-col gap-3">
-                    {savedEvents.length === 0 && (
-                      <p className="text-sm text-foreground-muted">{t.evenements.noneYet}</p>
-                    )}
-                    {savedEvents.map((event) => (
-                      <EventCard key={event.id} event={event} />
-                    ))}
-                  </div>
-                </section>
+          {!checkingUser && !userId && (
+            <p className="py-6 text-sm text-foreground-muted">
+              <Link href="/login" className="underline hover:text-foreground">
+                {t.evenements.loginLink}
+              </Link>{" "}
+              {t.evenements.loginToSee}
+            </p>
+          )}
 
-                <section className="mt-8">
-                  <h2 className="text-sm font-medium text-foreground-muted">{t.evenements.mesSoumissions}</h2>
-                  <div className="mt-3 flex flex-col gap-3">
-                    {submissions === null && (
-                      <p className="text-sm text-foreground-muted">{t.common.loading}</p>
-                    )}
-                    {submissions !== null && submissions.length === 0 && (
-                      <p className="text-sm text-foreground-muted">{t.evenements.noSubmissions}</p>
-                    )}
-                    {(submissions ?? []).map((s) => (
-                      <div key={s.id} className="rounded-lg bg-surface p-4 shadow-soft">
-                        <div className="flex items-center justify-between gap-2">
-                          <h3 className="font-medium">{s.titre}</h3>
-                          <span
-                            className={`rounded-full px-2 py-0.5 text-xs ${
-                              s.statut === "publie"
-                                ? "bg-green-600/10 text-green-700"
-                                : "bg-foreground/5 text-foreground-muted"
-                            }`}
-                          >
-                            {s.statut === "publie"
-                              ? t.evenements.statutPublie
-                              : t.evenements.statutEnAttente}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-sm text-foreground-muted">
-                          {t.villeLabels[s.ville]} ·{" "}
-                          {formatInVille(s.date, s.ville, {
-                            day: "numeric",
-                            month: "short",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                        <div className="mt-2 flex gap-3 text-xs">
-                          <Link
-                            href={`/evenements/${s.id}/modifier`}
-                            className="text-foreground-muted underline hover:text-foreground"
-                          >
-                            {t.evenements.editLink}
-                          </Link>
-                        </div>
+          {!checkingUser && userId && (
+            <div className="grid gap-x-12 md:grid-cols-2">
+              <section className="pt-7">
+                <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground-muted">
+                  ( {t.evenements.jeViens} )
+                </h2>
+                <div className="flex flex-col">
+                  {goingEvents.length === 0 && (
+                    <p className="py-6 font-display text-2xl italic text-foreground-muted">{t.evenements.noneYet}</p>
+                  )}
+                  {goingEvents.map((event) => (
+                    <EventCard key={event.id} event={event} />
+                  ))}
+                </div>
+              </section>
+
+              <section className="pt-7">
+                <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground-muted">
+                  ( {t.evenements.sauvegardes} )
+                </h2>
+                <div className="flex flex-col">
+                  {savedEvents.length === 0 && (
+                    <p className="py-6 font-display text-2xl italic text-foreground-muted">{t.evenements.noneYet}</p>
+                  )}
+                  {savedEvents.map((event) => (
+                    <EventCard key={event.id} event={event} />
+                  ))}
+                </div>
+              </section>
+
+              <section className="pt-7 md:col-span-2">
+                <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground-muted">
+                  ( {t.evenements.mesSoumissions} )
+                </h2>
+                <div className="flex flex-col">
+                  {submissions === null && <p className="py-6 text-sm text-foreground-muted">{t.common.loading}</p>}
+                  {submissions !== null && submissions.length === 0 && (
+                    <p className="py-6 font-display text-2xl italic text-foreground-muted">
+                      {t.evenements.noSubmissions}
+                    </p>
+                  )}
+                  {(submissions ?? []).map((s) => (
+                    <div key={s.id} className="border-b border-border py-5">
+                      <div className="flex items-baseline justify-between gap-3">
+                        <h3 className="font-display text-[26px] leading-tight">{s.titre}</h3>
+                        <span
+                          className={`shrink-0 text-[11px] font-semibold uppercase tracking-[0.1em] ${
+                            s.statut === "publie" ? "text-accent-secondary" : "text-foreground-muted"
+                          }`}
+                        >
+                          {s.statut === "publie" ? t.evenements.statutPublie : t.evenements.statutEnAttente}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </section>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+                      <p className="mt-1 text-sm text-foreground-muted">
+                        {t.villeLabels[s.ville]} ·{" "}
+                        {formatInVille(s.date, s.ville, {
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                      <Link
+                        href={`/evenements/${s.id}/modifier`}
+                        className="mt-2 inline-block text-[11px] font-semibold uppercase tracking-[0.1em] underline underline-offset-4"
+                      >
+                        {t.evenements.editLink}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+          )}
+        </main>
+      )}
 
       {!showSaved && (
         <button
           type="button"
           onClick={() => setView((v) => (v === "liste" ? "carte" : "liste"))}
-          className="fixed bottom-20 left-1/2 z-[500] flex -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-[22px] py-3 text-sm font-bold text-background shadow-modal md:hidden"
+          className="fixed bottom-20 left-1/2 z-[500] flex min-h-11 -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] text-background shadow-modal md:hidden"
         >
           {view === "liste" ? (
             <>
-              <MapIcon size={16} strokeWidth={2} />
+              <MapIcon size={16} strokeWidth={1.75} />
               {t.evenements.tabCarte}
             </>
           ) : (
             <>
-              <List size={16} strokeWidth={2} />
+              <List size={16} strokeWidth={1.75} />
               {t.evenements.tabTous}
             </>
           )}

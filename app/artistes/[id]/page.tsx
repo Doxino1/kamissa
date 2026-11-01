@@ -136,7 +136,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
   if (profile === null) {
     return (
       <div className="mx-auto w-full max-w-2xl px-4 py-8">
-        <p className="text-sm text-red-600">{t.artiste.notFound}</p>
+        <p className="text-sm text-danger">{t.artiste.notFound}</p>
       </div>
     );
   }

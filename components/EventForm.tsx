@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { VILLE_TIMEZONES } from "@/lib/timezone";
 import { useT } from "@/lib/i18n/context";
+import { FIELD_HINT, FIELD_INPUT, FIELD_LABEL, FIELD_TEXTAREA, PRIMARY_BUTTON } from "@/lib/form-styles";
+import { EVENT_TYPE_SQUARE_STYLES } from "./EventTypeBadge";
 import { AnnouncementSubtype, CoutType, DISCIPLINES, EventType, EVENT_TYPES_WITH_COST, Ville } from "@/lib/types";
 
 const VILLES: Ville[] = ["Paris", "Athènes"];
@@ -87,44 +89,58 @@ export function EventForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-[22px]">
       <input
         type="text"
         required
         placeholder={t.submission.titre}
+        aria-label={t.submission.titre}
         value={values.titre}
         onChange={(e) => set("titre", e.target.value)}
-        className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+        className={FIELD_INPUT}
       />
 
       <textarea
         placeholder={t.submission.description}
+        aria-label={t.submission.description}
         value={values.description}
         onChange={(e) => set("description", e.target.value)}
         rows={3}
-        className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+        className={FIELD_TEXTAREA}
       />
 
-      <select
-        value={values.type}
-        onChange={(e) => set("type", e.target.value as EventType)}
-        className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
-      >
-        {Object.entries(t.eventTypeLabels).map(([value, label]) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        ))}
-      </select>
+      {/* Catégorie en pastilles, chacune précédée de son carré de couleur. */}
+      <div role="radiogroup" className="flex flex-wrap gap-2">
+        {(Object.entries(t.eventTypeLabels) as [EventType, string][]).map(([value, label]) => {
+          const active = values.type === value;
+          return (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => set("type", value)}
+              className={`flex min-h-10 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold uppercase tracking-[0.08em] transition ${
+                active
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-border bg-transparent text-foreground hover:border-foreground"
+              }`}
+            >
+              <span aria-hidden="true" className={`h-2 w-2 ${EVENT_TYPE_SQUARE_STYLES[value]}`} />
+              {label}
+            </button>
+          );
+        })}
+      </div>
 
       {EVENT_TYPES_WITH_COST.includes(values.type) && (
-        <>
+        <div className="grid gap-x-6 gap-y-[22px] sm:grid-cols-2">
           <select
             required
             aria-label={t.submission.coutLabel}
             value={values.coutType}
             onChange={(e) => set("coutType", e.target.value as CoutType)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
+            className={FIELD_INPUT}
           >
             <option value="" disabled>
               {t.submission.coutPlaceholder}
@@ -138,11 +154,12 @@ export function EventForm({
           <input
             type="text"
             placeholder={t.submission.coutDetailPlaceholder}
+            aria-label={t.submission.coutDetailPlaceholder}
             value={values.coutDetail}
             onChange={(e) => set("coutDetail", e.target.value)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+            className={FIELD_INPUT}
           />
-        </>
+        </div>
       )}
 
       {values.type === "annonce" && (
@@ -150,7 +167,7 @@ export function EventForm({
           <select
             value={values.sousType}
             onChange={(e) => set("sousType", e.target.value as AnnouncementSubtype)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
+            className={FIELD_INPUT}
           >
             {Object.entries(t.announcementSubtypeLabels).map(([value, label]) => (
               <option key={value} value={value}>
@@ -158,78 +175,74 @@ export function EventForm({
               </option>
             ))}
           </select>
-          <p className="rounded-lg bg-foreground/5 px-3 py-2 text-xs text-foreground-muted">
-            {t.submission.annonceDisclaimer}
-          </p>
+          <p className="border-l border-foreground pl-3 text-xs text-text-soft">{t.submission.annonceDisclaimer}</p>
         </>
       )}
 
-      <select
-        value={values.discipline}
-        onChange={(e) => set("discipline", e.target.value)}
-        className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
-      >
-        {DISCIPLINES.map((d) => (
-          <option key={d} value={d}>
-            {t.disciplineLabels[d]}
-          </option>
-        ))}
-      </select>
+      <div className="grid gap-x-6 gap-y-[22px] sm:grid-cols-2">
+        <select value={values.discipline} onChange={(e) => set("discipline", e.target.value)} className={FIELD_INPUT}>
+          {DISCIPLINES.map((d) => (
+            <option key={d} value={d}>
+              {t.disciplineLabels[d]}
+            </option>
+          ))}
+        </select>
 
-      <select
-        value={values.ville}
-        onChange={(e) => set("ville", e.target.value as Ville)}
-        className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm"
-      >
-        {VILLES.map((v) => (
-          <option key={v} value={v}>
-            {t.villeLabels[v]}
-          </option>
-        ))}
-      </select>
+        <select value={values.ville} onChange={(e) => set("ville", e.target.value as Ville)} className={FIELD_INPUT}>
+          {VILLES.map((v) => (
+            <option key={v} value={v}>
+              {t.villeLabels[v]}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <input
         type="text"
         required
         placeholder={t.submission.lieu}
+        aria-label={t.submission.lieu}
         value={values.lieu}
         onChange={(e) => set("lieu", e.target.value)}
-        className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
+        className={FIELD_INPUT}
       />
 
-      <div className="flex gap-2">
-        <input
-          type="date"
-          required
-          value={values.date}
-          onChange={(e) => set("date", e.target.value)}
-          className="w-1/2 rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-        <input
-          type="time"
-          required
-          value={values.heure}
-          onChange={(e) => set("heure", e.target.value)}
-          className="w-1/2 rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
+      <div>
+        <div className="grid grid-cols-2 gap-6">
+          <input
+            type="date"
+            required
+            value={values.date}
+            onChange={(e) => set("date", e.target.value)}
+            className={FIELD_INPUT}
+          />
+          <input
+            type="time"
+            required
+            value={values.heure}
+            onChange={(e) => set("heure", e.target.value)}
+            className={FIELD_INPUT}
+          />
+        </div>
+        <p className={`mt-2 ${FIELD_HINT}`}>
+          {t.submission.heureLocale(t.villeLabels[values.ville], VILLE_TIMEZONES[values.ville])}
+        </p>
       </div>
-      <p className="text-xs text-foreground/50">
-        {t.submission.heureLocale(t.villeLabels[values.ville], VILLE_TIMEZONES[values.ville])}
-      </p>
 
       {recurrence && onRecurrenceChange && (
-        <div className="rounded-lg border border-border p-3">
-          <label className="flex items-center gap-2 text-sm">
+        <div className="border-t border-border pt-4">
+          <label className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.08em]">
             <input
               type="checkbox"
               checked={recurrence.repeatWeekly}
               onChange={(e) => onRecurrenceChange({ ...recurrence, repeatWeekly: e.target.checked })}
+              className="h-4 w-4 accent-foreground"
             />
             {t.submission.repeatWeekly}
           </label>
           {recurrence.repeatWeekly && (
             <>
-              <label className="mt-2 block text-xs text-foreground-muted">
+              <label className={`mt-3 flex items-center gap-3 ${FIELD_LABEL}`}>
                 {t.submission.repeatCountLabel}
                 <input
                   type="number"
@@ -242,23 +255,19 @@ export function EventForm({
                       count: Math.min(MAX_RECURRENCE_COUNT, Math.max(2, Number(e.target.value) || 2)),
                     })
                   }
-                  className="mt-1 w-20 rounded-lg border border-border bg-transparent px-2 py-1 text-sm"
+                  className="min-h-10 w-20 border-0 border-b border-foreground bg-transparent font-display text-2xl text-foreground outline-none"
                 />
               </label>
-              <p className="mt-1 text-xs text-foreground/50">{t.submission.repeatHint}</p>
+              <p className={`mt-1.5 ${FIELD_HINT}`}>{t.submission.repeatHint}</p>
             </>
           )}
         </div>
       )}
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      {message && <p className="text-sm text-green-700">{message}</p>}
+      {error && <p className="text-sm font-semibold text-danger">{error}</p>}
+      {message && <p className="text-sm font-semibold text-accent-secondary">{message}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="mt-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className={`mt-2.5 ${PRIMARY_BUTTON}`}>
         {loading ? "…" : submitLabel}
       </button>
 

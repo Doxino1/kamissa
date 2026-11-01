@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Caprasimo, Noto_Sans } from "next/font/google";
+import { Hanken_Grotesk, Instrument_Serif, Noto_Sans, Noto_Serif } from "next/font/google";
 import { BottomNav } from "@/components/BottomNav";
 import { TopNav } from "@/components/TopNav";
 import { PublicFooter } from "@/components/PublicFooter";
@@ -8,25 +8,32 @@ import { ToastProvider } from "@/lib/toast-context";
 import { createClient } from "@/lib/supabase/server";
 import "./globals.css";
 
-// Pairing corps/titres façon prototype Claude Design : Figtree pour le corps
-// de texte, Caprasimo (display, une seule graisse) pour les titres. Ni l'un
-// ni l'autre ne couvre le grec (subset absent chez Google Fonts) : Noto Sans
-// complète la pile pour ces caractères, aussi bien pour le corps que pour
-// les titres (pas de version "display" grecque de Caprasimo disponible).
-const figtree = Figtree({
-  variable: "--font-figtree",
+// Pairing corps/titres de la direction « Racines » : Hanken Grotesk pour le
+// corps de texte, Instrument Serif (une seule graisse, romain + italique) pour
+// les titres. Ni l'un ni l'autre ne couvre le grec (subset absent chez Google
+// Fonts) : Noto Sans complète la pile du corps et Noto Serif celle des titres,
+// pour que les titres grecs restent à empattements.
+const hankenGrotesk = Hanken_Grotesk({
+  variable: "--font-hanken-grotesk",
   subsets: ["latin", "latin-ext"],
   weight: "variable",
 });
-const caprasimo = Caprasimo({
-  variable: "--font-caprasimo",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin", "latin-ext"],
   weight: "400",
+  style: ["normal", "italic"],
 });
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
   subsets: ["latin", "greek"],
   weight: ["400", "600", "700", "900"],
+});
+const notoSerif = Noto_Serif({
+  variable: "--font-noto-serif",
+  subsets: ["greek"],
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -45,7 +52,7 @@ export default async function RootLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <html lang="fr" className={`${figtree.variable} ${caprasimo.variable} ${notoSans.variable} h-full antialiased`}>
+    <html lang="fr" className={`${hankenGrotesk.variable} ${instrumentSerif.variable} ${notoSans.variable} ${notoSerif.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <LocaleProvider>
           <ToastProvider>

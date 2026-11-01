@@ -204,87 +204,90 @@ export function MatchingTab() {
   }
 
   if (loading) {
-    return <p className="text-sm text-foreground-muted">{t.common.loading}</p>;
+    return <p className="pt-7 text-sm text-foreground-muted">{t.common.loading}</p>;
   }
 
   const current = suggestions[matchIndex];
 
   return (
-    <div>
-      <p className="mb-6 text-sm text-foreground-muted">{t.matching.subtitle}</p>
+    <div className="pt-7">
+      <p className="font-display text-[26px] leading-tight md:text-[34px]">{t.matching.subtitle}</p>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-6 text-sm text-danger">{error}</p>}
 
       {!error && myTags.length === 0 && (
-        <p className="text-sm text-foreground-muted">{t.matching.needTag}</p>
+        <p className="mt-10 font-display text-2xl italic text-foreground-muted">{t.matching.needTag}</p>
       )}
 
       {!error && myTags.length > 0 && !current && (
-        <p className="text-sm text-foreground-muted">{t.matching.noMoreCandidates}</p>
+        <p className="mt-10 font-display text-2xl italic text-foreground-muted">{t.matching.noMoreCandidates}</p>
       )}
 
       {current && (
-        <div className="mx-auto max-w-[360px]">
-          <div className="overflow-hidden rounded-[28px] border border-border bg-surface">
-            <div
-              className="flex h-[220px] items-center justify-center"
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(135deg, #fcefd1, #fcefd1 10px, #f5e2ae 10px, #f5e2ae 20px)",
-              }}
-            >
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-background/70 text-2xl font-bold">
-                {current.nom.charAt(0).toUpperCase()}
-              </div>
-            </div>
-            <div className="px-[22px] pb-6 pt-5">
-              <div className="flex items-center justify-between gap-2">
-                <Link href={`/artistes/${current.id}`} className="text-lg font-bold">
-                  {current.nom}
-                </Link>
-                <span className="text-xs text-foreground-muted">{t.profileTypeLabels[current.typeProfil]}</span>
-              </div>
-              <p className="mt-0.5 text-sm text-foreground-muted">
-                {current.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
-                {ville ? ` · ${t.villeLabels[ville]}` : ""}
-              </p>
-              {current.bio && <p className="mt-3 text-sm">{current.bio}</p>}
-              <div className="mt-1 flex flex-wrap gap-1.5">
-                {current.sharedTags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="mt-2 inline-block rounded-full bg-badge-workshop-bg px-3 py-1 text-xs font-bold text-badge-workshop-fg"
-                  >
-                    {t.matchingTagLabels[tag]}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-5 flex gap-2.5">
-                <button
-                  type="button"
-                  onClick={handlePass}
-                  className="flex-1 rounded-full border-[1.5px] border-border py-3 text-sm font-bold text-foreground-muted transition"
-                >
-                  {t.matching.pass}
-                </button>
-                <button
-                  type="button"
-                  onClick={handlePropose}
-                  className="flex-1 rounded-full bg-accent py-3 text-sm font-bold text-accent-foreground transition hover:bg-accent-hover"
-                >
-                  {t.matching.propose}
-                </button>
-              </div>
-            </div>
+        <article className="mt-8 max-w-[420px] border-t border-foreground pt-[18px]">
+          <div className="flex h-[200px] items-center justify-center bg-gradient-to-br from-cat-atelier to-[#a87b3e]">
+            <span className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-background bg-cat-vernissage font-display text-4xl text-background">
+              {current.nom.charAt(0).toUpperCase()}
+            </span>
           </div>
-        </div>
+          <div className="mt-4 flex items-baseline justify-between gap-3">
+            <Link
+              href={`/artistes/${current.id}`}
+              className="font-display text-[30px] leading-none underline-offset-4 hover:underline"
+            >
+              {current.nom}
+            </Link>
+            <span className="shrink-0 text-xs text-foreground-muted">
+              {t.profileTypeLabels[current.typeProfil]}
+              {ville ? ` · ${t.villeLabels[ville]}` : ""}
+            </span>
+          </div>
+          {current.disciplines.length > 0 && (
+            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.1em] text-accent-secondary">
+              {current.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
+            </p>
+          )}
+          {current.bio && <p className="mt-2.5 font-display text-[22px] italic leading-[1.2]">{current.bio}</p>}
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {current.sharedTags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em]"
+              >
+                {t.matchingTagLabels[tag]}
+              </span>
+            ))}
+          </div>
+          <div className="mt-5 flex gap-2.5">
+            <button
+              type="button"
+              onClick={handlePass}
+              className="min-h-11 flex-1 rounded-full border border-border text-xs font-semibold uppercase tracking-[0.1em] text-foreground-muted transition hover:border-foreground hover:text-foreground"
+            >
+              {t.matching.pass}
+            </button>
+            <button
+              type="button"
+              onClick={handlePropose}
+              className="min-h-11 flex-1 rounded-full bg-foreground text-xs font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover"
+            >
+              {t.matching.propose}
+            </button>
+          </div>
+        </article>
       )}
 
       {history.length > 0 && (
-        <div className="mx-auto mt-5 max-w-[360px]">
+        <div className="mt-8 max-w-[420px]">
           <div className="flex items-center justify-between">
-            <h2 className="text-xs font-bold text-foreground-muted">{t.matching.historyTitle}</h2>
-            <button type="button" onClick={handleUndo} className="text-xs font-bold text-accent">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground-muted">
+              ( {t.matching.historyTitle} )
+            </h2>
+            <button
+              type="button"
+              onClick={handleUndo}
+              className="min-h-8 text-xs font-semibold uppercase tracking-[0.1em] underline underline-offset-4"
+            >
               {t.matching.undo}
             </button>
           </div>
@@ -292,7 +295,7 @@ export function MatchingTab() {
             {[...history].reverse().map((entry, i) => (
               <li
                 key={`${entry.candidateId}-${history.length - i}`}
-                className="border-b border-border py-1.5 text-sm"
+                className="border-b border-border py-2 text-sm"
               >
                 {entry.action === "pass" ? t.matching.pass : t.matching.propose} — {entry.nom}
               </li>
@@ -303,11 +306,11 @@ export function MatchingTab() {
 
       {matched && (
         <Modal title={t.matching.matchedTitle} onClose={() => setMatched(null)}>
-          <p className="text-sm">{t.matching.matchedBody(matched.nom)}</p>
+          <p className="text-[15px] leading-relaxed text-text-soft">{t.matching.matchedBody(matched.nom)}</p>
           <Link
             href={`/artistes/${matched.id}`}
             onClick={() => setMatched(null)}
-            className="mt-4 inline-block w-full rounded-full bg-accent py-3 text-center text-sm font-bold text-accent-foreground transition hover:bg-accent-hover"
+            className="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-full bg-foreground text-[13px] font-semibold uppercase tracking-[0.12em] text-background transition hover:bg-accent-hover"
           >
             {t.matching.matchedCta}
           </Link>

@@ -7,13 +7,18 @@ import type { EventFilters } from "@/lib/use-event-filters";
 
 const VILLES: Ville[] = ["Paris", "Athènes"];
 
-function pillClass(active: boolean) {
-  return `rounded-full border px-4 py-2 text-sm font-bold transition ${
+// Pilule Racines : contour fin, pleine noire quand elle est active.
+export function pillClass(active: boolean) {
+  return `min-h-10 rounded-full border px-4 text-xs font-semibold uppercase tracking-[0.08em] transition ${
     active
-      ? "border-transparent bg-accent text-accent-foreground"
-      : "border-border bg-transparent text-foreground"
+      ? "border-foreground bg-foreground text-background"
+      : "border-border bg-transparent text-foreground hover:border-foreground"
   }`;
 }
+
+const CHIP =
+  "flex min-h-8 items-center gap-1.5 rounded-full border border-border px-3 text-[11px] font-semibold uppercase tracking-[0.08em] hover:border-foreground";
+const ROW = "-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 function toggleValue<T>(list: T[], value: T): T[] {
   return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
@@ -42,30 +47,32 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
 
   return (
     <>
-      <div className={`flex items-center gap-2.5 ${activeFilterCount > 0 || filtersOpen ? "mb-2" : "mb-6"}`}>
-        <div className="flex flex-1 items-center gap-2.5 rounded-full border border-border bg-background/70 px-[18px] py-3">
-          <Search size={17} strokeWidth={2} className="shrink-0 text-foreground-muted" />
+      <div className="flex items-center gap-3">
+        <label className="flex min-h-11 flex-1 items-center gap-2.5 border-b border-foreground">
+          <Search size={17} strokeWidth={1.75} className="shrink-0" />
           <input
             type="search"
             placeholder={t.evenements.searchPlaceholder}
+            aria-label={t.evenements.searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-transparent text-sm outline-none"
+            className="w-full bg-transparent font-display text-[22px] outline-none placeholder:text-muted-strong md:text-2xl"
           />
-        </div>
+        </label>
         <button
           onClick={() => setFiltersOpen((o) => !o)}
           aria-label={t.evenements.filtersButton}
+          aria-expanded={filtersOpen}
           title={t.evenements.filtersButton}
           className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition ${
             filtersOpen
-              ? "border-transparent bg-accent text-accent-foreground"
-              : "border-border bg-background text-foreground"
+              ? "border-foreground bg-foreground text-background"
+              : "border-border bg-white text-foreground hover:border-foreground"
           }`}
         >
-          <Filter size={17} strokeWidth={2} />
+          <Filter size={17} strokeWidth={1.75} />
           {activeFilterCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-medium text-accent-foreground">
+            <span className="absolute -right-1 -top-1 flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-background bg-accent-secondary text-[10px] font-semibold text-accent-secondary-foreground">
               {activeFilterCount}
             </span>
           )}
@@ -73,32 +80,21 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
       </div>
 
       {!filtersOpen && activeFilterCount > 0 && (
-        <div className="mb-4 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-2">
           {types.map((v) => (
-            <button
-              key={v}
-              onClick={() => setTypes((prev) => toggleValue(prev, v))}
-              className="flex items-center gap-1 rounded-full border border-border px-3 py-1 text-xs hover:border-foreground/40"
-            >
+            <button key={v} onClick={() => setTypes((prev) => toggleValue(prev, v))} className={CHIP}>
               {t.eventTypeLabels[v]}
               <X size={12} strokeWidth={2} />
             </button>
           ))}
           {disciplines.map((d) => (
-            <button
-              key={d}
-              onClick={() => setDisciplines((prev) => toggleValue(prev, d))}
-              className="flex items-center gap-1 rounded-full border border-border px-3 py-1 text-xs hover:border-foreground/40"
-            >
+            <button key={d} onClick={() => setDisciplines((prev) => toggleValue(prev, d))} className={CHIP}>
               {t.disciplineLabels[d] ?? d}
               <X size={12} strokeWidth={2} />
             </button>
           ))}
           {cout && (
-            <button
-              onClick={() => setCout("")}
-              className="flex items-center gap-1 rounded-full border border-border px-3 py-1 text-xs hover:border-foreground/40"
-            >
+            <button onClick={() => setCout("")} className={CHIP}>
               {t.coutLabels[cout]}
               <X size={12} strokeWidth={2} />
             </button>
@@ -107,13 +103,16 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
       )}
 
       {filtersOpen && (
-        <div className="mb-6 rounded-lg border border-border bg-surface p-4">
-          <p className="mb-1 px-1 text-xs font-medium text-foreground-muted">{t.profil.ville}</p>
-          <div className="mb-2 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
+          <p className="px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground-muted">
+            {t.profil.ville}
+          </p>
+          <div className={ROW}>
             {VILLES.map((v) => (
               <button
                 key={v}
                 onClick={() => setVille(v)}
+                aria-pressed={ville === v}
                 className={`shrink-0 whitespace-nowrap ${pillClass(ville === v)}`}
               >
                 {t.villeLabels[v]}
@@ -121,9 +120,10 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
             ))}
           </div>
 
-          <div className="mb-2 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className={ROW}>
             <button
               onClick={() => setTypes([])}
+              aria-pressed={types.length === 0}
               className={`shrink-0 whitespace-nowrap ${pillClass(types.length === 0)}`}
             >
               {t.evenements.tousTypes}
@@ -132,6 +132,7 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
               <button
                 key={value}
                 onClick={() => setTypes((prev) => toggleValue(prev, value as EventType))}
+                aria-pressed={types.includes(value as EventType)}
                 className={`shrink-0 whitespace-nowrap ${pillClass(types.includes(value as EventType))}`}
               >
                 {label}
@@ -139,9 +140,10 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
             ))}
           </div>
 
-          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className={ROW}>
             <button
               onClick={() => setDisciplines([])}
+              aria-pressed={disciplines.length === 0}
               className={`shrink-0 whitespace-nowrap ${pillClass(disciplines.length === 0)}`}
             >
               {t.evenements.toutesDisciplines}
@@ -150,6 +152,7 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
               <button
                 key={d}
                 onClick={() => setDisciplines((prev) => toggleValue(prev, d))}
+                aria-pressed={disciplines.includes(d)}
                 className={`shrink-0 whitespace-nowrap ${pillClass(disciplines.includes(d))}`}
               >
                 {t.disciplineLabels[d]}
@@ -157,9 +160,10 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
             ))}
           </div>
 
-          <div className="mt-2 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className={ROW}>
             <button
               onClick={() => setCout("")}
+              aria-pressed={cout === ""}
               className={`shrink-0 whitespace-nowrap ${pillClass(cout === "")}`}
             >
               {t.evenements.tousCouts}
@@ -168,6 +172,7 @@ export function EventFilterBar({ filters }: { filters: EventFilters }) {
               <button
                 key={value}
                 onClick={() => setCout(value as CoutType)}
+                aria-pressed={cout === value}
                 className={`shrink-0 whitespace-nowrap ${pillClass(cout === value)}`}
               >
                 {label}

@@ -109,7 +109,7 @@ export default function ModerationPage() {
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
       <h1 className="text-xl font-black">{t.moderation.title}</h1>
 
-      {error && <p className="mt-6 text-sm text-red-600">{t.moderation.loadError(error)}</p>}
+      {error && <p className="mt-6 text-sm text-danger">{t.moderation.loadError(error)}</p>}
       {events === null && !error && <p className="mt-6 text-sm text-foreground-muted">{t.common.loading}</p>}
       {events !== null && events.length === 0 && (
         <p className="mt-6 text-sm text-foreground-muted">{t.moderation.empty}</p>
@@ -152,7 +152,7 @@ export default function ModerationPage() {
                 type="button"
                 disabled={busyId === event.id}
                 onClick={() => handleReject(event.id)}
-                className="rounded-lg border border-red-600/40 px-3 py-1 text-sm text-red-600 transition hover:border-red-600 disabled:opacity-50"
+                className="rounded-lg border border-danger/40 px-3 py-1 text-sm text-danger transition hover:border-danger disabled:opacity-50"
               >
                 {t.moderation.reject}
               </button>
@@ -202,7 +202,7 @@ export default function ModerationPage() {
                 type="button"
                 disabled={busyId === shop.id}
                 onClick={() => handleRejectShop(shop.id)}
-                className="rounded-lg border border-red-600/40 px-3 py-1 text-sm text-red-600 transition hover:border-red-600 disabled:opacity-50"
+                className="rounded-lg border border-danger/40 px-3 py-1 text-sm text-danger transition hover:border-danger disabled:opacity-50"
               >
                 {t.moderation.reject}
               </button>

@@ -6,6 +6,7 @@ import { BadgeCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { ProfileType, Ville } from "@/lib/types";
+import { pillClass } from "@/components/EventFilterBar";
 
 interface ArtisteRow {
   id: string;
@@ -19,13 +20,15 @@ interface ArtisteRow {
 
 const VILLES: Ville[] = ["Paris", "Athènes"];
 
-function pillClass(active: boolean) {
-  return `rounded-full border px-4 py-2 text-sm font-bold transition ${
-    active
-      ? "border-transparent bg-accent text-accent-foreground"
-      : "border-border bg-transparent text-foreground"
-  }`;
-}
+// Avatars en accents terre, attribués à tour de rôle.
+const AVATAR_TONES = [
+  "bg-cat-expo",
+  "bg-cat-atelier",
+  "bg-cat-residence",
+  "bg-cat-annonce",
+  "bg-cat-vernissage",
+  "bg-cat-open-call",
+];
 
 export function ArtistesTab() {
   const t = useT();
@@ -74,56 +77,70 @@ export function ArtistesTab() {
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap gap-2">
-        <button onClick={() => setVilleFilter("")} className={pillClass(villeFilter === "")}>
+      <div className="flex flex-wrap gap-2 pt-6">
+        <button onClick={() => setVilleFilter("")} aria-pressed={villeFilter === ""} className={pillClass(villeFilter === "")}>
           {t.common.allCities}
         </button>
         {VILLES.map((v) => (
-          <button key={v} onClick={() => setVilleFilter(v)} className={pillClass(villeFilter === v)}>
+          <button key={v} onClick={() => setVilleFilter(v)} aria-pressed={villeFilter === v} className={pillClass(villeFilter === v)}>
             {t.villeLabels[v]}
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {artistes === null && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}
-        {artistes !== null && artistes.length === 0 && (
-          <p className="text-sm text-foreground-muted">{t.evenements.noResults}</p>
-        )}
-        {(artistes ?? []).map((a) => {
+      {artistes === null && <p className="mt-6 text-sm text-foreground-muted">{t.common.loading}</p>}
+      {artistes !== null && artistes.length === 0 && (
+        <p className="py-14 text-center font-display text-[26px] italic text-foreground-muted">{t.evenements.noResults}</p>
+      )}
+      <div className="mt-4 grid grid-cols-1 border-l border-t border-border sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
+        {(artistes ?? []).map((a, i) => {
           const followed = followedIds.has(a.id);
           return (
-            <div key={a.id} className="rounded-2xl border border-border bg-surface p-5">
-              <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-badge-workshop-bg text-lg font-bold text-badge-workshop-fg">
+            <article key={a.id} className="flex flex-col gap-2.5 border-b border-r border-border px-6 py-7">
+              <span
+                aria-hidden="true"
+                className={`flex h-16 w-16 items-center justify-center rounded-full font-display text-[30px] text-white ${
+                  AVATAR_TONES[i % AVATAR_TONES.length]
+                }`}
+              >
                 {a.nom.charAt(0).toUpperCase()}
-              </div>
-              <Link href={`/artistes/${a.id}`} className="mt-3 flex items-center gap-1 text-base font-bold">
+              </span>
+              <Link
+                href={`/artistes/${a.id}`}
+                className="mt-1.5 flex items-center gap-1.5 font-display text-[30px] leading-none underline-offset-4 hover:underline"
+              >
                 {a.nom}
                 {a.verified && (a.type_profil === "galerie" || a.type_profil === "institution") && (
                   <span title={t.artiste.verified}>
-                    <BadgeCheck size={15} strokeWidth={2} className="text-accent" />
+                    <BadgeCheck size={18} strokeWidth={1.75} className="text-accent-secondary" />
                   </span>
                 )}
               </Link>
-              <p className="mt-0.5 text-xs text-foreground-muted">{t.villeLabels[a.ville]}</p>
-              {a.disciplines.length > 0 && (
-                <span className="mt-2.5 inline-block rounded-full bg-badge-workshop-bg px-3 py-1 text-xs font-bold text-badge-workshop-fg">
-                  {a.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
-                </span>
-              )}
-              {a.bio && <p className="mt-2.5 text-sm">{a.bio}</p>}
+              <p className="text-xs uppercase tracking-[0.1em] text-foreground-muted">
+                {t.villeLabels[a.ville]}
+                {a.disciplines.length > 0 && (
+                  <>
+                    {" · "}
+                    <span className="font-semibold text-accent-secondary">
+                      {a.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
+                    </span>
+                  </>
+                )}
+              </p>
+              {a.bio && <p className="text-sm leading-[1.45]">{a.bio}</p>}
               {userId && userId !== a.id && (
                 <button
                   type="button"
                   onClick={() => toggleFollow(a.id)}
-                  className={`mt-3.5 w-full rounded-full border-[1.5px] border-accent-secondary py-2.5 text-sm font-bold transition ${
+                  aria-pressed={followed}
+                  className={`mt-auto min-h-11 rounded-full border border-accent-secondary text-xs font-semibold uppercase tracking-[0.1em] transition ${
                     followed ? "bg-accent-secondary text-accent-secondary-foreground" : "bg-transparent text-accent-secondary"
                   }`}
                 >
                   {followed ? t.artiste.unfollow : t.artiste.follow}
                 </button>
               )}
-            </div>
+            </article>
           );
         })}
       </div>

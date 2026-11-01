@@ -7,6 +7,7 @@ import { ChevronDown, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useLocale } from "@/lib/i18n/context";
 import { BlockReportActions } from "@/components/BlockReportActions";
+import { pillClass } from "@/components/EventFilterBar";
 import { Ville } from "@/lib/types";
 
 interface Message {
@@ -26,13 +27,7 @@ interface ReplyTarget {
 const VILLES: Ville[] = ["Paris", "Athènes"];
 const BCP47_TAGS: Record<string, string> = { fr: "fr-FR", en: "en-US", el: "el-GR" };
 
-function pillClass(active: boolean) {
-  return `rounded-full border px-4 py-2 text-sm font-bold transition ${
-    active
-      ? "border-transparent bg-accent text-accent-foreground"
-      : "border-border bg-transparent text-foreground"
-  }`;
-}
+const ACTION = "min-h-8 text-xs font-semibold uppercase tracking-[0.1em]";
 
 export function CommunityChatTab() {
   const { locale, t } = useLocale();
@@ -224,44 +219,50 @@ export function CommunityChatTab() {
 
   return (
     <div>
-      <div className="mb-4 flex gap-2">
-        {VILLES.map((v) => (
-          <button key={v} onClick={() => setVille(v)} className={pillClass(ville === v)}>
-            {t.villeLabels[v]}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-end justify-between gap-4 pt-6">
+        <h2 className="font-display text-[clamp(1.75rem,4vw,2.25rem)] italic leading-tight">
+          {t.communaute.title(ville ? (t.villeLabels[ville] ?? ville) : "")}
+        </h2>
+        <div className="flex gap-2">
+          {VILLES.map((v) => (
+            <button key={v} onClick={() => setVille(v)} aria-pressed={ville === v} className={pillClass(ville === v)}>
+              {t.villeLabels[v]}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <h2 className="mt-5 text-[22px] font-black">
-        {t.communaute.title(ville ? (t.villeLabels[ville] ?? ville) : "")}
-      </h2>
-
-      {loading && <p className="mt-4 text-sm text-foreground-muted">{t.common.loading}</p>}
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {loading && <p className="mt-6 text-sm text-foreground-muted">{t.common.loading}</p>}
+      {error && <p className="mt-6 text-sm text-danger">{error}</p>}
 
       {!loading && (
         <>
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-4 flex flex-col border-t border-border">
             {topLevel.length === 0 && !error && (
-              <p className="text-sm text-foreground-muted">{t.communaute.noMessages}</p>
+              <p className="py-14 text-center font-display text-[26px] italic text-foreground-muted md:text-[32px]">
+                {t.communaute.noMessages}
+              </p>
             )}
             {topLevel.map((m) => {
               const replies = repliesByParent.get(m.id) ?? [];
               const nom = m.profiles?.nom || t.communaute.anonyme;
               return (
-                <div key={m.id} className="rounded-lg border border-border bg-surface px-[18px] py-4">
-                  <div className="flex items-baseline justify-between gap-2">
-                    <Link href={`/artistes/${m.user_id}`} className="text-sm font-bold">
+                <article key={m.id} className="border-b border-border py-[26px]">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <Link
+                      href={`/artistes/${m.user_id}`}
+                      className="text-xs font-bold uppercase tracking-[0.12em] underline-offset-4 hover:underline"
+                    >
                       {nom}
                     </Link>
                     <span className="text-xs text-foreground-muted">{formatDate(m.date)}</span>
                   </div>
-                  <p className="mt-1.5 text-sm">{m.texte}</p>
-                  <div className="mt-2 flex items-center gap-3.5 text-xs">
+                  <p className="mt-2 break-words font-display text-[26px] leading-[1.1] md:text-[34px]">« {m.texte} »</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1">
                     <button
                       type="button"
                       onClick={() => setReplyingTo({ id: m.id, nom })}
-                      className="font-semibold text-accent-secondary"
+                      className={`${ACTION} text-accent-secondary`}
                     >
                       {t.communaute.reply}
                     </button>
@@ -275,11 +276,12 @@ export function CommunityChatTab() {
                   </div>
 
                   {replies.length > 0 && (
-                    <div className="mt-2">
+                    <div className="mt-1">
                       <button
                         type="button"
                         onClick={() => toggleThread(m.id)}
-                        className="flex items-center gap-1 text-xs font-semibold text-badge-residency-fg"
+                        aria-expanded={expandedThreads.has(m.id)}
+                        className={`${ACTION} flex items-center gap-1 text-[#8a6532]`}
                       >
                         {t.communaute.repliesToggle(replies.length)}
                         <ChevronDown
@@ -289,21 +291,21 @@ export function CommunityChatTab() {
                         />
                       </button>
                       {expandedThreads.has(m.id) && (
-                        <div className="mt-2 flex flex-col gap-2 border-l-2 border-border pl-3.5">
+                        <div className="ml-4 mt-3 flex flex-col gap-3.5 border-l border-foreground pl-[18px] md:ml-8">
                           {replies.map((r) => {
                             const replyNom = r.profiles?.nom || t.communaute.anonyme;
                             return (
                               <div key={r.id}>
-                                <div className="flex items-baseline justify-between gap-2">
+                                <div className="flex items-baseline gap-2">
                                   <Link
                                     href={`/artistes/${r.user_id}`}
-                                    className="text-[13px] font-bold"
+                                    className="text-xs font-bold uppercase tracking-[0.12em] underline-offset-4 hover:underline"
                                   >
                                     {replyNom}
                                   </Link>
-                                  <span className="text-[11px] text-foreground-muted">{formatDate(r.date)}</span>
+                                  <span className="text-xs text-foreground-muted">· {formatDate(r.date)}</span>
                                 </div>
-                                <p className="text-[13px]">{r.texte}</p>
+                                <p className="mt-1 break-words font-display text-2xl leading-tight">{r.texte}</p>
                                 {userId && r.user_id !== userId && (
                                   <BlockReportActions
                                     targetUserId={r.user_id}
@@ -319,38 +321,39 @@ export function CommunityChatTab() {
                       )}
                     </div>
                   )}
-                </div>
+                </article>
               );
             })}
           </div>
 
           {replyingTo && (
-            <div className="mt-6 flex items-center justify-between gap-2 rounded-lg bg-surface px-3 py-1.5 text-xs text-foreground-muted">
+            <div className="mt-6 flex items-center justify-between gap-2 border-b border-border py-2 text-xs uppercase tracking-[0.1em] text-foreground-muted">
               <span>{t.communaute.replyingTo(replyingTo.nom)}</span>
               <button
                 type="button"
                 onClick={() => setReplyingTo(null)}
                 aria-label={t.common.cancel}
-                className="text-foreground/40 hover:text-foreground"
+                className="flex h-8 w-8 items-center justify-center hover:text-foreground"
               >
                 <X size={14} strokeWidth={2} />
               </button>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className={`flex gap-2.5 ${replyingTo ? "mt-2" : "mt-3.5"}`}>
+          <form onSubmit={handleSubmit} className={`flex items-center gap-3 ${replyingTo ? "mt-2" : "mt-6"}`}>
             <input
               type="text"
               required
               placeholder={t.communaute.placeholder}
+              aria-label={t.communaute.placeholder}
               value={texte}
               onChange={(e) => setTexte(e.target.value)}
-              className="flex-1 rounded-full border border-border bg-background px-[18px] py-3 text-sm outline-none"
+              className="min-h-[52px] min-w-0 flex-1 border-b border-foreground bg-transparent font-display text-[22px] outline-none placeholder:text-muted-strong md:text-2xl"
             />
             <button
               type="submit"
               disabled={sending}
-              className="rounded-full bg-accent px-6 text-sm font-bold text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
+              className="min-h-12 shrink-0 rounded-full bg-foreground px-[26px] text-xs font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover disabled:opacity-50"
             >
               {sending ? "…" : t.communaute.send}
             </button>

@@ -26,12 +26,17 @@ export function BottomNav({ show }: { show: boolean }) {
           <Link
             key={href}
             href={href}
-            className={`flex flex-col items-center gap-[3px] px-2.5 py-1 transition ${
-              active ? "text-accent" : "text-foreground-muted"
+            aria-current={active ? "page" : undefined}
+            className={`flex flex-col items-center gap-1 px-2.5 py-1 transition ${
+              active ? "text-foreground" : "text-foreground-muted"
             }`}
           >
-            <Icon size={20} strokeWidth={2} />
-            <span className="text-[10px]">{label}</span>
+            <Icon size={20} strokeWidth={1.75} />
+            <span
+              className={`text-[10px] font-semibold uppercase tracking-[0.08em] underline-offset-4 ${active ? "underline" : ""}`}
+            >
+              {label}
+            </span>
           </Link>
         );
       })}

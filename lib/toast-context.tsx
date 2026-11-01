@@ -27,7 +27,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 left-1/2 z-[1100] -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background shadow-soft"
+          className="fixed bottom-20 left-1/2 z-[1100] -translate-x-1/2 rounded-full bg-accent-secondary px-[26px] py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-accent-secondary-foreground md:bottom-8"
         >
           {message}
         </div>

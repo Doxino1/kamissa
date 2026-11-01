@@ -15,16 +15,18 @@ export default function CalendrierPage() {
   const { ville, events } = filters;
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-6 md:py-4">
-      <h1 className="font-display text-xl font-black">{t.calendar.tab}</h1>
-
-      <div className="mt-4">
-        <EventFilterBar filters={filters} />
-      </div>
-
-      {loading && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}
-      {error && <p className="text-sm text-red-600">{t.evenements.loadError(error)}</p>}
-      {!loading && !error && <EventCalendar events={events} ville={ville} />}
+    <div className="pb-12">
+      <EventCalendar
+        events={loading || error ? [] : events}
+        ville={ville}
+        filterBar={<EventFilterBar filters={filters} />}
+        status={
+          <>
+            {loading && <p className="pt-4 text-sm text-foreground-muted">{t.common.loading}</p>}
+            {error && <p className="pt-4 text-sm text-danger">{t.evenements.loadError(error)}</p>}
+          </>
+        }
+      />
     </div>
   );
 }

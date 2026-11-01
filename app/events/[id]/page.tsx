@@ -49,7 +49,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   if (error) {
     return (
       <div className="mx-auto w-full max-w-2xl px-4 py-8">
-        <p className="text-sm text-red-600">{t.eventDetail.loadError(error)}</p>
+        <p className="text-sm text-danger">{t.eventDetail.loadError(error)}</p>
       </div>
     );
   }

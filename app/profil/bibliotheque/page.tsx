@@ -124,7 +124,7 @@ export default function BibliothequePage() {
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           className="text-sm text-foreground-muted file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-bold file:text-foreground hover:file:bg-background"
         />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
         <button
           type="submit"
           disabled={saving}
@@ -149,7 +149,7 @@ export default function BibliothequePage() {
             <button
               type="button"
               onClick={() => handleDelete(item.id)}
-              className="mt-2 text-xs text-red-600 hover:underline"
+              className="mt-2 text-xs text-danger hover:underline"
             >
               {t.library.delete}
             </button>

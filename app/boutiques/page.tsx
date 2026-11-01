@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Search, Share2, Map as MapIcon, List } from "lucide-react";
+import { Search, Share2, Map as MapIcon, List, Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/lib/toast-context";
 import { useMediaQuery } from "@/lib/use-media-query";
@@ -12,6 +12,10 @@ import { useT } from "@/lib/i18n/context";
 import { Ville } from "@/lib/types";
 import { AddShopModal } from "@/components/AddShopModal";
 import { CardSkeleton } from "@/components/CardSkeleton";
+import { rowNumber } from "@/components/EventCard";
+import { pillClass } from "@/components/EventFilterBar";
+import { PageHeader } from "@/components/PageHeader";
+import { shopCategoryColor } from "@/lib/shop-colors";
 
 const ShopMap = dynamic(() => import("@/components/ShopMap").then((m) => m.ShopMap), {
   ssr: false,
@@ -36,14 +40,6 @@ export interface Shop {
 const VILLES: Ville[] = ["Paris", "Athènes"];
 const PAGE_SIZE = 6;
 type MobileView = "liste" | "carte";
-
-function pillClass(active: boolean) {
-  return `rounded-full border px-4 py-2 text-sm font-bold transition ${
-    active
-      ? "border-transparent bg-accent text-accent-foreground"
-      : "border-border bg-transparent text-foreground"
-  }`;
-}
 
 export const SHOP_SELECT = "id, nom, ville, adresse, description, lien, discipline, lat, lng, statut, soumis_par";
 
@@ -127,162 +123,171 @@ export default function BoutiquesPage() {
   const showMap = isDesktop || mobileView === "carte";
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-6 md:py-4">
-      <div className="md:flex md:h-[calc(100vh-6.5rem)] md:flex-col md:overflow-hidden md:rounded-2xl md:border md:border-border md:shadow-soft">
-        <div className="px-1 py-1 md:px-6 md:py-5">
-          <h1 className="text-xl font-black md:text-[22px]">{t.shops.title}</h1>
-
-          <div className="mt-3 flex gap-2">
-            {VILLES.map((v) => (
-              <button key={v} onClick={() => setVille(v)} className={pillClass(ville === v)}>
-                {t.villeLabels[v]}
-              </button>
-            ))}
-          </div>
-
-          <div className="mt-3 flex max-w-[400px] items-center gap-2.5 rounded-full border border-border bg-background/70 px-[18px] py-3">
-            <Search size={16} strokeWidth={2} className="shrink-0 text-foreground-muted" />
-            <input
-              type="search"
-              placeholder={t.shops.searchPlaceholder}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-transparent text-sm outline-none"
-            />
-          </div>
-
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            <button onClick={() => setCategory("")} className={pillClass(category === "")}>
-              {t.shops.allCategories}
+    <div className="relative pb-24 md:pb-12">
+      <PageHeader title={t.shops.title}>
+        <div className="flex gap-2 pb-1.5">
+          {VILLES.map((v) => (
+            <button key={v} onClick={() => setVille(v)} aria-pressed={ville === v} className={pillClass(ville === v)}>
+              {t.villeLabels[v]}
             </button>
-            {categories.map((c) => (
-              <button key={c} onClick={() => setCategory(c)} className={pillClass(category === c)}>
-                {t.disciplineLabels[c] ?? c}
-              </button>
-            ))}
-          </div>
+          ))}
         </div>
+      </PageHeader>
 
-        <div className="relative md:flex md:min-h-0 md:flex-1 md:items-stretch md:gap-5 md:px-6 md:pb-6">
-          {showList && (
-            <div className="mt-4 md:mt-0 md:h-full md:w-[42%] md:shrink-0 md:overflow-y-auto">
-              <div className="flex flex-col gap-3">
-                {loadingShown && <CardSkeleton />}
-                {!loadingShown && shops !== null && filtered.length === 0 && (
-                  <p className="text-sm text-foreground-muted">{t.shops.empty}</p>
-                )}
-                {!loadingShown &&
-                  filtered.slice(0, visibleCount).map((shop) => (
-                    <div
-                      key={shop.id}
-                      className="rounded-lg border border-border bg-surface px-5 py-[18px] transition hover:border-accent-secondary/40 hover:shadow-shop-hover"
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <h3 className="text-base font-bold">{shop.nom}</h3>
-                        {shop.statut === "en_attente" && (
-                          <span className="rounded-full bg-foreground/5 px-2 py-0.5 text-xs text-foreground-muted">
-                            {t.evenements.statutEnAttente}
-                          </span>
-                        )}
-                      </div>
-                      {shop.discipline && (
-                        <p className="mt-0.5 text-xs text-foreground-muted">
-                          {t.disciplineLabels[shop.discipline] ?? shop.discipline}
-                        </p>
+      <section className="mx-auto flex max-w-[1360px] flex-wrap items-center gap-x-5 gap-y-3 border-b border-border px-4 py-[18px] md:px-10">
+        <label className="flex min-h-11 flex-[1_1_280px] items-center gap-2.5 border-b border-foreground">
+          <Search size={17} strokeWidth={1.75} className="shrink-0" />
+          <input
+            type="search"
+            placeholder={t.shops.searchPlaceholder}
+            aria-label={t.shops.searchPlaceholder}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full bg-transparent font-display text-[22px] outline-none placeholder:text-muted-strong md:text-2xl"
+          />
+        </label>
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => setCategory("")} aria-pressed={category === ""} className={pillClass(category === "")}>
+            {t.shops.allCategories}
+          </button>
+          {categories.map((c) => (
+            <button key={c} onClick={() => setCategory(c)} aria-pressed={category === c} className={pillClass(category === c)}>
+              {t.disciplineLabels[c] ?? c}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <main className="mx-auto max-w-[1360px] px-4 md:flex md:items-start md:gap-8 md:px-10">
+        {showList && (
+          <div className="min-w-0 md:w-[42%] md:max-w-[600px] md:shrink-0">
+            <div className="flex flex-col">
+              {loadingShown && <CardSkeleton />}
+              {!loadingShown && shops !== null && filtered.length === 0 && (
+                <p className="py-12 text-center font-display text-2xl italic text-foreground-muted md:text-[28px]">
+                  {t.shops.empty}
+                </p>
+              )}
+              {!loadingShown &&
+                filtered.slice(0, visibleCount).map((shop, i) => (
+                  <article key={shop.id} className="border-b border-border py-6 transition-colors hover:bg-surface-hover">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.1em]">
+                        <span className="font-normal text-foreground-muted">{rowNumber(i + 1)}</span>
+                        <span
+                          aria-hidden="true"
+                          className="h-[9px] w-[9px]"
+                          style={{ background: shopCategoryColor(shop.discipline) }}
+                        />
+                        {shop.discipline ? (t.disciplineLabels[shop.discipline] ?? shop.discipline) : null}
+                      </span>
+                      {shop.statut === "en_attente" && (
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground-muted">
+                          {t.evenements.statutEnAttente}
+                        </span>
                       )}
-                      {shop.adresse && <p className="mt-1.5 text-sm">{shop.adresse}</p>}
-                      {shop.description && <p className="mt-1.5 text-sm">{shop.description}</p>}
+                    </div>
+                    <h3 className="mt-2.5 font-display text-[28px] leading-[1.05] md:text-[34px]">{shop.nom}</h3>
+                    {shop.adresse && (
+                      <p className="mt-1.5 text-[13px] tracking-[0.04em] text-foreground-muted">{shop.adresse}</p>
+                    )}
+                    {shop.description && (
+                      <p className="mt-2 font-display text-[19px] italic leading-[1.25] md:text-[21px]">{shop.description}</p>
+                    )}
+                    <div className="mt-3.5 flex flex-wrap items-center gap-x-[18px] gap-y-2">
                       {shop.lien && (
                         <a
                           href={shop.lien}
                           target="_blank"
                           rel="noreferrer"
-                          className="mt-1.5 inline-block text-sm text-accent-secondary"
+                          className="max-w-full truncate text-[13px] underline underline-offset-4"
                         >
                           {shop.lien}
                         </a>
                       )}
-                      <div className="mt-2 flex items-center gap-4">
-                        {isModerator && (
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(shop.id)}
-                            className="text-xs text-badge-open-call-fg"
-                          >
-                            {t.shops.delete}
-                          </button>
-                        )}
+                      <button
+                        type="button"
+                        onClick={() => handleShare(shop.id)}
+                        className="flex min-h-10 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.1em] underline underline-offset-4"
+                      >
+                        <Share2 size={13} strokeWidth={1.75} />
+                        {t.common.share}
+                      </button>
+                      {isModerator && (
                         <button
                           type="button"
-                          onClick={() => handleShare(shop.id)}
-                          className="flex items-center gap-1 text-xs text-foreground-muted"
+                          onClick={() => handleDelete(shop.id)}
+                          className="min-h-10 text-xs font-semibold uppercase tracking-[0.1em] text-danger"
                         >
-                          <Share2 size={13} strokeWidth={2} />
-                          {t.common.share}
+                          {t.shops.delete}
                         </button>
-                      </div>
+                      )}
                     </div>
-                  ))}
-                {!loadingShown && filtered.length > visibleCount && (
-                  <button
-                    type="button"
-                    onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                    className="self-center rounded-full border border-border px-[22px] py-2.5 text-sm font-bold"
-                  >
-                    {t.common.loadMore}
-                  </button>
-                )}
-              </div>
-
-              {!userId && (
-                <p className="mt-6 text-sm text-foreground-muted">
-                  <Link href="/login" className="font-bold text-accent">
-                    {t.evenements.loginLink}
-                  </Link>{" "}
-                  {t.shops.loginToPropose}
-                </p>
-              )}
-            </div>
-          )}
-
-          {showMap && (
-            <div className="relative mt-4 md:mt-0 md:h-full md:flex-1">
-              <ShopMap key={ville} shops={filtered} ville={ville} />
-              {userId && (
+                  </article>
+                ))}
+              {!loadingShown && filtered.length > visibleCount && (
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(true)}
-                  aria-label={t.shops.addShop}
-                  title={t.shops.addShop}
-                  className="absolute bottom-6 right-6 z-[1000] flex items-center gap-2 rounded-full bg-accent px-[22px] py-3.5 text-sm font-bold text-accent-foreground shadow-shop-hover transition hover:bg-accent-hover"
+                  onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                  className="mt-5 min-h-11 self-start rounded-full border border-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] transition hover:bg-surface-hover"
                 >
-                  {t.shops.addShop}
+                  {t.common.loadMore}
                 </button>
               )}
             </div>
-          )}
 
-          {!isDesktop && (
-            <button
-              type="button"
-              onClick={() => setMobileView((v) => (v === "liste" ? "carte" : "liste"))}
-              className="fixed bottom-20 left-1/2 z-[500] flex -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-[22px] py-3 text-sm font-bold text-background shadow-modal"
-            >
-              {mobileView === "liste" ? (
-                <>
-                  <MapIcon size={16} strokeWidth={2} />
-                  {t.shops.tabMap}
-                </>
-              ) : (
-                <>
-                  <List size={16} strokeWidth={2} />
-                  {t.shops.tabList}
-                </>
-              )}
-            </button>
+            {!userId && (
+              <p className="mt-6 text-sm text-foreground-muted">
+                <Link href="/login" className="font-bold text-foreground underline underline-offset-4">
+                  {t.evenements.loginLink}
+                </Link>{" "}
+                {t.shops.loginToPropose}
+              </p>
+            )}
+          </div>
+        )}
+
+        {showMap && (
+          <div className="relative mt-4 md:sticky md:top-[104px] md:mt-6 md:h-[calc(100vh-128px)] md:min-h-[480px] md:flex-1">
+            <ShopMap key={ville} shops={filtered} ville={ville} />
+            <p className="pointer-events-none absolute bottom-4 left-5 z-[500] hidden text-xs uppercase tracking-[0.12em] text-foreground-muted md:block">
+              ( {t.villeLabels[ville]} )
+            </p>
+            {userId && (
+              <button
+                type="button"
+                onClick={() => setShowAddModal(true)}
+                aria-label={t.shops.addShop}
+                title={t.shops.addShop}
+                className="absolute bottom-6 right-6 z-[1000] flex min-h-14 items-center gap-2.5 rounded-full bg-foreground px-[26px] text-[13px] font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover"
+              >
+                <Plus size={18} strokeWidth={2} />
+                {t.shops.addShop}
+              </button>
+            )}
+          </div>
+        )}
+      </main>
+
+      {!isDesktop && (
+        <button
+          type="button"
+          onClick={() => setMobileView((v) => (v === "liste" ? "carte" : "liste"))}
+          className="fixed bottom-20 left-1/2 z-[500] flex min-h-11 -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] text-background shadow-modal"
+        >
+          {mobileView === "liste" ? (
+            <>
+              <MapIcon size={16} strokeWidth={1.75} />
+              {t.shops.tabMap}
+            </>
+          ) : (
+            <>
+              <List size={16} strokeWidth={1.75} />
+              {t.shops.tabList}
+            </>
           )}
-        </div>
-      </div>
+        </button>
+      )}
 
       {showAddModal && (
         <AddShopModal

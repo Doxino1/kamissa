@@ -114,7 +114,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
   if (post === null) {
     return (
       <div className="mx-auto w-full max-w-md px-4 py-8">
-        <p className="text-sm text-red-600">404</p>
+        <p className="text-sm text-danger">404</p>
       </div>
     );
   }

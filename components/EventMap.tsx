@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet.markercluster";
-import type { CircleMarker as LeafletCircleMarker } from "leaflet";
+import type { Marker as LeafletMarker } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -12,25 +12,21 @@ import { ArtEvent, Ville } from "@/lib/types";
 import { formatInVille } from "@/lib/timezone";
 import { localizedTitle } from "@/lib/localize-event";
 import { escapeHtml } from "@/lib/escape-html";
-import { TILE_URL, TILE_SUBDOMAINS, TILE_ATTRIBUTION } from "@/lib/map-tiles";
+import { makePinIcon, setPinActive } from "@/lib/map-pins";
+import { EVENT_TYPE_COLORS } from "./EventTypeBadge";
+import { TILE_URL, TILE_ATTRIBUTION } from "@/lib/map-tiles";
 import { useLocale } from "@/lib/i18n/context";
 import { Locale } from "@/lib/i18n/dictionary";
 
-// Petits points pleins plutôt que la grosse épingle par défaut de Leaflet —
-// plusieurs événements proches restent lisibles au lieu de se chevaucher. Le
-// marqueur survolé (depuis la carte ou depuis la liste) grossit légèrement
-// pour confirmer visuellement la correspondance liste <-> carte.
-const DOT_STYLE = { color: "#ffffff", weight: 1.5, fillColor: "#c06722", fillOpacity: 0.9 };
-const DOT_STYLE_HOVERED = { color: "#ffffff", weight: 2, fillColor: "#c06722", fillOpacity: 1 };
-const RADIUS = 7;
-const RADIUS_HOVERED = 10;
-
+// Repères carrés à la couleur de la catégorie, numérotés comme la liste
+// ( 01 ), ( 02 )… Le repère survolé (depuis la carte ou depuis la liste)
+// grossit pour confirmer visuellement la correspondance liste <-> carte.
 const CITY_CENTER: Record<Ville, [number, number]> = {
   Paris: [48.8566, 2.3522],
   Athènes: [37.9838, 23.7275],
 };
 
-type EventWithCoords = ArtEvent & { lat: number; lng: number };
+type EventWithCoords = ArtEvent & { lat: number; lng: number; n: number };
 
 function ClusterLayer({
   events,
@@ -40,7 +36,7 @@ function ClusterLayer({
 }: {
   events: EventWithCoords[];
   locale: Locale;
-  layerRefs: React.RefObject<Map<string, LeafletCircleMarker>>;
+  layerRefs: React.RefObject<Map<string, LeafletMarker>>;
   onHoverEvent?: (id: string | null) => void;
 }) {
   const map = useMap();
@@ -50,7 +46,9 @@ function ClusterLayer({
     const refs = layerRefs.current;
 
     for (const event of events) {
-      const marker = L.circleMarker([event.lat, event.lng], { radius: RADIUS, ...DOT_STYLE });
+      const marker = L.marker([event.lat, event.lng], {
+        icon: makePinIcon(event.n, EVENT_TYPE_COLORS[event.type] ?? "var(--cat-annonce)"),
+      });
       const dateStr = formatInVille(
         event.date,
         event.ville,
@@ -62,7 +60,7 @@ function ClusterLayer({
 
       marker.bindTooltip(
         `<div class="text-xs"><div class="font-medium">${titre}</div><div class="text-foreground-muted">${dateHtml}</div></div>`,
-        { direction: "top", offset: [0, -8], opacity: 1 }
+        { direction: "top", offset: [0, -4], opacity: 1 }
       );
       marker.bindPopup(`<a href="/events/${event.id}">${titre}</a><br/>${dateHtml}`);
       marker.on("mouseover", () => onHoverEvent?.(event.id));
@@ -95,29 +93,30 @@ export function EventMap({
   onHoverEvent?: (id: string | null) => void;
 }) {
   const { locale, t } = useLocale();
-  const withCoords = events.filter(
-    (e): e is EventWithCoords => e.lat != null && e.lng != null
+  const withCoords = useMemo(
+    () =>
+      events
+        .map((e, i) => ({ ...e, n: i + 1 }))
+        .filter((e): e is EventWithCoords => e.lat != null && e.lng != null),
+    [events]
   );
   const withoutCoords = events.length - withCoords.length;
 
-  // react-leaflet ne réapplique pas radius/pathOptions de façon réactive une
-  // fois le CircleMarker monté — on pilote le style survolé directement sur
-  // l'instance Leaflet plutôt que de compter sur ses props.
-  const layerRefs = useRef(new Map<string, LeafletCircleMarker>());
+  // Le survol est piloté directement sur l'élément du repère plutôt que par
+  // un nouveau rendu des marqueurs (qui reconstruirait tout le groupe).
+  const layerRefs = useRef(new Map<string, LeafletMarker>());
 
   useEffect(() => {
     for (const [id, layer] of layerRefs.current) {
-      const isHovered = id === hoveredEventId;
-      layer.setRadius(isHovered ? RADIUS_HOVERED : RADIUS);
-      layer.setStyle(isHovered ? DOT_STYLE_HOVERED : DOT_STYLE);
+      setPinActive(layer, id === hoveredEventId);
     }
   }, [hoveredEventId]);
 
   return (
     <div className="h-full">
-      <div className="h-[420px] overflow-hidden rounded-lg md:h-full md:rounded-none">
+      <div className="h-[420px] overflow-hidden bg-surface md:h-full">
         <MapContainer center={CITY_CENTER[ville]} zoom={12} style={{ height: "100%", width: "100%" }}>
-          <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} subdomains={TILE_SUBDOMAINS} />
+          <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} />
           <ClusterLayer events={withCoords} locale={locale} layerRefs={layerRefs} onHoverEvent={onHoverEvent} />
         </MapContainer>
       </div>

@@ -109,7 +109,7 @@ export default function MesPostsPage() {
           rows={2}
           className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
         />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
         <button
           type="submit"
           disabled={saving}
@@ -136,7 +136,7 @@ export default function MesPostsPage() {
             <button
               type="button"
               onClick={() => handleDelete(post.id)}
-              className="absolute right-1 top-1 rounded-full bg-background/80 px-2 py-0.5 text-xs text-red-600 opacity-0 transition group-hover:opacity-100"
+              className="absolute right-1 top-1 rounded-full bg-background/80 px-2 py-0.5 text-xs text-danger opacity-0 transition group-hover:opacity-100"
             >
               {t.posts.delete}
             </button>

@@ -42,23 +42,23 @@ export function NotificationBell({ userId }: { userId: string | null }) {
         onClick={() => setOpen((o) => !o)}
         aria-label={t.notifications.title}
         title={t.notifications.title}
-        className="relative flex h-[42px] w-[42px] items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:bg-surface"
+        className="relative flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white text-foreground transition hover:bg-surface-hover"
       >
-        <Bell size={19} strokeWidth={2} />
+        <Bell size={17} strokeWidth={1.75} />
         {unreadCount > 0 && (
-          <span className="absolute right-1.5 top-1.5 h-[9px] w-[9px] rounded-full border-2 border-background bg-badge-open-call-fg" />
+          <span className="absolute right-1.5 top-1.5 h-[9px] w-[9px] rounded-full border-2 border-white bg-danger" />
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 z-[1050] mt-2 w-80 overflow-hidden rounded-2xl border border-border bg-background shadow-modal">
-          <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3.5">
-            <span className="text-sm font-bold">{t.notifications.title}</span>
+        <div className="absolute right-0 z-[1050] mt-2 w-80 overflow-hidden border border-border bg-background shadow-modal">
+          <div className="flex items-center justify-between gap-2 border-b border-foreground px-4 py-3.5">
+            <span className="font-display text-2xl leading-none">{t.notifications.title}</span>
             {unreadCount > 0 && (
               <button
                 type="button"
                 onClick={markAllRead}
-                className="text-xs font-bold text-accent-secondary"
+                className="text-[11px] font-semibold uppercase tracking-[0.1em] text-accent-secondary"
               >
                 {t.notifications.markAllRead}
               </button>
@@ -75,8 +75,8 @@ export function NotificationBell({ userId }: { userId: string | null }) {
                 key={n.id}
                 href={notificationHref(n)}
                 onClick={() => setOpen(false)}
-                className={`border-b border-border px-4 py-3 text-[13px] transition hover:bg-surface ${
-                  n.read ? "" : "bg-badge-open-call-bg/20"
+                className={`border-b border-border px-4 py-3 text-[13px] transition hover:bg-surface-hover ${
+                  n.read ? "" : "bg-surface-selected"
                 }`}
               >
                 {label(n)}
@@ -87,7 +87,7 @@ export function NotificationBell({ userId }: { userId: string | null }) {
           <Link
             href="/profil/parametres"
             onClick={() => setOpen(false)}
-            className="block px-4 py-3 text-xs font-bold"
+            className="block px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.1em]"
           >
             {t.notifications.prefsTitle}
           </Link>

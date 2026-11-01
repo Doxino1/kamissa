@@ -107,6 +107,9 @@ export interface Dictionary {
     highlightThisWeek: (count: number, ville: string) => string;
     highlightGoing: (titre: string, date: string) => string;
     highlightMatch: string;
+    tagline: string;
+    greetingShort: (hour: number, nom: string) => string;
+    thisWeekLabel: (count: number, ville: string) => string;
   };
 
   saveButtons: {
@@ -498,6 +501,9 @@ export const fr: Dictionary = {
     highlightThisWeek: (count, ville) => `${count} événement${count > 1 ? "s" : ""} cette semaine à ${ville}`,
     highlightGoing: (titre, date) => `Prochain événement : ${titre} · ${date}`,
     highlightMatch: "Nouvelle suggestion de matching :",
+    tagline: "L'art partout, tout le temps.",
+    greetingShort: (hour, nom) => (hour < 18 ? `Bonjour, ${nom}` : `Bonsoir, ${nom}`),
+    thisWeekLabel: (count, ville) => `événement${count > 1 ? "s" : ""} cette semaine à ${ville}`,
   },
   saveButtons: {
     sauvegarder: "Sauvegarder",
@@ -893,6 +899,9 @@ export const en: Dictionary = {
     highlightThisWeek: (count, ville) => `${count} event${count > 1 ? "s" : ""} this week in ${ville}`,
     highlightGoing: (titre, date) => `Next event: ${titre} · ${date}`,
     highlightMatch: "New matching suggestion:",
+    tagline: "Art everywhere, all the time.",
+    greetingShort: (hour, nom) => (hour < 12 ? `Good morning, ${nom}` : hour < 18 ? `Good afternoon, ${nom}` : `Good evening, ${nom}`),
+    thisWeekLabel: (count, ville) => `event${count > 1 ? "s" : ""} this week in ${ville}`,
   },
   saveButtons: {
     sauvegarder: "Save",
@@ -1285,6 +1294,9 @@ export const el: Dictionary = {
       `${count} εκδήλωση${count > 1 ? "εις" : ""} αυτή την εβδομάδα στην ${ville}`,
     highlightGoing: (titre, date) => `Επόμενη εκδήλωση: ${titre} · ${date}`,
     highlightMatch: "Νέα πρόταση αντιστοίχισης:",
+    tagline: "Η τέχνη παντού, πάντα.",
+    greetingShort: (hour, nom) => (hour < 18 ? `Καλημέρα, ${nom}` : `Καλησπέρα, ${nom}`),
+    thisWeekLabel: (count, ville) => `εκδήλωση${count > 1 ? "εις" : ""} αυτή την εβδομάδα στην ${ville}`,
   },
   saveButtons: {
     sauvegarder: "Αποθήκευση",

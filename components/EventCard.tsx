@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Share2 } from "lucide-react";
 import { SaveButtons } from "./SaveButtons";
 import { EventTypeBadge } from "./EventTypeBadge";
-import { CostBadge } from "./CostBadge";
 import { ArtEvent } from "@/lib/types";
 import { formatInVille } from "@/lib/timezone";
 import { localizedTitle } from "@/lib/localize-event";
@@ -12,13 +11,23 @@ import { useSavedEvents } from "@/lib/use-saved-events";
 import { useLocale } from "@/lib/i18n/context";
 import { useToast } from "@/lib/toast-context";
 
+// Numéro de ligne façon Racines : ( 01 ), ( 02 )… — le même que sur le repère
+// de la carte.
+export function rowNumber(n: number) {
+  return `( ${String(n).padStart(2, "0")} )`;
+}
+
+// Ligne d'événement « Racines » : pas de carte, un filet sous chaque entrée ;
+// le survol (ou le repère survolé sur la carte) teinte légèrement le fond.
 export function EventCard({
   event,
+  index,
   highlighted,
   onMouseEnter,
   onMouseLeave,
 }: {
   event: ArtEvent;
+  index?: number;
   highlighted?: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
@@ -40,34 +49,39 @@ export function EventCard({
   );
 
   return (
-    <div
+    <article
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`rounded-lg border bg-surface p-5 transition ${
-        highlighted ? "border-accent/40 shadow-event-hover" : "border-border"
-      }`}
+      className={`border-b border-border py-[22px] transition-colors ${highlighted ? "bg-surface-hover" : ""}`}
     >
       <Link href={`/events/${event.id}`} className="block">
-        <div className="flex items-center justify-between gap-2 text-xs text-foreground-muted">
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between gap-3">
+          <span className="flex items-center gap-2">
+            {index !== undefined && (
+              <span className="text-xs tracking-[0.1em] text-foreground-muted">{rowNumber(index)}</span>
+            )}
             <EventTypeBadge type={event.type} />
-            {event.coutType && <CostBadge type={event.coutType} />}
-          </div>
-          <span>{date}</span>
+          </span>
+          <span className="text-xs uppercase tracking-[0.08em] text-foreground-muted">{date}</span>
         </div>
-        <h3 className="mt-2.5 text-[17px] font-bold">{localizedTitle(event, locale)}</h3>
-        <p className="mt-1 text-sm text-foreground-muted">
+        <h3 className="mt-2.5 font-display text-[26px] leading-[1.05] md:text-[32px]">
+          {localizedTitle(event, locale)}
+        </h3>
+        <p className="mt-1.5 text-sm text-foreground-muted">
           {t.villeLabels[event.ville]} · {t.disciplineLabels[event.discipline] ?? event.discipline}
+          {event.coutType && (
+            <>
+              {" · "}
+              <span className="font-semibold text-foreground">{t.coutLabels[event.coutType]}</span>
+            </>
+          )}
         </p>
       </Link>
       <div className="mt-3.5 flex items-center gap-2.5">
         {canSave ? (
           <SaveButtons status={saved[event.id]} onChange={(status) => setStatus(event.id, status)} />
         ) : (
-          <Link
-            href="/login"
-            className="flex-1 text-xs text-foreground/40 hover:text-foreground-muted"
-          >
+          <Link href="/login" className="flex-1 text-xs text-foreground-muted underline-offset-4 hover:underline">
             {t.saveButtons.loginToSave}
           </Link>
         )}
@@ -76,11 +90,11 @@ export function EventCard({
           onClick={handleShare}
           aria-label={t.common.share}
           title={t.common.share}
-          className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-border text-foreground-muted transition hover:text-foreground"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition hover:border-foreground"
         >
-          <Share2 size={14} strokeWidth={2} />
+          <Share2 size={14} strokeWidth={1.75} />
         </button>
       </div>
-    </div>
+    </article>
   );
 }
