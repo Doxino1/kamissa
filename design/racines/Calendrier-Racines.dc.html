@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Kamissa — Calendrier, direction Racines</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1100px; background: #fdfcf9; color: #12110e; font-family: 'Hanken Grotesk', system-ui, sans-serif;">
+
+  <header style="display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 24px; padding: 24px 40px;">
+    <nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 28px;">
+      <a href="Accueil-Racines.dc.html" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Événements</a>
+      <a href="Communaute-Racines.dc.html" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Communauté</a>
+      <a href="#" aria-current="page" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: underline; text-underline-offset: 6px;">Calendrier</a>
+    </nav>
+    <a href="Accueil-Racines.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: #12110e;">
+      <span style="font-family: 'Instrument Serif', serif; font-size: 30px; line-height: 1;">Kamissa</span>
+      <span aria-hidden="true" style="display: flex; gap: 5px;"><span style="width: 8px; height: 8px; background: #cb9a56;"></span><span style="width: 8px; height: 8px; background: #5f8763;"></span><span style="width: 8px; height: 8px; background: #5a7580;"></span></span>
+    </a>
+    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button aria-label="Notifications" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+      <a href="Boutiques-Racines.dc.html" aria-label="Boutiques" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v7h14v-7"/></svg></a>
+      <a href="Profil-Racines.dc.html" aria-label="Mon profil" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+    </div>
+  </header>
+
+  <section style="max-width: 1360px; margin: 0 auto; padding: 24px 40px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; border-bottom: 1px solid #12110e;">
+    <div>
+      <h1 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 120px; line-height: 0.85; text-transform: uppercase;">Calendrier</h1>
+      <p style="margin: 8px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 44px;">{{ monthLabel }}</p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button onClick="{{ prev }}" aria-label="Mois précédent" style="width: 48px; height: 48px; border-radius: 999px; border: 1px solid #12110e; background: transparent; font-size: 20px; cursor: pointer;">‹</button>
+      <button onClick="{{ today }}" style="min-height: 48px; padding: 0 20px; border-radius: 999px; border: 1px solid #12110e; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">Aujourd'hui</button>
+      <button onClick="{{ next }}" aria-label="Mois suivant" style="width: 48px; height: 48px; border-radius: 999px; border: 1px solid #12110e; background: transparent; font-size: 20px; cursor: pointer;">›</button>
+    </div>
+  </section>
+
+  <main style="max-width: 1360px; margin: 0 auto; padding: 0 40px 48px; display: flex; flex-wrap: wrap; gap: 40px;">
+    <div style="flex: 999 1 640px; min-width: 0;">
+      <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); padding: 14px 0; border-bottom: 1px solid #e4dfd4;">
+        <sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7"><span style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #6e6a61;">{{ w }}</span></sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));">
+        <sc-for list="{{ cells }}" as="d" hint-placeholder-count="42">
+          <button onClick="{{ d.pick }}" aria-label="{{ d.aria }}" aria-pressed="{{ d.pressed }}" style="{{ d.style }}">
+            <span style="{{ d.numStyle }}">{{ d.n }}</span>
+            <sc-for list="{{ d.evs }}" as="e" hint-placeholder-count="1">
+              <span style="display: flex; align-items: center; gap: 5px; margin-top: 4px; font-size: 11px; line-height: 1.2; text-align: left; color: #12110e;"><span style="{{ e.sq }}"></span>{{ e.short }}</span>
+            </sc-for>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <aside aria-label="Événements du jour" style="flex: 1 1 320px; max-width: 400px; padding-top: 18px;">
+      <p style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">( Jour sélectionné )</p>
+      <h2 style="margin: 6px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 52px; line-height: 1;">{{ selLabel }}</h2>
+      <sc-for list="{{ selEvents }}" as="e" hint-placeholder-count="2">
+        <article style="padding: 20px 0; border-bottom: 1px solid #e4dfd4;">
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;"><span style="{{ e.sq }}"></span>{{ e.cat }} · {{ e.cost }}</span>
+          <h3 style="margin: 8px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; line-height: 1.05;">{{ e.title }}</h3>
+          <p style="margin: 6px 0 0; font-size: 14px; color: #6e6a61;">{{ e.loc }}</p>
+        </article>
+      </sc-for>
+      <sc-if value="{{ noSel }}" hint-placeholder-val="{{ false }}">
+        <p style="margin: 24px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 28px; color: #6e6a61;">Aucun événement ce jour.</p>
+      </sc-if>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+const EV = [
+  { iso: '2026-07-31', cat: 'Vernissage', cost: 'Payant', title: 'Vernissage — Matière première', loc: 'Paris · Sculpture' },
+  { iso: '2026-08-01', cat: 'Résidence', cost: 'Gratuit', title: "Open call — Résidence d'été", loc: 'Paris · Pluridisciplinaire' },
+  { iso: '2026-08-05', cat: 'Exposition', cost: 'Payant', title: 'Performance — Corps et mémoire', loc: 'Paris · Performance' },
+  { iso: '2026-08-08', cat: 'Atelier', cost: 'Payant', title: 'Atelier tournage — Initiation céramique', loc: 'Paris · Céramique' },
+  { iso: '2026-07-31', cat: 'Vernissage', cost: 'Gratuit', title: 'Vernissage — Lumières du Pirée', loc: 'Athènes · Peinture' },
+  { iso: '2026-08-02', cat: 'Exposition', cost: 'Gratuit', title: "Exposition — Portraits d'ateliers", loc: 'Athènes · Photographie' },
+  { iso: '2026-08-06', cat: 'Appel à candidatures', cost: 'Gratuit', title: 'Appel à candidatures — Résidence Kerameikos', loc: 'Athènes · Pluridisciplinaire' },
+  { iso: '2026-08-08', cat: 'Atelier', cost: 'Payant', title: 'Atelier marbre — Techniques traditionnelles', loc: 'Athènes · Sculpture' }
+];
+const CAT = { 'Vernissage': '#a3867d', 'Résidence': '#5f8763', 'Exposition': '#5a7580', 'Atelier': '#cb9a56', 'Appel à candidatures': '#337c83' };
+const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+const DAYS = ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'];
+const pad = (n) => String(n).padStart(2, '0');
+const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+class Component extends DCLogic {
+  state = { y: 2026, m: 7, sel: '2026-08-08' };
+  renderVals() {
+    const st = this.state;
+    const first = new Date(st.y, st.m, 1);
+    const start = new Date(st.y, st.m, 1 - ((first.getDay() + 6) % 7));
+    const sq = (c) => ({ width: '8px', height: '8px', flexShrink: 0, background: CAT[c] });
+    const cells = [];
+    for (let i = 0; i < 42; i++) {
+      const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+      const iso = isoOf(d), inMonth = d.getMonth() === st.m, sel = iso === st.sel;
+      const evs = EV.filter(e => e.iso === iso);
+      cells.push({ n: d.getDate(), aria: `${d.getDate()} ${MONTHS[d.getMonth()]}, ${evs.length} événement(s)`, pressed: String(sel),
+        pick: () => this.setState({ sel: iso }),
+        evs: evs.slice(0, 2).map(e => ({ short: e.title.split(' — ')[1] || e.title, sq: sq(e.cat) })),
+        style: { minHeight: '118px', padding: '10px 10px 8px', border: 0, borderRight: '1px solid #e4dfd4', borderBottom: '1px solid #e4dfd4', background: sel ? '#f2ede2' : 'transparent', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'stretch', fontFamily: 'inherit', opacity: inMonth ? 1 : 0.35, outline: sel ? '1px solid #12110e' : 'none', outlineOffset: '-1px' },
+        numStyle: { fontFamily: "'Instrument Serif', serif", fontSize: '30px', lineHeight: 1, textAlign: 'left', fontStyle: sel ? 'italic' : 'normal', color: '#12110e' } });
+    }
+    const sd = new Date(st.sel + 'T12:00:00');
+    const selEvents = EV.filter(e => e.iso === st.sel).map(e => ({ ...e, sq: sq(e.cat) }));
+    return {
+      monthLabel: `${MONTHS[st.m].toLowerCase()} ${st.y}`,
+      weekdays: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+      cells,
+      prev: () => this.setState({ m: st.m === 0 ? 11 : st.m - 1, y: st.m === 0 ? st.y - 1 : st.y }),
+      next: () => this.setState({ m: st.m === 11 ? 0 : st.m + 1, y: st.m === 11 ? st.y + 1 : st.y }),
+      today: () => this.setState({ y: 2026, m: 7, sel: '2026-08-08' }),
+      selLabel: `${DAYS[sd.getDay()]} ${sd.getDate()} ${MONTHS[sd.getMonth()].toLowerCase()}`,
+      selEvents, noSel: selEvents.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

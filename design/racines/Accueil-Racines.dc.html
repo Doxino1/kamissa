@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Kamissa — Événements, direction Racines</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1100px; background: #fdfcf9; color: #12110e; font-family: 'Hanken Grotesk', system-ui, sans-serif; position: relative;">
+
+  <header style="display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 24px; padding: 24px 40px;">
+    <nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 28px;">
+      <a href="#" aria-current="page" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: underline; text-underline-offset: 6px;">Événements</a>
+      <a href="#" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Communauté</a>
+      <a href="#" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Calendrier</a>
+    </nav>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: #12110e;">
+      <span style="font-family: 'Instrument Serif', serif; font-size: 30px; line-height: 1;">Kamissa</span>
+      <span aria-hidden="true" style="display: flex; gap: 5px;"><span style="width: 8px; height: 8px; background: #cb9a56;"></span><span style="width: 8px; height: 8px; background: #5f8763;"></span><span style="width: 8px; height: 8px; background: #5a7580;"></span></span>
+    </a>
+    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button aria-label="Notifications" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+      <button aria-label="Boutiques" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v7h14v-7"/></svg></button>
+      <a href="Profil-Racines.dc.html" aria-label="Mon profil" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+    </div>
+  </header>
+
+  <section style="max-width: 1360px; margin: 0 auto; padding: 24px 40px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; border-bottom: 1px solid #12110e;">
+    <div style="padding-bottom: 18px;">
+      <p style="margin: 0 0 8px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6e6a61;">( Bonjour, Dotian )</p>
+      <h1 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 120px; line-height: 0.85; text-transform: uppercase;">Événements</h1>
+      <p style="margin: 8px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 36px;">L'art partout, tout le temps.</p>
+    </div>
+    <div style="padding-bottom: 22px; text-align: right;">
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 96px; line-height: 0.9;">4</p>
+      <p style="margin: 6px 0 14px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">événements cette semaine à Paris</p>
+      <button style="min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid #12110e; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">Mes événements</button>
+    </div>
+  </section>
+
+  <section aria-label="Recherche et filtres" style="max-width: 1360px; margin: 0 auto; padding: 18px 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; border-bottom: 1px solid #e4dfd4;">
+    <label style="flex: 1 1 280px; display: flex; align-items: center; gap: 10px; min-height: 44px; border-bottom: 1px solid #12110e;">
+      <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input placeholder="Rechercher un événement..." aria-label="Rechercher un événement" style="flex: 1; border: 0; background: transparent; font-family: 'Instrument Serif', serif; font-size: 24px; color: #12110e; outline-offset: 4px;" />
+    </label>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+      <sc-for list="{{ cities }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+      <button style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #e4dfd4; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;">Type ▾</button>
+      <button style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #e4dfd4; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;">Discipline ▾</button>
+      <button style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #e4dfd4; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;">Coût ▾</button>
+    </div>
+  </section>
+
+  <main style="max-width: 1360px; margin: 0 auto; padding: 0 40px 40px; display: flex; flex-wrap: wrap; gap: 32px;">
+    <div style="flex: 1 1 480px; max-width: 600px; min-width: 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #e4dfd4; font-size: 14px;">
+        <span>Complétez votre profil pour être visible dans la Communauté. <a href="Profil-Racines.dc.html" style="color: #12110e; font-weight: 700;">Compléter →</a></span>
+        <button aria-label="Masquer" style="width: 36px; height: 36px; border: 0; background: transparent; cursor: pointer; font-size: 16px; color: #6e6a61;">✕</button>
+      </div>
+      <sc-for list="{{ events }}" as="ev" hint-placeholder-count="4">
+        <article onMouseEnter="{{ ev.enter }}" onMouseLeave="{{ ev.leave }}" style="{{ ev.card }}">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+            <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;"><span style="font-weight: 400; color: #6e6a61;">( 0{{ ev.id }} )</span><span aria-hidden="true" style="{{ ev.square }}"></span>{{ ev.cat }}</span>
+            <span style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #6e6a61;">{{ ev.date }}</span>
+          </div>
+          <h2 style="margin: 10px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 32px; line-height: 1.05;">{{ ev.title }}</h2>
+          <p style="margin: 6px 0 0; font-size: 14px; color: #6e6a61;">{{ ev.loc }} · <span style="color: #12110e; font-weight: 600;">{{ ev.cost }}</span></p>
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+            <button onClick="{{ ev.toggleSave }}" style="{{ ev.saveStyle }}">{{ ev.saveLabel }}</button>
+            <button onClick="{{ ev.toggleGoing }}" style="{{ ev.goingStyle }}">{{ ev.goingLabel }}</button>
+            <button aria-label="Partager" style="width: 40px; height: 40px; border-radius: 999px; border: 1px solid #e4dfd4; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+          </div>
+        </article>
+      </sc-for>
+      <button style="margin-top: 20px; min-height: 44px; padding: 0 22px; border-radius: 999px; border: 1px solid #12110e; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">Charger plus</button>
+    </div>
+
+    <div aria-label="Carte des événements" role="img" style="flex: 999 1 420px; min-width: 0; position: relative; min-height: 640px; margin-top: 24px; background: #efeadf; overflow: hidden;">
+      <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+        <path d="M0 55 C 15 45, 25 60, 40 52 S 60 35, 72 48 S 90 70, 100 62" fill="none" stroke="#c9d3d6" stroke-width="3.2"/>
+        <path d="M0 20 L100 34 M12 0 L30 100 M55 0 L48 100 M0 82 L100 76 M78 0 L92 100" fill="none" stroke="#e2dccf" stroke-width="0.5"/>
+      </svg>
+      <sc-for list="{{ events }}" as="ev" hint-placeholder-count="4">
+        <span style="{{ ev.pin }}">{{ ev.id }}</span>
+      </sc-for>
+      <p style="position: absolute; left: 20px; bottom: 16px; margin: 0; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">( Paris )</p>
+    </div>
+  </main>
+
+  <a href="Modale-Evenement-Racines.dc.html" style="position: absolute; right: 40px; bottom: 32px; display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 26px; border-radius: 999px; background: #12110e; color: #fdfcf9; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;"><span style="font-size: 20px;">+</span> Ajouter un événement</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+const EV = [
+  { id: 1, cat: 'Vernissage', date: 'Ven. 31 juil.', title: 'Vernissage — Matière première', loc: 'Paris · Sculpture', cost: 'Payant', x: 25, y: 44 },
+  { id: 2, cat: 'Résidence', date: 'Sam. 1 août', title: "Open call — Résidence d'été", loc: 'Paris · Pluridisciplinaire', cost: 'Gratuit', x: 50, y: 64 },
+  { id: 3, cat: 'Exposition', date: 'Mer. 5 août', title: 'Performance — Corps et mémoire', loc: 'Paris · Performance', cost: 'Payant', x: 62, y: 80 },
+  { id: 4, cat: 'Atelier', date: 'Sam. 8 août', title: 'Atelier tournage — Initiation céramique', loc: 'Paris · Céramique', cost: 'Payant', x: 77, y: 20 }
+];
+const CAT = { 'Vernissage': '#a3867d', 'Résidence': '#5f8763', 'Exposition': '#5a7580', 'Atelier': '#cb9a56' };
+class Component extends DCLogic {
+  state = { saved: { 2: true }, going: { 1: true }, hover: null, city: 'paris' };
+  renderVals() {
+    const st = this.state;
+    const pill = (a) => ({ minHeight: '40px', padding: '0 16px', borderRadius: '999px', border: a ? '1px solid #12110e' : '1px solid #e4dfd4', background: a ? '#12110e' : 'transparent', color: a ? '#fdfcf9' : '#12110e', fontFamily: 'inherit', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' });
+    return {
+      cities: [['paris', 'Paris'], ['athens', 'Athènes']].map(([v, l]) => ({ label: l, pressed: String(st.city === v), style: pill(st.city === v), pick: () => this.setState({ city: v }) })),
+      events: EV.map(e => {
+        const h = st.hover === e.id, s = !!st.saved[e.id], g = !!st.going[e.id];
+        return { ...e,
+          card: { padding: '22px 0', borderBottom: '1px solid #e4dfd4', background: h ? '#f6f2ea' : 'transparent', transition: 'background .15s' },
+          square: { width: '9px', height: '9px', background: CAT[e.cat] },
+          saveLabel: s ? 'Sauvegardé ✓' : 'Sauvegarder', goingLabel: g ? 'Inscrit ✓' : 'Participer',
+          saveStyle: pill(s), goingStyle: { ...pill(g), background: g ? '#46684a' : 'transparent', borderColor: g ? '#46684a' : '#e4dfd4', color: g ? '#ffffff' : '#12110e' },
+          toggleSave: () => this.setState({ saved: { ...st.saved, [e.id]: !s } }),
+          toggleGoing: () => this.setState({ going: { ...st.going, [e.id]: !g } }),
+          enter: () => this.setState({ hover: e.id }), leave: () => this.setState({ hover: null }),
+          pin: { position: 'absolute', left: e.x + '%', top: e.y + '%', transform: `translate(-50%, -50%) scale(${h ? 1.35 : 1})`, width: '34px', height: '34px', background: CAT[e.cat], color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Instrument Serif', serif", fontSize: '20px', border: '3px solid #fdfcf9', transition: 'transform .15s', boxShadow: h ? '0 8px 20px rgba(18,17,14,.25)' : 'none' }
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

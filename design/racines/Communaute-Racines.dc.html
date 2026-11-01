@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Kamissa — Communauté, direction Racines</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1100px; background: #fdfcf9; color: #12110e; font-family: 'Hanken Grotesk', system-ui, sans-serif;">
+
+  <header style="display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 24px; padding: 24px 40px;">
+    <nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 28px;">
+      <a href="Accueil-Racines.dc.html" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Événements</a>
+      <a href="#" aria-current="page" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: underline; text-underline-offset: 6px;">Communauté</a>
+      <a href="Calendrier-Racines.dc.html" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Calendrier</a>
+    </nav>
+    <a href="Accueil-Racines.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: #12110e;">
+      <span style="font-family: 'Instrument Serif', serif; font-size: 30px; line-height: 1;">Kamissa</span>
+      <span aria-hidden="true" style="display: flex; gap: 5px;"><span style="width: 8px; height: 8px; background: #cb9a56;"></span><span style="width: 8px; height: 8px; background: #5f8763;"></span><span style="width: 8px; height: 8px; background: #5a7580;"></span></span>
+    </a>
+    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button aria-label="Notifications" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+      <a href="Boutiques-Racines.dc.html" aria-label="Boutiques" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v7h14v-7"/></svg></a>
+      <a href="Profil-Racines.dc.html" aria-label="Mon profil" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+    </div>
+  </header>
+
+  <section style="max-width: 1360px; margin: 0 auto; padding: 24px 40px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px;">
+    <div>
+      <h1 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 120px; line-height: 0.85; text-transform: uppercase;">Communauté</h1>
+      <p style="margin: 8px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 36px;">{{ cityLong }}</p>
+    </div>
+    <div style="display: flex; gap: 8px; padding-bottom: 10px;">
+      <sc-for list="{{ cities }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+    </div>
+  </section>
+
+  <div role="tablist" aria-label="Sections de la communauté" style="max-width: 1280px; margin: 24px auto 0; padding: 18px 40px; display: flex; flex-wrap: wrap; gap: 8px 40px; border-top: 1px solid #12110e; border-bottom: 1px solid #e4dfd4;">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+      <button role="tab" aria-selected="{{ t.sel }}" onClick="{{ t.pick }}" style="{{ t.style }}"><span style="font-family: 'Hanken Grotesk', sans-serif; font-style: normal; font-size: 12px; letter-spacing: 0.12em; color: #6e6a61;">( 0{{ t.n }} )</span> {{ t.label }}</button>
+    </sc-for>
+  </div>
+
+  <main style="max-width: 1360px; margin: 0 auto; padding: 0 40px 48px;">
+    <sc-if value="{{ isFeed }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 48px; margin-top: 8px;">
+        <div style="flex: 999 1 560px; min-width: 0;">
+          <label style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-bottom: 1px solid #e4dfd4;">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6e6a61" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input placeholder="Rechercher dans les messages..." aria-label="Rechercher dans les messages" style="flex: 1; border: 0; background: transparent; font-family: inherit; font-size: 15px; color: #12110e;" />
+          </label>
+          <sc-if value="{{ hasMessages }}" hint-placeholder-val="{{ true }}">
+            <sc-for list="{{ messages }}" as="m" hint-placeholder-count="3">
+              <article style="padding: 26px 0; border-bottom: 1px solid #e4dfd4;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+                  <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;">{{ m.name }}</span>
+                  <span style="font-size: 12px; color: #6e6a61;">{{ m.time }}</span>
+                </div>
+                <p style="margin: 8px 0 0; font-family: 'Instrument Serif', serif; font-size: 34px; line-height: 1.1;">« {{ m.text }} »</p>
+                <div style="display: flex; gap: 20px; margin-top: 12px;">
+                  <button style="min-height: 32px; border: 0; padding: 0; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #46684a; cursor: pointer;">Répondre</button>
+                  <sc-if value="{{ m.hasReplies }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ m.toggle }}" style="min-height: 32px; border: 0; padding: 0; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8a6532; cursor: pointer;">{{ m.threadLabel }}</button>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ m.open }}" hint-placeholder-val="{{ false }}">
+                  <sc-for list="{{ m.replies }}" as="r" hint-placeholder-count="1">
+                    <div style="margin-top: 14px; margin-left: 32px; padding-left: 18px; border-left: 1px solid #12110e;">
+                      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;">{{ r.name }}</span> <span style="font-size: 12px; color: #6e6a61;">· {{ r.time }}</span>
+                      <p style="margin: 4px 0 0; font-family: 'Instrument Serif', serif; font-size: 24px;">{{ r.text }}</p>
+                    </div>
+                  </sc-for>
+                </sc-if>
+              </article>
+            </sc-for>
+          </sc-if>
+          <sc-if value="{{ noMessages }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 60px 0; text-align: center; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 32px; color: #6e6a61;">Aucun message pour l'instant à Athènes — soyez le premier à écrire !</p>
+          </sc-if>
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 24px;">
+            <input value="{{ draft }}" onChange="{{ onDraft }}" placeholder="Écrire un message..." aria-label="Écrire un message" style="flex: 1; min-height: 52px; border: 0; border-bottom: 1px solid #12110e; background: transparent; font-family: 'Instrument Serif', serif; font-size: 24px; color: #12110e;" />
+            <button onClick="{{ send }}" style="min-height: 48px; padding: 0 26px; border-radius: 999px; border: 0; background: #12110e; color: #fdfcf9; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">Envoyer</button>
+          </div>
+        </div>
+        <aside aria-label="Artistes suggérés" style="flex: 1 1 280px; max-width: 340px; padding-top: 20px;">
+          <h2 style="margin: 0 0 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">( Artistes suggérés )</h2>
+          <sc-for list="{{ suggested }}" as="a" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #e4dfd4;">
+              <span aria-hidden="true" style="{{ a.dot }}">{{ a.initial }}</span>
+              <span style="flex: 1; min-width: 0;"><span style="display: block; font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1.1;">{{ a.name }}</span><span style="font-size: 12px; color: #6e6a61;">{{ a.discipline }} · {{ a.city }}</span></span>
+            </div>
+          </sc-for>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isArtists }}" hint-placeholder-val="{{ false }}">
+      <label style="display: flex; align-items: center; gap: 10px; min-height: 52px; margin-top: 8px; border-bottom: 1px solid #e4dfd4;">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6e6a61" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input placeholder="Rechercher un artiste ou une discipline..." aria-label="Rechercher un artiste ou une discipline" style="flex: 1; border: 0; background: transparent; font-family: inherit; font-size: 15px; color: #12110e;" />
+      </label>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0; margin-top: 8px; border-left: 1px solid #e4dfd4;">
+        <sc-for list="{{ artists }}" as="a" hint-placeholder-count="6">
+          <article style="padding: 28px 24px; border-right: 1px solid #e4dfd4; border-bottom: 1px solid #e4dfd4; display: flex; flex-direction: column; gap: 10px;">
+            <span aria-hidden="true" style="{{ a.avatar }}">{{ a.initial }}</span>
+            <h3 style="margin: 6px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; line-height: 1;">{{ a.name }}</h3>
+            <p style="margin: 0; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #6e6a61;">{{ a.city }} · <span style="{{ a.discStyle }}">{{ a.discipline }}</span></p>
+            <p style="margin: 0; font-size: 14px; line-height: 1.45;">{{ a.bio }}</p>
+            <button onClick="{{ a.toggle }}" style="{{ a.followStyle }}">{{ a.followLabel }}</button>
+          </article>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMatching }}" hint-placeholder-val="{{ false }}">
+      <p style="margin: 28px 0 0; font-family: 'Instrument Serif', serif; font-size: 34px;">Des artistes qui cherchent <em>la même chose que vous.</em></p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; margin-top: 24px;">
+        <sc-for list="{{ matches }}" as="a" hint-placeholder-count="4">
+          <article style="border-top: 1px solid #12110e; padding-top: 18px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;"><h3 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px;">{{ a.name }}</h3><span style="font-size: 12px; color: #6e6a61;">{{ a.city }}</span></div>
+            <p style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #46684a;">{{ a.discipline }}</p>
+            <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 22px; line-height: 1.2;">{{ a.bio }}</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{ a.tags }}" as="tg" hint-placeholder-count="2"><span style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px; border: 1px solid #e4dfd4; border-radius: 999px;">{{ tg }}</span></sc-for></div>
+            <button style="align-self: flex-start; margin-top: 6px; min-height: 44px; padding: 0 22px; border-radius: 999px; border: 1px solid #12110e; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">Proposer un échange</button>
+          </article>
+        </sc-for>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+const ARTISTS = [
+  { id: 1, name: 'Léa Fontaine', discipline: 'Peinture', city: 'paris', bio: 'Peinture murale et fresques collectives.' },
+  { id: 2, name: 'Yiannis K.', discipline: 'Céramique', city: 'athens', bio: 'Céramique utilitaire et sculpturale.' },
+  { id: 3, name: 'Nour Idrissi', discipline: 'Photographie', city: 'paris', bio: "Portraits d'artistes et de leurs ateliers." },
+  { id: 4, name: 'Sofia D.', discipline: 'Sculpture', city: 'athens', bio: 'Travail du marbre et du bronze.' },
+  { id: 5, name: 'Marco T.', discipline: 'Performance', city: 'paris', bio: 'Performances autour du corps et de la mémoire.' },
+  { id: 6, name: 'Elena P.', discipline: 'Papeterie', city: 'athens', bio: 'Reliure artisanale et papiers faits main.' }
+];
+const MATCHES = [
+  { name: 'Léa Fontaine', discipline: 'Peinture', city: 'Paris', bio: 'Cherche un binôme pour une fresque collective cet automne.', tags: ['Peinture murale', 'Collectif'] },
+  { name: 'Yiannis K.', discipline: 'Céramique', city: 'Athènes', bio: "Ouvert à un échange d'atelier entre Paris et Athènes.", tags: ['Céramique', 'Résidence'] },
+  { name: 'Nour Idrissi', discipline: 'Photographie', city: 'Paris', bio: 'Documente les ateliers d’artistes, cherche des sujets.', tags: ['Photographie', 'Portrait'] },
+  { name: 'Sofia D.', discipline: 'Sculpture', city: 'Athènes', bio: 'Travaille le marbre, intéressée par des projets pluridisciplinaires.', tags: ['Sculpture', 'Marbre'] }
+];
+const TONES = ['#5a7580', '#cb9a56', '#5f8763', '#9b8b73', '#a3867d', '#337c83'];
+const CITY = { paris: 'Paris', athens: 'Athènes' };
+class Component extends DCLogic {
+  state = { tab: 'feed', city: 'paris', open: { 2: true }, follows: { 3: true }, draft: '', messages: [
+    { id: 1, name: 'Dotian', time: '18 juil., 13:58', text: 'Message de test — vérification du groupe communautaire.', city: 'paris', replies: [] },
+    { id: 2, name: 'Dotian', time: '18 juil., 14:59', text: 'Eyaa', city: 'paris', replies: [{ name: 'Markella', time: '18 juil., 15:10', text: 'Coucou !' }] },
+    { id: 3, name: 'Markella', time: '23 juil., 11:50', text: 'Wadup', city: 'paris', replies: [] }
+  ] };
+  renderVals() {
+    const st = this.state;
+    const pill = (a) => ({ minHeight: '40px', padding: '0 16px', borderRadius: '999px', border: a ? '1px solid #12110e' : '1px solid #e4dfd4', background: a ? '#12110e' : 'transparent', color: a ? '#fdfcf9' : '#12110e', fontFamily: 'inherit', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' });
+    const tabStyle = (a) => ({ display: 'flex', alignItems: 'baseline', gap: '10px', minHeight: '44px', border: 0, padding: 0, background: 'transparent', cursor: 'pointer', fontFamily: "'Instrument Serif', serif", fontSize: '36px', fontStyle: a ? 'italic' : 'normal', color: a ? '#12110e' : '#8f8a7f', textDecoration: a ? 'underline' : 'none', textUnderlineOffset: '8px', textDecorationThickness: '1px' });
+    const msgs = st.messages.filter(m => m.city === st.city);
+    return {
+      cityLong: st.city === 'paris' ? 'le groupe de Paris' : "le groupe d'Athènes",
+      cities: Object.keys(CITY).map(v => ({ label: CITY[v], pressed: String(st.city === v), style: pill(st.city === v), pick: () => this.setState({ city: v }) })),
+      tabs: [['feed', 'Communauté'], ['artists', 'Artistes'], ['matching', 'Matching']].map(([v, l], i) => ({ n: i + 1, label: l, sel: String(st.tab === v), style: tabStyle(st.tab === v), pick: () => this.setState({ tab: v }) })),
+      isFeed: st.tab === 'feed', isArtists: st.tab === 'artists', isMatching: st.tab === 'matching',
+      hasMessages: msgs.length > 0, noMessages: msgs.length === 0,
+      messages: msgs.map(m => ({ ...m, hasReplies: m.replies.length > 0, open: !!st.open[m.id], threadLabel: st.open[m.id] ? 'Masquer' : `${m.replies.length} réponse${m.replies.length > 1 ? 's' : ''}`, toggle: () => this.setState({ open: { ...st.open, [m.id]: !st.open[m.id] } }) })),
+      draft: st.draft,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      send: () => { if (!st.draft.trim()) return; this.setState({ draft: '', messages: [...st.messages, { id: Date.now(), name: 'Vous', time: "à l'instant", text: st.draft, city: st.city, replies: [] }] }); },
+      suggested: MATCHES.map((a, i) => ({ ...a, initial: a.name[0], dot: { width: '40px', height: '40px', borderRadius: '999px', background: TONES[i], color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Instrument Serif', serif", fontSize: '20px', flexShrink: 0 } })),
+      artists: ARTISTS.filter(a => a.city === st.city).concat(ARTISTS.filter(a => a.city !== st.city)).map((a, i) => {
+        const f = !!st.follows[a.id];
+        return { ...a, city: CITY[a.city], initial: a.name[0],
+          avatar: { width: '64px', height: '64px', borderRadius: '999px', background: TONES[a.id - 1], color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Instrument Serif', serif", fontSize: '30px' },
+          discStyle: { color: '#46684a', fontWeight: 600 },
+          followLabel: f ? 'Suivi ✓' : 'Suivre', toggle: () => this.setState({ follows: { ...st.follows, [a.id]: !f } }),
+          followStyle: { marginTop: 'auto', minHeight: '44px', borderRadius: '999px', border: '1px solid #3f6b52', background: f ? '#3f6b52' : 'transparent', color: f ? '#ffffff' : '#3f6b52', fontFamily: 'inherit', fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' } };
+      }),
+      matches: MATCHES
+    };
+  }
+}
+</script>
+</body>
+</html>

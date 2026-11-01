@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Kamissa — Paramètres du compte, direction Racines</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+html{scroll-behavior:smooth}
+</style>
+</helmet>
+<div style="min-height: 1100px; background: #fdfcf9; color: #12110e; font-family: 'Hanken Grotesk', system-ui, sans-serif;">
+
+  <header style="display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 24px; padding: 24px 40px;">
+    <nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 28px;">
+      <a href="Accueil-Racines.dc.html" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Événements</a>
+      <a href="Communaute-Racines.dc.html" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Communauté</a>
+      <a href="Calendrier-Racines.dc.html" style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #12110e; text-decoration: none;">Calendrier</a>
+    </nav>
+    <a href="Accueil-Racines.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: #12110e;">
+      <span style="font-family: 'Instrument Serif', serif; font-size: 30px; line-height: 1;">Kamissa</span>
+      <span aria-hidden="true" style="display: flex; gap: 5px;"><span style="width: 8px; height: 8px; background: #cb9a56;"></span><span style="width: 8px; height: 8px; background: #5f8763;"></span><span style="width: 8px; height: 8px; background: #5a7580;"></span></span>
+    </a>
+    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button aria-label="Notifications" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+      <a href="Boutiques-Racines.dc.html" aria-label="Boutiques" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 999px; border: 1px solid #e4dfd4; background: #ffffff; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#12110e" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v7h14v-7"/></svg></a>
+      <a href="Profil-Racines.dc.html" aria-label="Mon profil" style="width: 44px; height: 44px; border-radius: 999px; background: #12110e; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fdfcf9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+    </div>
+  </header>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: 16px 40px 18px; border-bottom: 1px solid #12110e;">
+    <a href="Profil-Racines.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61; text-decoration: none;">‹ Profil</a>
+    <h1 style="margin: 4px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 120px; line-height: 0.85; text-transform: uppercase;">Paramètres</h1>
+    <p style="margin: 8px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 36px;">du compte</p>
+  </section>
+
+  <main style="max-width: 1280px; margin: 0 auto; padding: 0 40px 64px; display: flex; flex-wrap: wrap; gap: 56px;">
+    <nav aria-label="Sections des paramètres" style="flex: 1 1 200px; max-width: 240px; padding-top: 28px; display: flex; flex-direction: column; gap: 2px;">
+      <a href="#p-info" style="display: flex; align-items: baseline; gap: 10px; min-height: 40px; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px; color: #12110e; text-decoration: none;"><span style="font-family: 'Hanken Grotesk', sans-serif; font-style: normal; font-size: 11px; letter-spacing: 0.12em; color: #6e6a61;">( 01 )</span>Informations</a>
+      <a href="#p-langue" style="display: flex; align-items: baseline; gap: 10px; min-height: 40px; font-family: 'Instrument Serif', serif; font-size: 24px; color: #6e6a61; text-decoration: none;"><span style="font-family: 'Hanken Grotesk', sans-serif; font-size: 11px; letter-spacing: 0.12em;">( 02 )</span>Langue</a>
+      <a href="#p-public" style="display: flex; align-items: baseline; gap: 10px; min-height: 40px; font-family: 'Instrument Serif', serif; font-size: 24px; color: #6e6a61; text-decoration: none;"><span style="font-family: 'Hanken Grotesk', sans-serif; font-size: 11px; letter-spacing: 0.12em;">( 03 )</span>Profil public</a>
+      <a href="#p-notifs" style="display: flex; align-items: baseline; gap: 10px; min-height: 40px; font-family: 'Instrument Serif', serif; font-size: 24px; color: #6e6a61; text-decoration: none;"><span style="font-family: 'Hanken Grotesk', sans-serif; font-size: 11px; letter-spacing: 0.12em;">( 04 )</span>Notifications</a>
+      <a href="#p-compte" style="display: flex; align-items: baseline; gap: 10px; min-height: 40px; font-family: 'Instrument Serif', serif; font-size: 24px; color: #6e6a61; text-decoration: none;"><span style="font-family: 'Hanken Grotesk', sans-serif; font-size: 11px; letter-spacing: 0.12em;">( 05 )</span>Compte</a>
+    </nav>
+
+    <div style="flex: 999 1 560px; min-width: 0;">
+      <section id="p-info" aria-labelledby="h-info" style="padding: 28px 0 32px; border-bottom: 1px solid #e4dfd4;">
+        <h2 id="h-info" style="margin: 0 0 18px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 40px;">Informations</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px 32px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="r-nom" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Nom</label>
+            <input id="r-nom" value="Dotian" style="min-height: 46px; border: 0; border-bottom: 1px solid #12110e; background: transparent; font-family: 'Instrument Serif', serif; font-size: 26px; color: #12110e;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="r-email" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Email</label>
+            <input id="r-email" type="email" value="dotian@kamissa.art" style="min-height: 46px; border: 0; border-bottom: 1px solid #12110e; background: transparent; font-family: 'Instrument Serif', serif; font-size: 26px; color: #12110e;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="r-ville" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Ville</label>
+            <select id="r-ville" style="min-height: 46px; border: 0; border-bottom: 1px solid #12110e; background: transparent; font-family: 'Instrument Serif', serif; font-size: 26px; color: #12110e;">
+              <option value="paris">Paris</option>
+              <option value="athens">Athènes</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 48px; border-bottom: 1px solid #e4dfd4;">
+        <section id="p-langue" aria-labelledby="h-langue" style="padding: 28px 0 32px;">
+          <h2 id="h-langue" style="margin: 0 0 18px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 40px;">Langue</h2>
+          <div role="radiogroup" aria-labelledby="h-langue" style="display: flex; gap: 8px;">
+            <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3"><button role="radio" aria-checked="{{ l.checked }}" onClick="{{ l.pick }}" style="{{ l.style }}">{{ l.label }}</button></sc-for>
+          </div>
+        </section>
+        <section id="p-public" aria-labelledby="h-public" style="padding: 28px 0 32px;">
+          <h2 id="h-public" style="margin: 0 0 18px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 40px;">Profil public</h2>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <button role="switch" aria-checked="{{ publicChecked }}" aria-labelledby="h-public" onClick="{{ togglePublic }}" style="{{ publicTrack }}"><span style="{{ publicKnob }}"></span></button>
+            <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px;">{{ publicLabel }}</span>
+          </div>
+        </section>
+      </div>
+
+      <section id="p-notifs" aria-labelledby="h-notifs" style="padding: 28px 0 32px; border-bottom: 1px solid #e4dfd4;">
+        <h2 id="h-notifs" style="margin: 0 0 8px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 40px;">Notifications <em>par type d'événement</em></h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); column-gap: 48px;">
+          <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="6">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; border-bottom: 1px solid #e4dfd4;">
+              <span style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;"><span aria-hidden="true" style="{{ n.sq }}"></span><span id="{{ n.id }}">{{ n.label }}</span></span>
+              <button role="switch" aria-checked="{{ n.checked }}" aria-labelledby="{{ n.id }}" onClick="{{ n.toggle }}" style="{{ n.track }}"><span style="{{ n.knob }}"></span></button>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section id="p-compte" aria-labelledby="h-compte" style="padding: 28px 0 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+        <h2 id="h-compte" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 40px;">Compte</h2>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px;">
+          <button style="min-height: 48px; padding: 0 26px; border-radius: 999px; border: 1px solid #12110e; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #12110e; cursor: pointer;">Se déconnecter</button>
+          <button style="min-height: 48px; padding: 0; border: 0; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #9e3a1e; text-decoration: underline; text-underline-offset: 5px; cursor: pointer;">Supprimer mon compte</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+const CAT = { 'Vernissage': '#a3867d', 'Atelier': '#cb9a56', 'Appel à candidatures': '#337c83', 'Exposition': '#5a7580', 'Annonce': '#9b8b73', 'Résidence': '#5f8763' };
+class Component extends DCLogic {
+  state = { lang: 'fr', isPublic: true, prefs: { 'Vernissage': true, 'Atelier': true, 'Appel à candidatures': true, 'Exposition': false, 'Annonce': false, 'Résidence': true } };
+  renderVals() {
+    const st = this.state;
+    const track = (on) => ({ width: '52px', height: '30px', flexShrink: 0, borderRadius: '999px', border: on ? '1px solid #12110e' : '1px solid #cfc9bd', padding: 0, position: 'relative', cursor: 'pointer', background: on ? '#12110e' : 'transparent', transition: 'background .15s' });
+    const knob = (on) => ({ position: 'absolute', top: '4px', left: on ? '25px' : '4px', width: '20px', height: '20px', borderRadius: '999px', background: on ? '#fdfcf9' : '#cfc9bd', transition: 'left .15s' });
+    const pill = (a) => ({ minHeight: '44px', padding: '0 18px', borderRadius: '999px', border: a ? '1px solid #12110e' : '1px solid #e4dfd4', background: a ? '#12110e' : 'transparent', color: a ? '#fdfcf9' : '#12110e', fontFamily: "'Instrument Serif', serif", fontSize: '20px', cursor: 'pointer' });
+    return {
+      langs: [['fr', 'Français'], ['en', 'English'], ['el', 'Ελληνικά']].map(([v, l]) => ({ label: l, checked: String(st.lang === v), style: pill(st.lang === v), pick: () => this.setState({ lang: v }) })),
+      publicChecked: String(st.isPublic), publicTrack: track(st.isPublic), publicKnob: knob(st.isPublic),
+      publicLabel: st.isPublic ? 'visible des autres artistes' : 'masqué',
+      togglePublic: () => this.setState({ isPublic: !st.isPublic }),
+      notifs: Object.keys(CAT).map((label, i) => {
+        const on = !!st.prefs[label];
+        return { label, id: 'rn-' + i, checked: String(on), track: track(on), knob: knob(on), sq: { width: '9px', height: '9px', background: CAT[label] },
+          toggle: () => this.setState({ prefs: { ...st.prefs, [label]: !on } }) };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/organic-03b43434-cace-44ce-8336-2c13dcbeba91/styles.css">
+  <script src="_ds/organic-03b43434-cace-44ce-8336-2c13dcbeba91/_ds_bundle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="./image-slot.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;}
+    @keyframes kbPaintDrift1{0%,100%{transform:translate(0,0) rotate(0deg);}50%{transform:translate(10px,8px) rotate(1deg);}}
+    @keyframes kbPaintDrift2{0%,100%{transform:translate(0,0) rotate(0deg);}50%{transform:translate(-12px,-6px) rotate(-1deg);}}
+    body{margin:0;}
+    :root, x-dc{--font-heading:'Fraunces',Georgia,serif;--font-heading-weight:600;}
+    ::selection{background:color-mix(in srgb, var(--color-accent-600) 18%, transparent);}
+    @keyframes kamissaFadeSlide{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes kamissaPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+    @keyframes kamissaBlobA{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-40px) scale(1.08);}}
+    @keyframes kamissaBlobB{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-36px,32px) scale(1.1);}}
+    @keyframes kamissaBlobC{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(24px,26px) scale(1.06);}}
+    button:focus-visible, [tabindex]:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible{outline:2px solid var(--color-accent-600)!important;outline-offset:2px;}
+    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large{background-color:color-mix(in srgb, var(--color-accent-600) 20%, transparent)!important;}
+    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div{background-color:var(--color-accent-600)!important;color:#fff!important;font-family:var(--font-body)!important;font-weight:700!important;}
+    .leaflet-control-zoom{border:none!important;box-shadow:0 4px 16px color-mix(in srgb, var(--color-text) 12%, transparent)!important;border-radius:14px!important;overflow:hidden;}
+    .leaflet-control-zoom a{width:34px!important;height:34px!important;line-height:34px!important;border-radius:0!important;color:var(--color-text)!important;font-family:var(--font-body)!important;border-bottom:1px solid var(--color-divider)!important;}
+    .leaflet-control-attribution{background:color-mix(in srgb, var(--color-bg) 80%, transparent)!important;color:var(--color-neutral-700)!important;border-radius:8px 0 0 0!important;font-family:var(--font-body)!important;}
+    .leaflet-popup-content-wrapper{border-radius:16px!important;background:var(--color-surface)!important;color:var(--color-text)!important;font-family:var(--font-body)!important;}
+    .leaflet-popup-tip{background:var(--color-surface)!important;}
+  </style>
+</helmet>
+<div style="{{ rootStyle }}">
+  <div style="position:absolute;top:0;left:0;right:0;height:300px;z-index:0;pointer-events:none;overflow:hidden;">
+    <svg width="100%" height="300" viewBox="0 0 1400 300" preserveAspectRatio="xMidYMin slice" style="display:block;">
+      <path d="M-40 40C40 -30 160 -40 280 10C390 55 420 130 540 145C640 157 700 110 800 100" stroke="#FF6B52" stroke-width="110" stroke-linecap="round" fill="none" opacity=".92" style="animation:kbPaintDrift1 24s ease-in-out infinite;transform-origin:300px 60px;"/>
+      <path d="M960 -60C1080 -10 1140 60 1200 110C1260 158 1320 150 1460 90" stroke="#2B49D6" stroke-width="150" stroke-linecap="round" fill="none" opacity=".88" style="animation:kbPaintDrift2 26s ease-in-out infinite;transform-origin:1200px 40px;"/>
+      <path d="M255 8C265 30 245 34 258 50C270 64 250 60 262 78" stroke="#17140f" stroke-width="2" fill="none" opacity=".55" stroke-linecap="round"/>
+      <circle cx="1330" cy="190" r="4" fill="#17140f" opacity=".4"/>
+      <circle cx="1300" cy="208" r="2.5" fill="#17140f" opacity=".35"/>
+    </svg>
+  </div>
+
+  <sc-if value="{{ showDesktopNav }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;top:130px;left:-8px;width:96px;z-index:0;pointer-events:none;">
+      <div style="width:80px;height:96px;border-radius:4px;background:linear-gradient(135deg,#2a2a2a,#0e0e0e);transform:rotate(-6deg);box-shadow:0 10px 22px rgba(23,20,15,.2);"></div>
+      <div style="font-family:var(--font-heading);font-weight:600;font-size:38px;line-height:.95;color:#17140f;margin-top:26px;letter-spacing:-1px;">A<br/>R<br/>T</div>
+      <div style="writing-mode:vertical-rl;font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#6B6659;margin-top:20px;">Découvrir · Créer · Connecter</div>
+    </div>
+  </sc-if>
+
+  <svg style="position:absolute;bottom:0;left:0;width:160px;height:160px;z-index:0;pointer-events:none;opacity:.5;" viewBox="0 0 160 160">
+    <g fill="#2B49D6">
+      <circle cx="20" cy="140" r="4"/><circle cx="20" cy="118" r="4"/><circle cx="20" cy="96" r="4"/>
+      <circle cx="42" cy="140" r="4"/><circle cx="42" cy="118" r="4"/><circle cx="42" cy="96" r="4"/>
+      <circle cx="64" cy="140" r="4"/><circle cx="64" cy="118" r="4"/>
+    </g>
+  </svg>
+  <svg style="position:absolute;bottom:-30px;right:60px;width:200px;height:140px;z-index:0;pointer-events:none;opacity:.6;" viewBox="0 0 200 140">
+    <path d="M0 100 Q60 60 110 90 T200 70" stroke="#FF6B52" stroke-width="34" stroke-linecap="round" fill="none" opacity=".7"/>
+  </svg>
+  <div style="position:absolute;bottom:60px;left:-10px;width:26px;height:70px;background:#F0B93A;opacity:.85;z-index:0;pointer-events:none;"></div>
+
+
+  <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ toastStyle }}">{{ toastMessage }}</div>
+  </sc-if>
+
+  <sc-if value="{{ isAuthenticated }}" hint-placeholder-val="{{ false }}">
+  <sc-if value="{{ showDesktopNav }}" hint-placeholder-val="{{ true }}">
+    <div style="height:72px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:transparent;position:relative;z-index:1;">
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="font-size:25px;font-weight:600;color:#17140f;letter-spacing:-.5px;font-family:var(--font-heading);">Kamissa</span>
+        <span style="width:7px;height:7px;border-radius:50%;background:#FF6B52;align-self:flex-start;margin-top:4px;"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="{{ navEventsStyle }}" onClick="{{ goEvents }}">Événements</div>
+        <div style="{{ navCommunityStyle }}" onClick="{{ goCommunity }}">
+          Communauté
+          <sc-if value="{{ hasUnreadNotif }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:999px;background:var(--color-accent-600);"></span>
+          </sc-if>
+        </div>
+        <div style="{{ navCalendarStyle }}" onClick="{{ goCalendar }}">Calendrier</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;position:relative;">
+        <div style="width:42px;height:42px;border-radius:999px;border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--color-bg);position:relative;" style-hover="background:var(--color-surface);" onClick="{{ toggleNotifPanel }}" role="button" tabindex="0" aria-label="Notifications">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <sc-if value="{{ hasUnreadNotif }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:999px;background:var(--color-accent-600);border:2px solid var(--color-bg);"></span>
+          </sc-if>
+        </div>
+        <sc-if value="{{ showNotifPanel }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:52px;right:100px;width:320px;background:var(--color-bg);border:1px solid var(--color-divider);border-radius:20px;box-shadow:0 12px 32px color-mix(in srgb, var(--color-text) 18%, transparent);overflow:hidden;z-index:1000;animation:kamissaFadeSlide .15s ease-out;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--color-divider);">
+              <span style="font-size:14px;font-weight:700;color:var(--color-text);">Notifications</span>
+              <span style="font-size:12px;color:var(--color-accent-2-700);font-weight:700;cursor:pointer;" onClick="{{ markAllRead }}">Tout marquer lu</span>
+            </div>
+            <sc-if value="{{ hasNotifItems }}" hint-placeholder-val="{{ true }}">
+              <sc-for list="{{ notifItems }}" as="nt" hint-placeholder-count="3">
+                <div style="{{ nt.rowStyle }}" onClick="{{ nt.onClick }}">
+                  <div style="font-size:13px;color:var(--color-text);">{{ nt.text }}</div>
+                  <div style="font-size:11px;color:var(--color-neutral-700);margin-top:3px;">{{ nt.time }}</div>
+                </div>
+              </sc-for>
+            </sc-if>
+            <sc-if value="{{ showEmptyNotifs }}" hint-placeholder-val="{{ false }}">
+              <div style="text-align:center;padding:32px 20px;color:var(--color-neutral-700);font-size:13px;">Aucune notification pour le moment.</div>
+            </sc-if>
+            <div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--color-text);cursor:pointer;border-top:1px solid var(--color-divider);display:flex;align-items:center;justify-content:space-between;" onClick="{{ toggleNotifPrefs }}">
+              Préférences par type d'événement
+              <span>{{ notifPrefsChevron }}</span>
+            </div>
+            <sc-if value="{{ showNotifPrefs }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:6px 16px 14px;">
+                <sc-for list="{{ notifPrefRows }}" as="pr" hint-placeholder-count="6">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+                    <span style="font-size:13px;color:var(--color-text);">{{ pr.label }}</span>
+                    <div style="{{ pr.trackStyle }}" onClick="{{ pr.onToggle }}">
+                      <div style="{{ pr.knobStyle }}"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <div style="width:42px;height:42px;border-radius:999px;border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--color-bg);" style-hover="background:var(--color-surface);" onClick="{{ goShop }}" role="button" tabindex="0" aria-label="Boutiques">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-6h16l1 6"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v10h14V9"/></svg>
+        </div>
+        <div style="width:42px;height:42px;border-radius:999px;border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--color-bg);" style-hover="background:var(--color-surface);" onClick="{{ goProfile }}" role="button" tabindex="0" aria-label="Profil">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showMobileTopBar }}" hint-placeholder-val="{{ true }}">
+    <div style="height:56px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:transparent;position:relative;z-index:1;">
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="font-size:21px;font-weight:600;color:#17140f;font-family:var(--font-heading);letter-spacing:-.4px;">Kamissa</span>
+        <span style="width:6px;height:6px;border-radius:50%;background:#FF6B52;align-self:flex-start;margin-top:3px;"></span>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="{{ mainAreaStyle }}">
+
+    <sc-if value="{{ isEventsScreen }}" hint-placeholder-val="{{ true }}">
+      <div style="{{ eventsPanelStyle }}">
+        <sc-if value="{{ showDesktopSearch }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;align-items:center;padding:20px 24px 0;">
+            <div style="width:100%;max-width:560px;display:flex;gap:10px;align-items:center;">
+              <div style="flex:1;display:flex;align-items:center;gap:10px;background:#ffffffaa;border:1px solid var(--color-divider);border-radius:999px;padding:12px 18px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <input value="{{ eventSearchQuery }}" onChange="{{ onEventSearchChange }}" placeholder="Rechercher un événement..." style="border:none;background:transparent;outline:none;font-family:var(--font-body);font-size:14px;color:var(--color-text);width:100%;" />
+              </div>
+              <div style="{{ eventFilterBtnStyle }}" onClick="{{ toggleEventFilters }}" role="button" tabindex="0" aria-label="Filtrer les événements">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ eventFilterIconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              </div>
+            </div>
+            <sc-if value="{{ showEventFilters }}" hint-placeholder-val="{{ false }}">
+              <div style="width:100%;max-width:620px;background:var(--color-surface);border:1px solid var(--color-divider);border-radius:20px;padding:16px 18px;margin-top:12px;display:flex;flex-direction:column;gap:10px;animation:kamissaFadeSlide .18s ease-out;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--color-neutral-700);margin-bottom:6px;">Ville</div>
+                  <div style="{{ eventFilterRowStyle }}">
+                    <sc-for list="{{ eventFilterCityRow }}" as="opt" hint-placeholder-count="2">
+                      <div style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--color-neutral-700);margin-bottom:6px;">Type</div>
+                  <div style="{{ eventFilterRowStyle }}">
+                    <sc-for list="{{ eventFilterTypeRow }}" as="opt" hint-placeholder-count="4">
+                      <div style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--color-neutral-700);margin-bottom:6px;">Discipline</div>
+                  <div style="{{ eventFilterRowStyle }}">
+                    <sc-for list="{{ eventFilterDisciplineRow }}" as="opt" hint-placeholder-count="4">
+                      <div style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--color-neutral-700);margin-bottom:6px;">Coût</div>
+                  <div style="{{ eventFilterRowStyle }}">
+                    <sc-for list="{{ eventFilterCostRow }}" as="opt" hint-placeholder-count="3">
+                      <div style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <div style="{{ eventsHeaderRowStyle }}">
+          <div>
+            <div style="font-size:27px;font-weight:600;color:#17140f;font-family:var(--font-heading);letter-spacing:-.4px;">Événements</div>
+            <div style="font-size:14px;font-style:italic;color:#17140f;font-family:var(--font-heading);margin-top:2px;">L'art partout, tout le temps.</div>
+          </div>
+          <div style="{{ myEventsBtnStyle }}" onClick="{{ toggleMyEvents }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{ myEventsIconFill }}" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4V3z"/></svg>
+            Mes événements
+          </div>
+        </div>
+
+        <div style="{{ eventsBodyRowStyle }}">
+          <sc-if value="{{ showEventsList }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ listColumnStyle }}">
+              <sc-if value="{{ showProfileNudge }}" hint-placeholder-val="{{ true }}">
+                <div style="background:var(--color-accent-100);border:1px solid #f0c4b3;border-radius:20px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                  <div style="font-size:13px;color:var(--color-text);">Complétez votre profil pour être visible dans la Communauté. <span style="font-weight:700;color:var(--color-accent-600);cursor:pointer;" onClick="{{ goProfile }}">Compléter →</span></div>
+                  <span style="font-size:16px;color:var(--color-neutral-700);cursor:pointer;flex:0 0 auto;" onClick="{{ dismissProfileNudge }}">✕</span>
+                </div>
+              </sc-if>
+              <div style="display:flex;gap:14px;margin-bottom:14px;align-items:stretch;">
+                <div style="background:var(--color-surface);border:1px solid var(--color-divider);border-radius:20px;padding:18px 20px;flex:1;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;overflow:hidden;">
+                <svg style="position:absolute;top:0;right:0;width:170px;height:100%;pointer-events:none;" viewBox="0 0 170 90" preserveAspectRatio="none">
+                  <path d="M40 -10 Q90 30 60 60 T90 110" stroke="#FF6B52" stroke-width="46" stroke-linecap="round" fill="none" opacity=".5"/>
+                  <path d="M110 -10 Q150 20 130 60 T170 100" stroke="#2B49D6" stroke-width="46" stroke-linecap="round" fill="none" opacity=".4"/>
+                </svg>
+                <div style="position:relative;">
+                  <div style="font-size:18px;font-weight:700;color:var(--color-text);font-family:var(--font-heading);">{{ greetingText }}</div>
+                  <div style="font-size:13px;color:var(--color-neutral-700);margin-top:4px;">{{ weekHighlightText }}</div>
+                </div>
+                <div style="width:52px;height:52px;border-radius:999px;background:#FFE1D6;flex:0 0 auto;position:relative;"></div>
+                </div>
+
+                <sc-if value="{{ showDesktopNav }}" hint-placeholder-val="{{ true }}">
+                  <div style="width:76px;flex:0 0 auto;position:relative;border-radius:16px;overflow:visible;background:#17140f;box-shadow:0 8px 20px rgba(23,20,15,.18);">
+                    <svg width="100%" height="100%" viewBox="0 0 76 200" preserveAspectRatio="none" style="display:block;border-radius:16px;">
+                      <defs>
+                        <filter id="kbTornEdge"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="9"/></filter>
+                        <linearGradient id="kbCollageBg" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stop-color="#2b2b2b"/><stop offset="55%" stop-color="#121212"/><stop offset="100%" stop-color="#050505"/>
+                        </linearGradient>
+                      </defs>
+                      <rect x="0" y="0" width="76" height="200" fill="url(#kbCollageBg)" filter="url(#kbTornEdge)"/>
+                      <g opacity=".5" stroke="#ffffff" stroke-width="1">
+                        <path d="M8 20 L30 60 L14 95" fill="none"/>
+                        <path d="M55 30 L40 70 L62 110" fill="none"/>
+                        <circle cx="38" cy="150" r="22" fill="none"/>
+                      </g>
+                    </svg>
+                    <div style="position:absolute;top:14px;left:0;width:100%;filter:url(#kbTornEdge);">
+                      <div style="width:44px;height:44px;background:#F0B93A;margin:0 auto;clip-path:polygon(12% 0,88% 6%,100% 60%,70% 100%,10% 92%,0 40%);opacity:.92;"></div>
+                    </div>
+                    <div style="position:absolute;bottom:36px;left:6px;width:34px;height:34px;background:#FF6B52;border-radius:50%;clip-path:polygon(20% 0,80% 5%,100% 45%,90% 90%,40% 100%,0 60%);opacity:.9;"></div>
+                    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:10.5px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FBF6EC;">Art · Découvrir · Créer · Connecter</div>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+
+              <sc-if value="{{ isLoadingEvents }}" hint-placeholder-val="{{ false }}">
+                <sc-for list="{{ skeletonRows }}" as="sk" hint-placeholder-count="3">
+                  <div style="background:var(--color-surface);border:1px solid var(--color-divider);border-radius:20px;padding:18px 20px;margin-bottom:14px;">
+                    <div style="width:80px;height:18px;border-radius:999px;background:var(--color-divider);animation:kamissaPulse 1.2s ease-in-out infinite;"></div>
+                    <div style="width:70%;height:16px;border-radius:6px;background:var(--color-divider);margin-top:14px;animation:kamissaPulse 1.2s ease-in-out infinite;"></div>
+                    <div style="width:50%;height:12px;border-radius:6px;background:var(--color-divider);margin-top:8px;animation:kamissaPulse 1.2s ease-in-out infinite;"></div>
+                  </div>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ showEventCards }}" hint-placeholder-val="{{ true }}">
+              <sc-for list="{{ eventCards }}" as="ev" hint-placeholder-count="3">
+                <div style="{{ ev.cardStyle }}" onMouseEnter="{{ ev.onEnter }}" onMouseLeave="{{ ev.onLeave }}">
+                  <svg style="position:absolute;top:-14px;right:-14px;width:64px;height:64px;pointer-events:none;" viewBox="0 0 64 64">
+                    <circle cx="32" cy="32" r="30" fill="{{ ev.accentColor }}" opacity=".14"/>
+                  </svg>
+                  <div style="position:relative;display:flex;align-items:center;justify-content:space-between;">
+                    <span style="{{ ev.badgeStyle }}">{{ ev.category }}</span>
+                    <span style="font-size:12px;color:var(--color-neutral-700);">{{ ev.date }}</span>
+                  </div>
+                  <div style="position:relative;font-size:17px;font-weight:700;color:var(--color-text);margin-top:10px;">{{ ev.title }}</div>
+                  <div style="font-size:13px;color:var(--color-neutral-700);margin-top:3px;">{{ ev.location }}</div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                    <span style="{{ ev.costStyle }}">{{ ev.cost }}</span>
+                  </div>
+                  <div style="display:flex;gap:10px;margin-top:14px;">
+                    <button style="{{ ev.saveStyle }}" onClick="{{ ev.onSave }}">{{ ev.saveLabel }}</button>
+                    <button style="{{ ev.goingStyle }}" onClick="{{ ev.onGoing }}">{{ ev.goingLabel }}</button>
+                    <div style="width:38px;height:38px;flex:0 0 auto;border-radius:999px;border:1.5px solid var(--color-divider);display:flex;align-items:center;justify-content:center;cursor:pointer;" onClick="{{ ev.onShare }}" title="Copier le lien">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+
+              <div style="border-radius:20px;overflow:hidden;position:relative;background:#17140f;margin-bottom:14px;display:flex;height:186px;">
+                <svg style="position:absolute;top:-20px;left:-20px;width:100px;height:100px;pointer-events:none;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#F0B93A" opacity=".18"/></svg>
+                <div style="flex:1;padding:20px 20px 20px 22px;display:flex;flex-direction:column;justify-content:space-between;position:relative;">
+                  <div>
+                    <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#FF6B52;margin-bottom:8px;">À la une</div>
+                    <div style="font-family:var(--font-heading);font-weight:600;font-size:24px;line-height:1.15;color:#FBF6EC;">Regards Croisés</div>
+                    <div style="font-size:12.5px;color:#c9c4b8;margin-top:8px;">Festival d'art contemporain<br/>12 — 20 sept. 2025 · Paris</div>
+                  </div>
+                  <button style="align-self:flex-start;margin-top:14px;border:none;border-radius:999px;background:#FBF6EC;color:#17140f;font-family:var(--font-body);font-weight:700;font-size:12.5px;padding:9px 16px;cursor:pointer;white-space:nowrap;">Voir le festival</button>
+                </div>
+                <div style="position:relative;width:130px;flex:0 0 auto;overflow:hidden;background:linear-gradient(160deg,#2a2a2a,#0e0e0e);">
+                  <div style="position:absolute;top:10px;right:8px;width:34px;height:44px;background:#F0B93A;opacity:.9;clip-path:polygon(0 0,100% 6%,94% 100%,4% 92%);"></div>
+                  <div style="position:absolute;bottom:10px;left:-14px;width:36px;height:36px;border-radius:999px;background:#2B49D6;opacity:.85;"></div>
+                  <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 130 186" preserveAspectRatio="xMidYMid slice">
+                    <circle cx="60" cy="70" r="46" fill="#3a3a3a" opacity=".6"/>
+                    <path d="M20 186 Q40 120 70 100 T130 90 V186Z" fill="#1a1a1a" opacity=".7"/>
+                  </svg>
+                </div>
+              </div>
+
+              <sc-if value="{{ showLoadMoreEvents }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;padding:8px 0 4px;">
+                  <button style="background:transparent;border:1px solid var(--color-divider);border-radius:999px;padding:10px 22px;font-family:var(--font-body);font-weight:700;font-size:13px;color:var(--color-text);cursor:pointer;" onClick="{{ loadMoreEvents }}">Charger plus</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ showEmptyEvents }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;padding:60px 20px;color:var(--color-neutral-700);font-size:14px;">Aucun événement ne correspond à votre recherche. Essayez d'élargir vos filtres.</div>
+              </sc-if>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showEventsMap }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ mapColumnStyle }}">
+              <svg style="position:absolute;top:-16px;right:-16px;width:120px;height:120px;pointer-events:none;z-index:0;" viewBox="0 0 120 120">
+                <path d="M10 40 Q50 0 90 30 T110 90" stroke="#F0B93A" stroke-width="26" stroke-linecap="round" fill="none" opacity=".5"/>
+              </svg>
+              <div ref="{{ mapRefCallback }}" style="width:100%;height:100%;border-radius:20px;overflow:hidden;background:var(--color-neutral-200);position:relative;z-index:1;"></div>
+              <sc-if value="{{ showAddEventBtn }}" hint-placeholder-val="{{ true }}">
+                <button style="position:absolute;right:24px;bottom:24px;z-index:1000;background:var(--color-accent-600);color:#fff;border:none;border-radius:999px;padding:14px 22px;font-family:var(--font-body);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px rgba(192,103,34,.35);" style-hover="background:#8f3e0096;" style-active="transform:scale(.96);" onClick="{{ openAddDialog }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                  Ajouter un événement
+                </button>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showMobileMapToggle }}" hint-placeholder-val="{{ true }}">
+            <button style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);background:var(--color-text);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-family:var(--font-body);font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px color-mix(in srgb, var(--color-text) 30%, transparent);z-index:500;" onClick="{{ toggleMobileMapView }}">{{ mobileMapToggleLabel }}</button>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCommunityScreen }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ communityPanelStyle }}">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div style="{{ tabCommunityStyle }}" onClick="{{ setTabCommunity }}">Communauté</div>
+          <div style="{{ tabArtistsStyle }}" onClick="{{ setTabArtists }}">Artistes</div>
+          <div style="{{ tabMatchingStyle }}" onClick="{{ setTabMatching }}">Matching</div>
+        </div>
+
+        <sc-if value="{{ isCommunityTab }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            <div style="{{ cityParisStyle }}" onClick="{{ setCityParis }}">Paris</div>
+            <div style="{{ cityAthensStyle }}" onClick="{{ setCityAthens }}">Athènes</div>
+          </div>
+          <div style="font-size:22px;font-weight:700;color:var(--color-text);margin:20px 0 14px;font-family:var(--font-heading);font-weight:600;">{{ communityTitle }}</div>
+
+          <div style="display:flex;align-items:center;gap:10px;background:#ffffffaa;border:1px solid var(--color-divider);border-radius:999px;padding:11px 16px;margin-bottom:14px;max-width:400px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input value="{{ communitySearchQuery }}" onChange="{{ onCommunitySearchChange }}" placeholder="Rechercher dans les messages..." style="border:none;background:transparent;outline:none;font-family:var(--font-body);font-size:14px;color:var(--color-text);width:100%;" />
+          </div>
+
+          <div style="{{ messagesListStyle }}">
+            <sc-for list="{{ messageCards }}" as="m" hint-placeholder-count="2">
+              <div style="background:var(--color-surface);border:1px solid var(--color-divider);border-radius:20px;padding:16px 18px;margin-bottom:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                  <span style="font-weight:700;font-size:14px;color:var(--color-text);">{{ m.name }}</span>
+                  <span style="font-size:12px;color:var(--color-neutral-700);">{{ m.time }}</span>
+                </div>
+                <div style="font-size:14px;color:var(--color-text);margin-top:6px;">{{ m.text }}</div>
+                <div style="display:flex;gap:14px;margin-top:8px;font-size:12px;">
+                  <span style="color:var(--color-accent-2-700);cursor:pointer;font-weight:600;" onClick="{{ m.onReply }}">Répondre</span>
+                  <sc-if value="{{ m.showModTools }}" hint-placeholder-val="{{ false }}">
+                    <span style="color:var(--color-neutral-700);cursor:pointer;">Bloquer</span>
+                    <span style="color:var(--color-neutral-700);cursor:pointer;">Signaler</span>
+                  </sc-if>
+                  <sc-if value="{{ m.hasReplies }}" hint-placeholder-val="{{ false }}">
+                    <span style="color:#a9720a;cursor:pointer;font-weight:600;" onClick="{{ m.onToggleThread }}">{{ m.threadLabel }}</span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ m.threadOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:10px;padding-left:14px;border-left:2px solid var(--color-divider);">
+                    <sc-for list="{{ m.replies }}" as="r" hint-placeholder-count="1">
+                      <div style="margin-bottom:6px;">
+                        <div style="display:flex;justify-content:space-between;">
+                          <span style="font-weight:700;font-size:13px;color:var(--color-text);">{{ r.name }}</span>
+                          <span style="font-size:11px;color:var(--color-neutral-700);">{{ r.time }}</span>
+                        </div>
+                        <div style="font-size:13px;color:var(--color-text);">{{ r.text }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{ showEmptyCommunity }}" hint-placeholder-val="{{ false }}">
+              <div style="text-align:center;padding:60px 20px;color:var(--color-neutral-700);font-size:14px;">Aucun message pour l'instant à Athènes — soyez le premier à écrire !</div>
+            </sc-if>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:14px;">
+            <input value="{{ messageInput }}" onChange="{{ onMessageInputChange }}" placeholder="Écrire un message..." style="flex:1;border:1px solid var(--color-divider);background:var(--color-bg);border-radius:999px;padding:12px 18px;font-family:var(--font-body);font-size:14px;color:var(--color-text);outline:none;" />
+            <button style="background:var(--color-accent-600);color:#fff;border:none;border-radius:999px;padding:0 24px;font-family:var(--font-body);font-weight:700;font-size:14px;cursor:pointer;" style-hover="background:#8f3e00;" style-active="transform:scale(.96);" onClick="{{ onSendMessage }}">Envoyer</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isArtistsTab }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;background:#ffffffaa;border:1px solid var(--color-divider);border-radius:999px;padding:11px 16px;margin-top:16px;max-width:400px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input value="{{ artistSearchQuery }}" onChange="{{ onArtistSearchChange }}" placeholder="Rechercher un artiste ou une discipline..." style="border:none;background:transparent;outline:none;font-family:var(--font-body);font-size:14px;color:var(--color-text);width:100%;" />
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <div style="{{ artistFilterAllStyle }}" onClick="{{ setArtistFilterAll }}">Toutes les villes</div>
+            <div style="{{ artistFilterParisStyle }}" onClick="{{ setArtistFilterParis }}">Paris</div>
+            <div style="{{ artistFilterAthensStyle }}" onClick="{{ setArtistFilterAthens }}">Athènes</div>
+          </div>
+          <div style="{{ artistDirectoryGridStyle }}">
+            <sc-for list="{{ artistDirectoryCards }}" as="a" hint-placeholder-count="6">
+              <div style="{{ a.cardStyle }}">
+                <div style="{{ a.avatarStyle }}"></div>
+                <div style="font-weight:700;font-size:16px;color:var(--color-text);margin-top:12px;">{{ a.name }}</div>
+                <div style="font-size:12px;color:var(--color-neutral-700);margin-top:2px;">{{ a.city }}</div>
+                <span style="{{ a.disciplineStyle }}">{{ a.discipline }}</span>
+                <div style="font-size:13px;color:var(--color-text);margin-top:10px;">{{ a.bio }}</div>
+                <button style="{{ a.followStyle }}" onClick="{{ a.onToggleFollow }}">{{ a.followLabel }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isMatchingTab }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ matchingWrapStyle }}">
+            <div style="{{ matchCardStyle }}">
+              <div style="{{ matchPhotoStyle }}"></div>
+              <div style="padding:20px 22px 24px;">
+                <div style="font-size:18px;font-weight:700;color:var(--color-text);">{{ matchName }}</div>
+                <div style="font-size:13px;color:var(--color-neutral-700);margin-top:2px;">{{ matchDiscipline }} · {{ matchCity }}</div>
+                <div style="font-size:13px;color:var(--color-text);margin-top:12px;">{{ matchBio }}</div>
+                <div style="margin-top:4px;">
+                  <sc-for list="{{ matchTags }}" as="tg" hint-placeholder-count="2">
+                    <span style="{{ tg.style }}">{{ tg.label }}</span>
+                  </sc-for>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                  <button style="{{ skipBtnStyle }}" onClick="{{ onSkip }}">Passer</button>
+                  <button style="{{ matchBtnStyle }}" onClick="{{ onMatch }}">Proposer un échange</button>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ hasMatchHistory }}" hint-placeholder-val="{{ false }}">
+              <div style="width:100%;max-width:360px;margin-top:20px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div style="font-size:12px;font-weight:700;color:var(--color-neutral-700);">Historique récent</div>
+                  <sc-if value="{{ canUndoMatch }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:12px;font-weight:700;color:var(--color-accent-600);cursor:pointer;" onClick="{{ undoLastSkip }}">Annuler</span>
+                  </sc-if>
+                </div>
+                <sc-for list="{{ matchHistory }}" as="h" hint-placeholder-count="2">
+                  <div style="font-size:13px;color:var(--color-text);padding:6px 0;border-bottom:1px solid var(--color-divider);">{{ h.name }} — {{ h.action }}</div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCalendarScreen }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ calendarPanelStyle }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="font-size:22px;font-weight:700;color:var(--color-text);font-family:var(--font-heading);font-weight:600;">{{ calendarMonthLabel }}</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button style="{{ calNavBtnStyle }}" onClick="{{ goPrevMonth }}">‹</button>
+            <button style="{{ calTodayBtnStyle }}" onClick="{{ goToday }}">Aujourd'hui</button>
+            <button style="{{ calNavBtnStyle }}" onClick="{{ goNextMonth }}">›</button>
+          </div>
+        </div>
+
+        <div style="{{ weekdayRowStyle }}">
+          <sc-for list="{{ weekdayLabels }}" as="wd" hint-placeholder-count="7">
+            <div style="text-align:center;font-size:12px;font-weight:700;color:var(--color-neutral-700);padding:6px 0;">{{ wd }}</div>
+          </sc-for>
+        </div>
+
+        <div style="{{ calendarGridStyle }}">
+          <sc-for list="{{ calendarDays }}" as="day" hint-placeholder-count="35">
+            <div style="{{ day.cellStyle }}" onClick="{{ day.onClick }}">
+              <div style="{{ day.numStyle }}">{{ day.dayNum }}</div>
+              <div style="display:flex;flex-direction:column;gap:3px;margin-top:4px;">
+                <sc-for list="{{ day.events }}" as="dev" hint-placeholder-count="1">
+                  <div style="{{ dev.pillStyle }}">{{ dev.title }}</div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:24px;">
+          <div style="font-size:16px;font-weight:700;color:var(--color-text);margin-bottom:12px;text-transform:capitalize;">{{ selectedDayLabel }}</div>
+          <sc-if value="{{ hasSelectedDayEvents }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ selectedDayEventCards }}" as="ev" hint-placeholder-count="1">
+              <div style="{{ ev.cardStyle }}">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <span style="{{ ev.badgeStyle }}">{{ ev.category }}</span>
+                  <span style="{{ ev.costStyle }}">{{ ev.cost }}</span>
+                </div>
+                <div style="font-size:15px;font-weight:700;color:var(--color-text);margin-top:8px;">{{ ev.title }}</div>
+                <div style="font-size:13px;color:var(--color-neutral-700);margin-top:2px;">{{ ev.location }}</div>
+              </div>
+            </sc-for>
+          </sc-if>
+          <sc-if value="{{ noSelectedDayEvents }}" hint-placeholder-val="{{ true }}">
+            <div style="color:var(--color-neutral-700);font-size:13px;">Aucun événement ce jour.</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSettingsScreen }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ settingsPanelStyle }}">
+        <div style="font-size:22px;font-weight:700;color:var(--color-text);cursor:pointer;font-family:var(--font-heading);font-weight:600;" onClick="{{ goProfile }}">‹ Paramètres du compte</div>
+
+        <div style="{{ settingsCardStyle }}">
+          <div style="font-size:14px;font-weight:700;color:var(--color-text);margin-bottom:10px;">Informations</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <input style="{{ settingsInputStyle }}" value="{{ accountName }}" onChange="{{ onAccountNameChange }}" placeholder="Nom" />
+            <input style="{{ settingsInputStyle }}" value="{{ accountEmail }}" onChange="{{ onAccountEmailChange }}" placeholder="Email" />
+            <select style="{{ settingsInputStyle }}" value="{{ accountCity }}" onChange="{{ onAccountCityChange }}">
+              <option value="paris">Paris</option>
+              <option value="athens">Athènes</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="{{ settingsCardStyle }}">
+          <div style="font-size:14px;font-weight:700;color:var(--color-text);margin-bottom:10px;">Langue</div>
+          <select style="{{ settingsInputStyle }}" value="{{ accountLanguage }}" onChange="{{ onAccountLanguageChange }}">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="el">Ελληνικά</option>
+          </select>
+        </div>
+
+        <div style="{{ settingsCardStyle }}">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:14px;font-weight:700;color:var(--color-text);">Profil public</span>
+            <div style="{{ publicToggleTrackStyle }}" onClick="{{ toggleProfilePublic }}">
+              <div style="{{ publicToggleKnobStyle }}"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="{{ settingsCardStyle }}">
+          <div style="font-size:14px;font-weight:700;color:var(--color-text);margin-bottom:6px;">Notifications par type d'événement</div>
+          <sc-for list="{{ notifPrefRows }}" as="pr" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+              <span style="font-size:13px;color:var(--color-text);">{{ pr.label }}</span>
+              <div style="{{ pr.trackStyle }}" onClick="{{ pr.onToggle }}">
+                <div style="{{ pr.knobStyle }}"></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--color-accent-600);cursor:pointer;margin-top:18px;" onClick="{{ logout }}">Se déconnecter</div>
+        <div style="{{ deleteAccountStyle }}" onClick="{{ onDeleteAccount }}">Supprimer mon compte</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isProfileScreen }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ profilePanelStyle }}">
+        <div style="{{ profileSettingsBtnStyle }}" onClick="{{ goSettings }}">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <div style="{{ profileHeaderStyle }}">
+          <div style="{{ profileAvatarStyle }}">D</div>
+          <div style="font-size:20px;font-weight:700;color:var(--color-text);font-family:var(--font-heading);font-weight:600;">Dotian</div>
+          <span style="{{ profileLevelBadgeStyle }}">Artiste amateur</span>
+          <div style="{{ profileDisciplineStyle }}">Peinture</div>
+          <div style="{{ profileStatsStyle }}">
+            <div style="{{ profileStatItemStyle }}">
+              <span style="font-size:16px;font-weight:700;color:var(--color-text);">{{ statsPosts }}</span>
+              <span style="font-size:12px;color:var(--color-neutral-700);">Posts</span>
+            </div>
+            <div style="{{ profileStatItemStyle }}">
+              <span style="font-size:16px;font-weight:700;color:var(--color-text);">{{ statsFollowers }}</span>
+              <span style="font-size:12px;color:var(--color-neutral-700);">Abonnés</span>
+            </div>
+            <div style="{{ profileStatItemStyle }}">
+              <span style="font-size:16px;font-weight:700;color:var(--color-text);">{{ statsFollowing }}</span>
+              <span style="font-size:12px;color:var(--color-neutral-700);">Abonnements</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="{{ profileTabsStyle }}">
+          <div style="{{ profileTabPostsStyle }}" onClick="{{ setProfileTabPosts }}">Posts</div>
+          <div style="{{ profileTabPortfolioStyle }}" onClick="{{ setProfileTabPortfolio }}">Portfolio</div>
+        </div>
+
+        <sc-if value="{{ isPostsTab }}" hint-placeholder-val="{{ true }}">
+          <div style="{{ publicRowStyle }}">
+            <span style="font-size:14px;color:var(--color-text);">Ce que vous partagez au fil de l'eau</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:13px;font-weight:700;color:var(--color-text);">Public</span>
+              <div style="{{ publicToggleTrackStyle }}" onClick="{{ toggleProfilePublic }}">
+                <div style="{{ publicToggleKnobStyle }}"></div>
+              </div>
+            </div>
+          </div>
+          <div style="{{ addPostTileStyle }}">+</div>
+        </sc-if>
+
+        <sc-if value="{{ isPortfolioTab }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ profileGridStyle }}">
+            <sc-for list="{{ portfolioCards }}" as="p" hint-placeholder-count="6">
+              <div style="{{ p.cellStyle }}">
+                <image-slot id="{{ p.slotId }}" shape="rounded" radius="20" placeholder="Ajouter une photo"></image-slot>
+                <div style="{{ p.captionStyle }}">{{ p.title }} — {{ p.medium }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="{{ libraryCardStyle }}" onClick="{{ toggleLibrary }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--color-text);">Bibliothèque privée</div>
+            <div style="font-size:12px;color:var(--color-neutral-700);">Votre espace personnel, jamais partagé.</div>
+          </div>
+        </div>
+        <sc-if value="{{ showLibrary }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ profileGridStyle }}">
+            <sc-for list="{{ libraryCards }}" as="l" hint-placeholder-count="4">
+              <div style="{{ l.cellStyle }}">
+                <div style="{{ l.lockStyle }}">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                </div>
+                <div style="{{ l.captionStyle }}">{{ l.title }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="{{ bioCardStyle }}">
+          <div style="font-size:14px;font-weight:700;color:var(--color-text);">Bio</div>
+          <div style="font-size:13px;color:var(--color-neutral-700);margin-top:4px;">Bio de test — vérification du formulaire de profil.</div>
+        </div>
+
+        <div style="font-size:14px;font-weight:700;color:var(--color-text);margin-top:20px;">Réseaux sociaux</div>
+        <div style="{{ socialCardStyle }}">
+          <sc-for list="{{ socialRows }}" as="soc" hint-placeholder-count="3">
+            <div style="{{ soc.rowStyle }}">
+              <div style="{{ soc.iconWrapStyle }}">
+                <sc-if value="{{ soc.isCamera }}" hint-placeholder-val="{{ false }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </sc-if>
+                <sc-if value="{{ soc.isTiktok }}" hint-placeholder-val="{{ false }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5.5a4.5 4.5 0 0 0 4.5 4.5V13a7 7 0 1 1-7-7"/></svg>
+                </sc-if>
+                <sc-if value="{{ soc.isMail }}" hint-placeholder-val="{{ false }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M3 6l9 7 9-7"/></svg>
+                </sc-if>
+                <sc-if value="{{ soc.isX }}" hint-placeholder-val="{{ false }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="round"><path d="M4 4l16 16M20 4L4 20"/></svg>
+                </sc-if>
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--color-text);">{{ soc.platform }}</div>
+                <div style="font-size:12px;color:var(--color-neutral-700);">{{ soc.handle }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:24px;font-size:13px;font-weight:700;color:var(--color-accent-600);cursor:pointer;" onClick="{{ logout }}">Se déconnecter</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isShopScreen }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ shopPanelStyle }}">
+        <div style="{{ shopHeaderRowStyle }}">
+          <div style="{{ shopTitleStyle }}">Boutiques de matériel</div>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <div style="{{ shopCityParisStyle }}" onClick="{{ setShopCityParis }}">Paris</div>
+            <div style="{{ shopCityAthensStyle }}" onClick="{{ setShopCityAthens }}">Athènes</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;background:#ffffffaa;border:1px solid var(--color-divider);border-radius:999px;padding:11px 16px;margin-top:12px;max-width:400px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input value="{{ shopSearchQuery }}" onChange="{{ onShopSearchChange }}" placeholder="Rechercher une boutique..." style="border:none;background:transparent;outline:none;font-family:var(--font-body);font-size:14px;color:var(--color-text);width:100%;" />
+          </div>
+          <div style="{{ shopCategoryRowStyle }}">
+            <sc-for list="{{ shopCategoryOptions }}" as="opt" hint-placeholder-count="5">
+              <div style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="{{ shopBodyRowStyle }}">
+          <sc-if value="{{ showShopList }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ shopListColumnStyle }}">
+              <sc-if value="{{ isLoadingShops }}" hint-placeholder-val="{{ false }}">
+                <sc-for list="{{ skeletonRows }}" as="sk" hint-placeholder-count="3">
+                  <div style="background:var(--color-surface);border:1px solid var(--color-divider);border-radius:20px;padding:18px 20px;margin-bottom:14px;">
+                    <div style="width:60%;height:16px;border-radius:6px;background:var(--color-divider);animation:kamissaPulse 1.2s ease-in-out infinite;"></div>
+                    <div style="width:80%;height:12px;border-radius:6px;background:var(--color-divider);margin-top:10px;animation:kamissaPulse 1.2s ease-in-out infinite;"></div>
+                  </div>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ showShopCards }}" hint-placeholder-val="{{ true }}">
+              <sc-for list="{{ shopCards }}" as="sh" hint-placeholder-count="3">
+                <div style="{{ sh.cardStyle }}" onMouseEnter="{{ sh.onEnter }}" onMouseLeave="{{ sh.onLeave }}">
+                  <div style="font-size:16px;font-weight:700;color:var(--color-text);">{{ sh.name }}</div>
+                  <div style="font-size:12px;color:var(--color-neutral-700);margin-top:2px;">{{ sh.category }}</div>
+                  <div style="font-size:13px;color:var(--color-text);margin-top:6px;">{{ sh.address }}</div>
+                  <div style="font-size:13px;color:var(--color-text);margin-top:6px;">{{ sh.description }}</div>
+                  <sc-if value="{{ sh.hasLink }}" hint-placeholder-val="{{ false }}">
+                    <a href="{{ sh.link }}" target="_blank" style="font-size:13px;color:var(--color-accent-2-700);margin-top:6px;display:inline-block;">{{ sh.link }}</a>
+                  </sc-if>
+                  <div style="margin-top:8px;font-size:12px;color:var(--color-accent-600);cursor:pointer;" onClick="{{ sh.onDelete }}">Supprimer</div>
+                  <div style="margin-top:4px;font-size:12px;color:var(--color-neutral-700);cursor:pointer;" onClick="{{ sh.onShare }}">Copier le lien</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ showLoadMoreShops }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;padding:8px 0 4px;">
+                  <button style="background:transparent;border:1px solid var(--color-divider);border-radius:999px;padding:10px 22px;font-family:var(--font-body);font-weight:700;font-size:13px;color:var(--color-text);cursor:pointer;" onClick="{{ loadMoreShops }}">Charger plus</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ showEmptyShops }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;padding:60px 20px;color:var(--color-neutral-700);font-size:14px;">Aucune boutique référencée ici pour l'instant.</div>
+              </sc-if>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showShopMap }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ shopMapColumnStyle }}">
+              <div ref="{{ shopMapRefCallback }}" style="width:100%;height:100%;border-radius:20px;overflow:hidden;background:var(--color-neutral-200);"></div>
+              <button style="position:absolute;right:24px;bottom:24px;z-index:1000;background:var(--color-accent-600);color:#fff;border:none;border-radius:999px;padding:14px 22px;font-family:var(--font-body);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px rgba(192,103,34,.35);" style-hover="background:#8f3e0096;" style-active="transform:scale(.96);" onClick="{{ openAddShopDialog }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                Ajouter une boutique
+              </button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showMobileShopToggle }}" hint-placeholder-val="{{ true }}">
+            <button style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);background:var(--color-text);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-family:var(--font-body);font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px color-mix(in srgb, var(--color-text) 30%, transparent);z-index:500;" onClick="{{ toggleMobileShopView }}">{{ mobileShopToggleLabel }}</button>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showAddShopDialog }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;background:rgba(32,28,22,.35);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;" onClick="{{ closeAddShopDialog }}">
+        <div style="background:var(--color-bg);border-radius:24px;padding:28px;width:100%;max-width:400px;box-shadow:0 20px 60px color-mix(in srgb, var(--color-text) 25%, transparent);" onClick="{{ stopPropagation }}">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+            <div style="font-size:18px;font-weight:700;color:var(--color-text);font-family:var(--font-heading);font-weight:600;">Ajouter une boutique</div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="round" style="cursor:pointer;" onClick="{{ closeAddShopDialog }}" role="button" tabindex="0" aria-label="Fermer"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <input style="{{ shopInputStyle }}" value="{{ newShopName }}" onChange="{{ onNewShopName }}" placeholder="Nom" />
+            <sc-if value="{{ hasNewShopError }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12px;color:var(--color-accent-600);margin-top:-4px;">{{ newShopError }}</div>
+            </sc-if>
+            <select style="{{ shopInputStyle }}" value="{{ newShopCity }}" onChange="{{ onNewShopCity }}">
+              <option value="paris">Paris</option>
+              <option value="athens">Athènes</option>
+            </select>
+            <select style="{{ shopInputStyle }}" value="{{ newShopCategory }}" onChange="{{ onNewShopCategory }}">
+              <option value="Peinture">Peinture</option>
+              <option value="Céramique">Céramique</option>
+              <option value="Papeterie">Papeterie</option>
+              <option value="Sculpture">Sculpture</option>
+              <option value="Pluridisciplinaire">Pluridisciplinaire</option>
+            </select>
+            <input style="{{ shopInputStyle }}" value="{{ newShopAddress }}" onChange="{{ onNewShopAddress }}" placeholder="Adresse" />
+            <textarea style="{{ shopTextareaStyle }}" value="{{ newShopDescription }}" onChange="{{ onNewShopDescription }}" placeholder="Description"></textarea>
+            <input style="{{ shopInputStyle }}" value="{{ newShopLink }}" onChange="{{ onNewShopLink }}" placeholder="Lien" />
+            <button style="{{ shopAddBtnStyle }}" style-hover="background:#a95a1c;" style-active="transform:scale(.97);" onClick="{{ addShop }}">Ajouter</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ showMobileTabs }}" hint-placeholder-val="{{ true }}">
+    <div style="height:64px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-around;border-top:1px solid var(--color-divider);background:var(--color-bg);">
+      <div style="{{ tabBarEventsStyle }}" onClick="{{ goEvents }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ tabBarEventsColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.9 17.6a8 8 0 1 0-13.8.06M9 22l3-3 3 3M12 2v3M4.2 8l2.1 1M19.8 8l-2.1 1"/><circle cx="12" cy="12" r="1.5"/></svg>
+        <span style="font-size:10px;">Événements</span>
+      </div>
+      <div style="{{ tabBarCommunityStyle }}" onClick="{{ goCommunity }}">
+        <div style="position:relative;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ tabBarCommunityColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8.5a5 5 0 1 0-10 0 5 5 0 0 0 3 4.58V21l2-1.2L14 21v-7.92a5 5 0 0 0 3-4.58z"/></svg>
+          <sc-if value="{{ hasUnreadNotif }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:-2px;right:-4px;width:7px;height:7px;border-radius:999px;background:var(--color-accent-600);"></span>
+          </sc-if>
+        </div>
+        <span style="font-size:10px;">Communauté</span>
+      </div>
+      <div style="{{ tabBarCalendarStyle }}" onClick="{{ goCalendar }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ tabBarCalendarColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+        <span style="font-size:10px;">Calendrier</span>
+      </div>
+      <div style="{{ tabBarProfileStyle }}" onClick="{{ goProfile }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ tabBarProfileColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
+        <span style="font-size:10px;">Profil</span>
+      </div>
+    </div>
+  </sc-if>
+  </sc-if>
+
+  <sc-if value="{{ showAuthScreen }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:2;">
+      <div style="width:100%;max-width:380px;background:var(--color-bg);border:1px solid var(--color-divider);border-radius:28px;padding:32px 28px;box-shadow:0 20px 48px rgba(23,20,15,.14);">
+        <div style="font-size:24px;font-weight:700;color:var(--color-text);text-align:center;font-family:var(--font-heading);font-weight:600;">Kamissa</div>
+        <div style="display:flex;gap:4px;background:var(--color-bg);border-radius:999px;padding:4px;margin-top:24px;">
+          <div style="{{ authTabLoginStyle }}" onClick="{{ setAuthLogin }}">Connexion</div>
+          <div style="{{ authTabSignupStyle }}" onClick="{{ setAuthSignup }}">Inscription</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;">
+          <sc-if value="{{ isSignupView }}" hint-placeholder-val="{{ false }}">
+            <input style="{{ authInputStyle }}" value="{{ authNameValue }}" onChange="{{ onAuthNameChange }}" placeholder="Nom" />
+          </sc-if>
+          <input style="{{ authInputStyle }}" value="{{ authEmailValue }}" onChange="{{ onAuthEmailChange }}" placeholder="Email" />
+          <input style="{{ authInputStyle }}" type="password" value="{{ authPasswordValue }}" onChange="{{ onAuthPasswordChange }}" placeholder="Mot de passe" />
+          <button style="font-family:var(--font-body);font-weight:700;font-size:14px;color:#fff;background:var(--color-accent-600);border:none;border-radius:999px;padding:13px;cursor:pointer;margin-top:6px;" onClick="{{ submitAuth }}" style-hover="background:#a95a1c;" style-active="transform:scale(.97);">{{ authSubmitLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showWelcomeModal }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(32,28,22,.35);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;" onClick="{{ closeWelcomeModal }}">
+      <div style="background:var(--color-bg);border-radius:24px;padding:32px;width:100%;max-width:360px;text-align:center;box-shadow:0 20px 60px color-mix(in srgb, var(--color-text) 25%, transparent);" onClick="{{ stopPropagation }}">
+        <div style="width:64px;height:64px;border-radius:999px;background:var(--color-accent-600);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">✓</div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text);font-family:var(--font-body);">Bienvenue chez Kamissa !</div>
+        <div style="font-size:13px;color:var(--color-neutral-700);margin-top:8px;">Découvrez les événements et boutiques près de vous, rejoignez la Communauté à Paris et à Athènes, et complétez votre profil pour être visible des autres artistes.</div>
+        <button style="margin-top:20px;width:100%;background:var(--color-accent-600);color:#fff;border:none;border-radius:999px;padding:13px;font-family:var(--font-body);font-weight:700;font-size:14px;cursor:pointer;" style-hover="background:#a95a1c;" style-active="transform:scale(.97);" onClick="{{ closeWelcomeModal }}">Commencer</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showMatchModal }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(32,28,22,.35);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;" onClick="{{ closeMatchModal }}">
+      <div style="background:var(--color-bg);border-radius:24px;padding:32px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px color-mix(in srgb, var(--color-text) 25%, transparent);" onClick="{{ stopPropagation }}">
+        <div style="width:64px;height:64px;border-radius:999px;background:var(--color-accent-600);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">✓</div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text);font-family:var(--font-heading);font-weight:600;">C'est un match !</div>
+        <div style="font-size:13px;color:var(--color-neutral-700);margin-top:6px;">Vous pouvez maintenant échanger avec {{ matchedName }} dans la Communauté.</div>
+        <button style="margin-top:20px;width:100%;background:var(--color-accent-600);color:#fff;border:none;border-radius:999px;padding:13px;font-family:var(--font-body);font-weight:700;font-size:14px;cursor:pointer;" onClick="{{ closeMatchModal }}" style-hover="background:#a95a1c;" style-active="transform:scale(.97);">Continuer</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showAddDialog }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(32,28,22,.35);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;" onClick="{{ closeAddDialog }}">
+      <div style="background:var(--color-bg);border-radius:24px;padding:28px;width:100%;max-width:400px;box-shadow:0 20px 60px color-mix(in srgb, var(--color-text) 25%, transparent);" onClick="{{ stopPropagation }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+          <div style="font-size:18px;font-weight:700;color:var(--color-text);font-family:var(--font-heading);font-weight:600;">Ajouter un événement</div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="round" style="cursor:pointer;" onClick="{{ closeAddDialog }}" role="button" tabindex="0" aria-label="Fermer"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <input value="{{ newEventTitle }}" onChange="{{ onNewTitleChange }}" placeholder="Titre de l'événement" style="border:1px solid var(--color-divider);background:var(--color-surface);border-radius:14px;padding:12px 16px;font-family:var(--font-body);font-size:14px;color:var(--color-text);outline:none;" />
+          <sc-if value="{{ hasNewEventError }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;color:var(--color-accent-600);margin-top:-4px;">{{ newEventError }}</div>
+          </sc-if>
+          <input value="{{ newEventDate }}" onChange="{{ onNewDateChange }}" placeholder="Date (ex: Ven. 14 août)" style="border:1px solid var(--color-divider);background:var(--color-surface);border-radius:14px;padding:12px 16px;font-family:var(--font-body);font-size:14px;color:var(--color-text);outline:none;" />
+          <select value="{{ newEventCategory }}" onChange="{{ onNewCategoryChange }}" style="border:1px solid var(--color-divider);background:var(--color-surface);border-radius:14px;padding:12px 16px;font-family:var(--font-body);font-size:14px;color:var(--color-text);outline:none;">
+            <option value="Vernissage">Vernissage</option>
+            <option value="Atelier">Atelier</option>
+            <option value="Appel à candidatures">Appel à candidatures</option>
+            <option value="Exposition">Exposition</option>
+            <option value="Annonce">Annonce</option>
+            <option value="Résidence">Résidence</option>
+          </select>
+          <div style="display:flex;gap:10px;">
+            <select value="{{ newEventCity }}" onChange="{{ onNewCityChange }}" style="flex:1;border:1px solid var(--color-divider);background:var(--color-surface);border-radius:14px;padding:12px 16px;font-family:var(--font-body);font-size:14px;color:var(--color-text);outline:none;">
+              <option value="paris">Paris</option>
+              <option value="athens">Athènes</option>
+            </select>
+            <select value="{{ newEventCost }}" onChange="{{ onNewCostChange }}" style="flex:1;border:1px solid var(--color-divider);background:var(--color-surface);border-radius:14px;padding:12px 16px;font-family:var(--font-body);font-size:14px;color:var(--color-text);outline:none;">
+              <option value="Gratuit">Gratuit</option>
+              <option value="Payant">Payant</option>
+            </select>
+          </div>
+          <button style="background:var(--color-accent-600);color:#fff;border:none;border-radius:999px;padding:13px;font-family:var(--font-body);font-weight:700;font-size:14px;cursor:pointer;margin-top:6px;" style-hover="background:#8f3e00;" style-active="transform:scale(.97);" onClick="{{ submitNewEvent }}">Créer l'événement</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const BADGE = {
+  'Vernissage': {bg:'#f1e6fa', color:'#6b3fa0'},
+  'Atelier': {bg:'#dff4ef', color:'#22796b'},
+  'Appel à candidatures': {bg:'var(--color-accent-100)', color:'var(--color-accent-600)'},
+  'Exposition': {bg:'#e3ecfc', color:'#3a5aa6'},
+  'Annonce': {bg:'#fbe1ec', color:'#a73d6c'},
+  'Résidence': {bg:'#fcefd1', color:'#a9720a'}
+};
+const COST = {
+  'Gratuit': {bg:'#e1f5e5', color:'#2f7d4f'},
+  'Payant': {bg:'var(--color-neutral-200)', color:'var(--color-neutral-700)'}
+};
+const FONT = "'Figtree', system-ui, sans-serif";
+const HEADING_FONT = "'Caprasimo', system-ui, sans-serif";
+const HEADING_STYLE = { fontOpticalSizing: 'auto', fontWeight: 900 };
+function loadLS(key, fallback) {
+  try { const v = JSON.parse(localStorage.getItem(key)); return v === null || v === undefined ? fallback : v; } catch (e) { return fallback; }
+}
+function saveLS(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+}
+
+class Component extends DCLogic {
+  state = {
+    isAuthenticated: false,
+    authView: 'login',
+    authForm: { name: '', email: '', password: '' },
+    screen: 'events',
+    isMobile: (typeof window !== 'undefined' && window.innerWidth < 900),
+    isTablet: (typeof window !== 'undefined' && window.innerWidth >= 900 && window.innerWidth < 1200),
+    mobileEventsView: 'list',
+    communityTab: 'community',
+    showNotifPanel: false,
+    showNotifPrefs: false,
+    notifPrefs: { 'Vernissage': false, 'Atelier': false, 'Appel à candidatures': true, 'Exposition': false, 'Annonce': false, 'Résidence': false },
+    notifications: [
+      { id: 1, text: 'Markella a répondu à Dotian dans la Communauté de Paris.', time: '18 juil., 15:10', read: false },
+      { id: 2, text: 'Markella : "Wadup"', time: '23 juil., 11:50', read: false },
+      { id: 3, text: "Nouveau membre à Athènes cette semaine.", time: '20 juil., 09:00', read: true }
+    ],
+    communityCity: 'paris',
+    myEventsOnly: false,
+    eventSearchQuery: '',
+    eventFilterCity: 'paris',
+    eventFilterCategory: 'all',
+    eventFilterDiscipline: 'all',
+    eventFilterCost: 'all',
+    showEventFilters: false,
+    hoveredId: null,
+    hoveredShopId: null,
+    isLoading: true,
+    showToast: false,
+    profileNudgeDismissed: false,
+    showWelcomeModal: false,
+    eventsVisibleCount: 6,
+    shopsVisibleCount: 6,
+    artistSearchQuery: '',
+    toastMessage: '',
+    showAddDialog: false,
+    newEvent: { title: '', date: '', category: 'Vernissage', city: 'paris', cost: 'Gratuit' },
+    newEventError: '',
+    messageInput: '',
+    profileTab: 'posts',
+    profilePublic: true,
+    showLibrary: false,
+    artistCityFilter: 'all',
+    followedArtistIds: [],
+    accountName: 'Dotian',
+    accountEmail: 'dotian@kamissa.art',
+    accountCity: 'paris',
+    accountLanguage: 'fr',
+    matchIndex: loadLS('kamissa_matchIndex', 0),
+    matchHistory: loadLS('kamissa_matchHistory', []),
+    showMatchModal: false,
+    shopCity: 'paris',
+    shopSearchQuery: '',
+    shopCategoryFilter: 'all',
+    shopView: 'list',
+    newShop: { name: '', city: 'paris', category: 'Peinture', address: '', description: '', link: '' },
+    newShopError: '',
+    showAddShopDialog: false,
+    shops: [
+      { id: 1, name: 'ADAM Montparnasse', category: 'Pluridisciplinaire', city: 'paris', address: '11 Boulevard Edgar Quinet, 75014 Paris', description: 'Fournitures pour beaux-arts depuis 1898, couleurs et produits fabriqués artisanalement.', link: 'https://www.adamparis.com/', lat: 48.840, lng: 2.326 },
+      { id: 2, name: 'Terre & Feu', category: 'Céramique', city: 'paris', address: '48 rue de Belleville, 75020 Paris', description: 'Argiles, émaux et outillage céramique.', link: '', lat: 48.872, lng: 2.383 },
+      { id: 3, name: 'Sennelier', category: 'Peinture', city: 'paris', address: '3 quai Voltaire, 75007 Paris', description: 'Pigments, pastels et couleurs extra-fines depuis 1887.', link: '', lat: 48.858, lng: 2.328 },
+      { id: 4, name: 'Rougier & Plé', category: 'Pluridisciplinaire', city: 'paris', address: '13-15 boulevard des Filles du Calvaire, 75003 Paris', description: 'Grand choix de matériel pour toutes les disciplines artistiques.', link: '', lat: 48.863, lng: 2.365 },
+      { id: 5, name: 'Techni Chromatiki', category: 'Peinture', city: 'athens', address: '22 Ermou, Athènes', description: 'Pigments et toiles pour peintres.', link: '', lat: 37.976, lng: 23.727 },
+      { id: 6, name: 'Keramio', category: 'Céramique', city: 'athens', address: '9 Melitonos, Athènes', description: 'Argiles, fours et outillage pour céramistes.', link: '', lat: 37.9718, lng: 23.7185 },
+      { id: 7, name: 'Chartopoleio Karagiannis', category: 'Papeterie', city: 'athens', address: '15 Stadiou, Athènes', description: 'Papiers d\u2019art, reliure et fournitures de gravure.', link: '', lat: 37.9795, lng: 23.7332 }
+    ],
+    calendarAnchor: new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime(),
+    selectedDay: null,
+    events: [
+      { id: 1, category: 'Vernissage', discipline: 'Sculpture', cost: 'Payant', date: 'Ven. 31 juil.', isoDate: '2026-07-31', title: 'Vernissage — Matière première', location: 'Paris · Sculpture', city: 'paris', lat: 48.860, lng: 2.320, saved: false, going: true },
+      { id: 2, category: 'Résidence', discipline: 'Pluridisciplinaire', cost: 'Gratuit', date: 'Sam. 1 août', isoDate: '2026-08-01', title: "Open call — Résidence d'été", location: 'Paris · Pluridisciplinaire', city: 'paris', lat: 48.851, lng: 2.35, saved: true, going: false },
+      { id: 3, category: 'Exposition', discipline: 'Performance', cost: 'Payant', date: 'Mer. 5 août', isoDate: '2026-08-05', title: 'Performance — Corps et mémoire', location: 'Paris · Performance', city: 'paris', lat: 48.845, lng: 2.365, saved: false, going: false },
+      { id: 4, category: 'Atelier', discipline: 'Céramique', cost: 'Payant', date: 'Sam. 8 août', isoDate: '2026-08-08', title: 'Atelier tournage — Initiation céramique', location: 'Paris · Céramique', city: 'paris', lat: 48.872, lng: 2.383, saved: false, going: false },
+      { id: 5, category: 'Vernissage', discipline: 'Peinture', cost: 'Gratuit', date: 'Ven. 31 juil.', isoDate: '2026-07-31', title: 'Vernissage — Lumières du Pirée', location: 'Athènes · Peinture', city: 'athens', lat: 37.9436, lng: 23.6467, saved: false, going: false },
+      { id: 6, category: 'Exposition', discipline: 'Photographie', cost: 'Gratuit', date: 'Dim. 2 août', isoDate: '2026-08-02', title: "Exposition — Portraits d'ateliers", location: 'Athènes · Photographie', city: 'athens', lat: 37.9838, lng: 23.7275, saved: true, going: false },
+      { id: 7, category: 'Appel à candidatures', discipline: 'Pluridisciplinaire', cost: 'Gratuit', date: 'Jeu. 6 août', isoDate: '2026-08-06', title: 'Appel à candidatures — Résidence Kerameikos', location: 'Athènes · Pluridisciplinaire', city: 'athens', lat: 37.9755, lng: 23.7118, saved: false, going: false },
+      { id: 8, category: 'Atelier', discipline: 'Sculpture', cost: 'Payant', date: 'Sam. 8 août', isoDate: '2026-08-08', title: 'Atelier marbre — Techniques traditionnelles', location: 'Athènes · Sculpture', city: 'athens', lat: 37.9908, lng: 23.7383, saved: false, going: false }
+    ],
+    messages: [
+      { id: 1, name: 'Dotian', time: '18 juil., 13:58', text: 'Message de test — vérification du groupe communautaire.', self: true, city: 'paris', replies: [], threadOpen: false },
+      { id: 2, name: 'Dotian', time: '18 juil., 14:59', text: 'Eyaa', self: true, city: 'paris', threadOpen: false, replies: [{ name: 'Markella', time: '18 juil., 15:10', text: 'Coucou !' }] },
+      { id: 3, name: 'Markella', time: '23 juil., 11:50', text: 'Wadup', self: false, city: 'paris', replies: [], threadOpen: false }
+    ]
+  };
+
+  componentDidMount() {
+    this._onResize = () => this.setState({ isMobile: window.innerWidth < 900, isTablet: window.innerWidth >= 900 && window.innerWidth < 1200 });
+    window.addEventListener('resize', this._onResize);
+    setTimeout(() => this.setState({ isLoading: false }), 650);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    if (this.leafletMap) this.leafletMap.remove();
+    if (this.shopMap) this.shopMap.remove();
+  }
+  componentDidUpdate(prevProps) {
+    const prevState = this.__prevStateSnapshot || this.state;
+    if (prevState.hoveredId !== this.state.hoveredId) this.refreshMarkers();
+    if (prevState.eventFilterCity !== this.state.eventFilterCity) this.rebuildEventMarkers();
+    if (prevState.hoveredShopId !== this.state.hoveredShopId) this.refreshShopMarkers();
+    if (prevState.shopCity !== this.state.shopCity) this.rebuildShopMarkers();
+    if (prevState.matchIndex !== this.state.matchIndex) saveLS('kamissa_matchIndex', this.state.matchIndex);
+    if (prevState.matchHistory !== this.state.matchHistory) saveLS('kamissa_matchHistory', this.state.matchHistory);
+    this.__prevStateSnapshot = this.state;
+  }
+  cityCenter(city) { return city === 'athens' ? [37.9838, 23.7275] : [48.8566, 2.3522]; }
+  rebuildEventMarkers() {
+    if (!this.leafletMap || !window.L || !this.eventCluster) return;
+    this.eventCluster.clearLayers();
+    this.markers = {};
+    const city = this.state.eventFilterCity === 'all' ? 'paris' : this.state.eventFilterCity;
+    this.leafletMap.setView(this.cityCenter(city), 12);
+    this.state.events.filter(e => e.city === city).forEach(e => {
+      const marker = window.L.marker([e.lat, e.lng], { icon: this.makeIcon(this.state.hoveredId === e.id) });
+      marker.on('mouseover', () => this.setState({ hoveredId: e.id }));
+      marker.on('click', () => this.setState({ hoveredId: e.id }));
+      this.eventCluster.addLayer(marker);
+      this.markers[e.id] = marker;
+    });
+  }
+  rebuildShopMarkers() {
+    if (!this.shopMap || !window.L || !this.shopCluster) return;
+    this.shopCluster.clearLayers();
+    this.shopMarkers = [];
+    this.shopMarkerById = {};
+    this.shopMap.setView(this.cityCenter(this.state.shopCity), 13);
+    this.state.shops.filter(sh => sh.city === this.state.shopCity).forEach(sh => {
+      const m = window.L.marker([sh.lat, sh.lng], { icon: this.makeShopIcon(this.state.hoveredShopId === sh.id) }).bindPopup(`<b>${sh.name}</b><br>${sh.address}`);
+      m.on('mouseover', () => this.setState({ hoveredShopId: sh.id }));
+      m.on('click', () => this.setState({ hoveredShopId: sh.id }));
+      this.shopCluster.addLayer(m);
+      this.shopMarkers.push(m);
+      this.shopMarkerById[sh.id] = m;
+    });
+  }
+  refreshShopMarkers() {
+    if (!this.shopMarkerById) return;
+    Object.keys(this.shopMarkerById).forEach(id => {
+      this.shopMarkerById[id].setIcon(this.makeShopIcon(Number(id) === this.state.hoveredShopId));
+    });
+  }
+  fireToast(message) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toastMessage: message, showToast: true });
+    this._toastTimer = setTimeout(() => this.setState({ showToast: false }), 2600);
+  }
+  copyLink(path) {
+    const url = `https://${path}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).catch(() => {});
+    this.fireToast('Lien copié ✓');
+  }
+
+  makeIcon(active) {
+    const size = active ? 30 : 22;
+    const html = `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${active ? 'var(--color-accent-600)' : '#ffffff'};border:3px solid var(--color-accent-600);box-shadow:0 2px 8px color-mix(in srgb, var(--color-text) 30%, transparent);"></div>`;
+    return window.L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+  }
+
+  setupMap(node) {
+    if (!node || !window.L || node === this._mapNode) return;
+    this._mapNode = node;
+    if (this.leafletMap) { this.leafletMap.remove(); this.leafletMap = null; }
+    const L = window.L;
+    const startCity = this.state.eventFilterCity === 'all' ? 'paris' : this.state.eventFilterCity;
+    const map = L.map(node, { zoomControl: true, attributionControl: true }).setView(this.cityCenter(startCity), 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19, attribution: '© OpenStreetMap, © CARTO'
+    }).addTo(map);
+    this.leafletMap = map;
+    this.eventCluster = (L.markerClusterGroup ? L.markerClusterGroup({ maxClusterRadius: 40 }) : L.layerGroup()).addTo(map);
+    this.markers = {};
+    this.state.events.filter(e => e.city === startCity).forEach(e => {
+      const marker = L.marker([e.lat, e.lng], { icon: this.makeIcon(this.state.hoveredId === e.id) });
+      marker.on('mouseover', () => this.setState({ hoveredId: e.id }));
+      marker.on('click', () => this.setState({ hoveredId: e.id }));
+      this.eventCluster.addLayer(marker);
+      this.markers[e.id] = marker;
+    });
+  }
+
+  refreshMarkers() {
+    if (!this.markers) return;
+    Object.keys(this.markers).forEach(id => {
+      this.markers[id].setIcon(this.makeIcon(Number(id) === this.state.hoveredId));
+    });
+  }
+
+  addMarkerForEvent(ev) {
+    const activeCity = this.state.eventFilterCity === 'all' ? 'paris' : this.state.eventFilterCity;
+    if (ev.city !== activeCity || !this.leafletMap || !window.L || !this.markers || !this.eventCluster) return;
+    const marker = window.L.marker([ev.lat, ev.lng], { icon: this.makeIcon(false) });
+    marker.on('mouseover', () => this.setState({ hoveredId: ev.id }));
+    marker.on('click', () => this.setState({ hoveredId: ev.id }));
+    this.eventCluster.addLayer(marker);
+    this.markers[ev.id] = marker;
+  }
+
+  pad(n) { return String(n).padStart(2, '0'); }
+  isoOf(d) { return `${d.getFullYear()}-${this.pad(d.getMonth() + 1)}-${this.pad(d.getDate())}`; }
+  buildMonthGrid(anchor) {
+    const year = anchor.getFullYear(), month = anchor.getMonth();
+    const startWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const cells = [];
+    for (let i = 0; i < startWeekday; i++) cells.push(new Date(year, month, i - startWeekday + 1));
+    for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
+    let next = 1;
+    while (cells.length < 42) { cells.push(new Date(year, month + 1, next)); next++; }
+    return cells;
+  }
+
+  calendarVals(s, isMobile) {
+    const anchor = new Date(s.calendarAnchor);
+    const monthCells = this.buildMonthGrid(anchor);
+    const todayIso = this.isoOf(new Date());
+    const selectedIso = s.selectedDay || todayIso;
+    const calendarDays = monthCells.map(d => {
+      const iso = this.isoOf(d);
+      const inMonth = d.getMonth() === anchor.getMonth();
+      const isToday = iso === todayIso;
+      const isSelected = iso === selectedIso;
+      const dayEvents = s.events.filter(e => e.isoDate === iso);
+      return {
+        dayNum: d.getDate(),
+        cellStyle: { minHeight: isMobile ? '58px' : '92px', background: isSelected ? 'var(--color-accent-100)' : (inMonth ? 'var(--color-neutral-100)' : 'transparent'), border: isToday ? '2px solid var(--color-accent-600)' : '1px solid var(--color-divider)', borderRadius: '12px', padding: '6px 8px', cursor: 'pointer', opacity: inMonth ? 1 : 0.35 },
+        numStyle: { fontSize: '12px', fontWeight: isToday ? 800 : 600, color: 'var(--color-text)' },
+        events: dayEvents.slice(0, isMobile ? 1 : 2).map(e => {
+          const b = BADGE[e.category] || BADGE['Annonce'];
+          return { title: e.title.length > 14 ? e.title.slice(0, 13) + '…' : e.title, pillStyle: { fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '999px', background: b.bg, color: b.color, whiteSpace: 'nowrap', overflow: 'hidden' } };
+        }),
+        onClick: () => this.setState({ selectedDay: iso })
+      };
+    });
+    const monthLabelRaw = anchor.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+    const selectedDate = new Date(selectedIso + 'T00:00:00');
+    const selectedDayEvents = s.events.filter(e => e.isoDate === selectedIso);
+    const navBtn = { width: '34px', height: '34px', borderRadius: '999px', border: '1px solid var(--color-divider)', background: 'var(--color-bg)', cursor: 'pointer', fontSize: '16px', color: 'var(--color-text)' };
+    return {
+      calendarPanelStyle: { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, margin: isMobile ? '0' : '20px 32px', padding: isMobile ? '18px 20px 24px' : '24px', border: isMobile ? 'none' : '1px solid var(--color-divider)', borderRadius: isMobile ? '0' : '24px', background: isMobile ? 'transparent' : 'var(--color-neutral-100)', overflowY: 'auto' },
+      calendarMonthLabel: monthLabelRaw.charAt(0).toUpperCase() + monthLabelRaw.slice(1),
+      calNavBtnStyle: navBtn,
+      calTodayBtnStyle: { ...navBtn, width: 'auto', padding: '0 16px', fontSize: '13px', fontWeight: 700, fontFamily: FONT },
+      goPrevMonth: () => this.setState(st => { const a = new Date(st.calendarAnchor); return { calendarAnchor: new Date(a.getFullYear(), a.getMonth() - 1, 1).getTime() }; }),
+      goNextMonth: () => this.setState(st => { const a = new Date(st.calendarAnchor); return { calendarAnchor: new Date(a.getFullYear(), a.getMonth() + 1, 1).getTime() }; }),
+      goToday: () => this.setState({ calendarAnchor: new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime(), selectedDay: todayIso }),
+      weekdayLabels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+      weekdayRowStyle: { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', marginTop: '18px' },
+      calendarGridStyle: { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: '6px' },
+      calendarDays,
+      selectedDayLabel: selectedDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }),
+      hasSelectedDayEvents: selectedDayEvents.length > 0,
+      noSelectedDayEvents: selectedDayEvents.length === 0,
+      selectedDayEventCards: selectedDayEvents.map(e => {
+        const b = BADGE[e.category] || BADGE['Annonce'];
+        const c = COST[e.cost] || COST['Gratuit'];
+        return {
+          category: e.category, cost: e.cost, title: e.title, location: e.location,
+          badgeStyle: { display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '5px 12px', borderRadius: '999px', background: b.bg, color: b.color },
+          costStyle: { display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '5px 12px', borderRadius: '999px', background: c.bg, color: c.color },
+          cardStyle: { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: '20px', padding: '16px 18px', marginBottom: '12px' }
+        };
+      })
+    };
+  }
+
+  profileVals(s, isMobile) {
+    const tabUnderline = (active) => ({ fontSize: '15px', fontWeight: 700, padding: '0 0 12px', cursor: 'pointer', color: active ? 'var(--color-text)' : 'var(--color-neutral-700)', borderBottom: active ? '3px solid var(--color-accent-600)' : '3px solid transparent' });
+    const stripe = (a, b) => `repeating-linear-gradient(135deg, ${a}, ${a} 10px, ${b} 10px, ${b} 20px)`;
+    const portfolioPosts = [
+      { id: 1, title: 'Sans titre I', medium: 'Sculpture' },
+      { id: 2, title: 'Étude de matière', medium: 'Sculpture' },
+      { id: 3, title: 'Fragments', medium: 'Céramique' },
+      { id: 4, title: 'Corps I', medium: 'Performance' },
+      { id: 5, title: 'Corps II', medium: 'Performance' },
+      { id: 6, title: 'Reliefs', medium: 'Sculpture' }
+    ];
+    const libraryItems = [
+      { id: 1, title: 'Texture bois' },
+      { id: 2, title: 'Palette argile' },
+      { id: 3, title: 'Croquis atelier' },
+      { id: 4, title: 'Moodboard résidence' }
+    ];
+    const cellBase = { aspectRatio: '1', borderRadius: '20px', position: 'relative', overflow: 'hidden', background: stripe('var(--color-surface)', 'var(--color-neutral-300)'), border: '1px solid var(--color-divider)' };
+    const captionBase = { position: 'absolute', left: 0, right: 0, bottom: 0, padding: '8px 10px', background: 'linear-gradient(to top, color-mix(in srgb, var(--color-text) 55%, transparent), transparent)', color: '#fff', fontFamily: 'monospace', fontSize: '11px' };
+    return {
+      profilePanelStyle: { flex: 1, padding: isMobile ? '20px 20px 90px' : '28px 40px 40px', overflowY: 'auto', position: 'relative' },
+      profileSettingsBtnStyle: { position: 'absolute', top: isMobile ? '16px' : '24px', right: isMobile ? '16px' : '32px', width: '38px', height: '38px', borderRadius: '999px', border: '1px solid var(--color-divider)', background: 'var(--color-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' },
+      profileHeaderStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '6px' },
+      profileAvatarStyle: { width: '84px', height: '84px', borderRadius: '999px', background: 'var(--color-accent-600)', color: '#fff', fontSize: '30px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '6px' },
+      profileLevelBadgeStyle: { display: 'inline-block', fontSize: '12px', fontWeight: 700, padding: '5px 14px', borderRadius: '999px', background: 'var(--color-surface)', color: 'var(--color-neutral-700)', border: '1px solid var(--color-divider)' },
+      profileDisciplineStyle: { fontSize: '14px', fontWeight: 700, color: 'var(--color-accent-2-700)' },
+      profileStatsStyle: { display: 'flex', gap: '36px', marginTop: '18px' },
+      profileStatItemStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' },
+      statsPosts: 0, statsFollowers: 1, statsFollowing: 0,
+
+      profileTabsStyle: { display: 'flex', gap: '28px', marginTop: '30px', borderBottom: '1px solid var(--color-divider)' },
+      profileTabPostsStyle: tabUnderline(s.profileTab === 'posts'),
+      profileTabPortfolioStyle: tabUnderline(s.profileTab === 'portfolio'),
+      setProfileTabPosts: () => this.setState({ profileTab: 'posts' }),
+      setProfileTabPortfolio: () => this.setState({ profileTab: 'portfolio' }),
+      isPostsTab: s.profileTab === 'posts',
+      isPortfolioTab: s.profileTab === 'portfolio',
+
+      publicRowStyle: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '20px' },
+      publicToggleTrackStyle: { width: '44px', height: '26px', borderRadius: '999px', background: s.profilePublic ? 'var(--color-accent-600)' : 'var(--color-divider)', position: 'relative', cursor: 'pointer', transition: 'background .15s' },
+      publicToggleKnobStyle: { position: 'absolute', top: '3px', left: s.profilePublic ? '21px' : '3px', width: '20px', height: '20px', borderRadius: '999px', background: '#fff', transition: 'left .15s', boxShadow: '0 1px 3px color-mix(in srgb, var(--color-text) 30%, transparent)' },
+      toggleProfilePublic: () => this.setState({ profilePublic: !s.profilePublic }),
+
+      addPostTileStyle: { width: '140px', height: '140px', borderRadius: '20px', border: '2px dashed var(--color-divider)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-neutral-700)', fontSize: '26px', marginTop: '14px' },
+
+      profileGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : (s.isTablet ? 'repeat(3,1fr)' : 'repeat(auto-fill,minmax(180px,1fr))'), gap: '14px', marginTop: '18px' },
+      portfolioCards: portfolioPosts.map(p => ({ cellStyle: cellBase, captionStyle: { ...captionBase, zIndex: 1, pointerEvents: 'none' }, title: p.title, medium: p.medium, slotId: `portfolio-${p.id}` })),
+
+      libraryCardStyle: { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: '20px', padding: '16px 20px', marginTop: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px' },
+      toggleLibrary: () => this.setState({ showLibrary: !s.showLibrary }),
+      showLibrary: s.showLibrary,
+      libraryCards: libraryItems.map(l => ({
+        cellStyle: cellBase, captionStyle: captionBase, title: l.title,
+        lockStyle: { position: 'absolute', top: '10px', right: '10px', width: '26px', height: '26px', borderRadius: '999px', background: 'color-mix(in srgb, var(--color-text) 55%, transparent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }
+      })),
+
+      bioCardStyle: { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: '20px', padding: '16px 20px', marginTop: '14px' },
+
+      socialCardStyle: { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: '20px', padding: '8px 20px', marginTop: '14px' },
+      socialRows: [
+        { platform: 'Instagram', handle: '@dotian.art', icon: 'camera' },
+        { platform: 'TikTok', handle: '@dotian.art', icon: 'tiktok' },
+        { platform: 'Mail', handle: 'dotian@kamissa.art', icon: 'mail' },
+        { platform: 'Twitter / X', handle: '@dotian_art', icon: 'x' }
+      ].map((r, i, arr) => ({
+        platform: r.platform, handle: r.handle,
+        isCamera: r.icon === 'camera', isTiktok: r.icon === 'tiktok', isMail: r.icon === 'mail', isX: r.icon === 'x',
+        rowStyle: { display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 0', borderBottom: i < arr.length - 1 ? '1px solid var(--color-divider)' : 'none', cursor: 'pointer' },
+        iconWrapStyle: { width: '34px', height: '34px', borderRadius: '999px', background: 'var(--color-bg)', border: '1px solid var(--color-divider)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: '0 0 auto' }
+      }))
+    };
+  }
+
+  makeShopIcon(active) {
+    const size = active ? 30 : 22;
+    return window.L.divIcon({ html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${active ? 'var(--color-accent-2-700)' : '#fff'};border:3px solid var(--color-accent-2-700);box-shadow:0 2px 8px color-mix(in srgb, var(--color-text) 30%, transparent);"></div>`, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+  }
+  setupShopMap(node) {
+    if (!node || !window.L || node === this._shopMapNode) return;
+    this._shopMapNode = node;
+    if (this.shopMap) { this.shopMap.remove(); this.shopMap = null; }
+    const L = window.L;
+    const map = L.map(node, { zoomControl: true, attributionControl: true }).setView(this.cityCenter(this.state.shopCity), 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: '© OpenStreetMap, © CARTO' }).addTo(map);
+    this.shopMap = map;
+    this.shopCluster = (L.markerClusterGroup ? L.markerClusterGroup({ maxClusterRadius: 40 }) : L.layerGroup()).addTo(map);
+    this.shopMarkers = [];
+    this.shopMarkerById = {};
+    this.state.shops.filter(sh => sh.city === this.state.shopCity).forEach(sh => {
+      const m = L.marker([sh.lat, sh.lng], { icon: this.makeShopIcon(this.state.hoveredShopId === sh.id) }).bindPopup(`<b>${sh.name}</b><br>${sh.address}`);
+      m.on('mouseover', () => this.setState({ hoveredShopId: sh.id }));
+      m.on('click', () => this.setState({ hoveredShopId: sh.id }));
+      this.shopCluster.addLayer(m);
+      this.shopMarkers.push(m);
+      this.shopMarkerById[sh.id] = m;
+    });
+  }
+  addShopMarker(sh) {
+    if (sh.city !== this.state.shopCity || !this.shopMap || !window.L || !this.shopCluster) return;
+    const m = window.L.marker([sh.lat, sh.lng], { icon: this.makeShopIcon(false) }).bindPopup(`<b>${sh.name}</b><br>${sh.address}`);
+    m.on('mouseover', () => this.setState({ hoveredShopId: sh.id }));
+    m.on('click', () => this.setState({ hoveredShopId: sh.id }));
+    this.shopCluster.addLayer(m);
+    (this.shopMarkers = this.shopMarkers || []).push(m);
+    (this.shopMarkerById = this.shopMarkerById || {})[sh.id] = m;
+  }
+
+  artistsList() {
+    return [
+      { id: 1, name: 'Léa Fontaine', discipline: 'Peinture', city: 'paris', bio: 'Peinture murale et fresques collectives.' },
+      { id: 2, name: 'Yiannis K.', discipline: 'Céramique', city: 'athens', bio: 'Céramique utilitaire et sculpturale.' },
+      { id: 3, name: 'Nour Idrissi', discipline: 'Photographie', city: 'paris', bio: "Portraits d'artistes et de leurs ateliers." },
+      { id: 4, name: 'Sofia D.', discipline: 'Sculpture', city: 'athens', bio: 'Travail du marbre et du bronze.' },
+      { id: 5, name: 'Marco T.', discipline: 'Performance', city: 'paris', bio: 'Performances autour du corps et de la mémoire.' },
+      { id: 6, name: 'Elena P.', discipline: 'Papeterie', city: 'athens', bio: 'Reliure artisanale et papiers faits main.' }
+    ];
+  }
+
+  artistsVals(s, isMobile) {
+    const stripe = (a, b) => `repeating-linear-gradient(135deg, ${a}, ${a} 10px, ${b} 10px, ${b} 20px)`;
+    const pill = (active) => ({ fontSize: '13px', fontWeight: 700, padding: '9px 18px', borderRadius: '999px', cursor: 'pointer', background: active ? 'var(--color-accent-600)' : 'transparent', color: active ? '#fff' : 'var(--color-text)', border: active ? 'none' : '1px solid var(--color-divider)' });
+    const cityLabel = { paris: 'Paris', athens: 'Athènes' };
+    const aq = (s.artistSearchQuery || '').trim().toLowerCase();
+    const filtered = this.artistsList().filter(a =>
+      (s.artistCityFilter === 'all' || a.city === s.artistCityFilter) &&
+      (!aq || a.name.toLowerCase().includes(aq) || a.discipline.toLowerCase().includes(aq))
+    );
+    return {
+      artistSearchQuery: s.artistSearchQuery || '',
+      onArtistSearchChange: (e) => this.setState({ artistSearchQuery: e.target.value }),
+      artistFilterAllStyle: pill(s.artistCityFilter === 'all'),
+      artistFilterParisStyle: pill(s.artistCityFilter === 'paris'),
+      artistFilterAthensStyle: pill(s.artistCityFilter === 'athens'),
+      setArtistFilterAll: () => this.setState({ artistCityFilter: 'all' }),
+      setArtistFilterParis: () => this.setState({ artistCityFilter: 'paris' }),
+      setArtistFilterAthens: () => this.setState({ artistCityFilter: 'athens' }),
+      artistDirectoryGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : (s.isTablet ? 'repeat(2,1fr)' : 'repeat(auto-fill,minmax(240px,1fr))'), gap: '16px', marginTop: '18px' },
+      artistDirectoryCards: filtered.map(a => {
+        const followed = s.followedArtistIds.includes(a.id);
+        return {
+          cardStyle: { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: '24px', padding: '20px' },
+          avatarStyle: { width: '52px', height: '52px', borderRadius: '999px', background: stripe('#dff4ef', '#c7ece2') },
+          name: a.name, city: cityLabel[a.city], bio: a.bio,
+          disciplineStyle: { display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '5px 12px', borderRadius: '999px', background: '#dff4ef', color: '#22796b', marginTop: '10px' },
+          discipline: a.discipline,
+          followLabel: followed ? 'Suivi ✓' : 'Suivre',
+          followStyle: { marginTop: '14px', width: '100%', fontFamily: FONT, fontSize: '13px', fontWeight: 700, padding: '10px 0', borderRadius: '999px', cursor: 'pointer', border: '1.5px solid var(--color-accent-2-700)', background: followed ? 'var(--color-accent-2-700)' : 'transparent', color: followed ? '#fff' : 'var(--color-accent-2-700)' },
+          onToggleFollow: () => this.setState(st => ({ followedArtistIds: st.followedArtistIds.includes(a.id) ? st.followedArtistIds.filter(x => x !== a.id) : [...st.followedArtistIds, a.id] }))
+        };
+      })
+    };
+  }
+
+  matchCandidates() {
+    return [
+      { id: 1, name: 'Léa Fontaine', discipline: 'Peinture', city: 'Paris', bio: 'Cherche un binôme pour une fresque collective cet automne.', tags: ['Peinture murale', 'Collectif'] },
+      { id: 2, name: 'Yiannis K.', discipline: 'Céramique', city: 'Athènes', bio: "Ouvert à un échange d'atelier entre Paris et Athènes.", tags: ['Céramique', 'Résidence'] },
+      { id: 3, name: 'Nour Idrissi', discipline: 'Photographie', city: 'Paris', bio: 'Documente les ateliers d\u2019artistes, cherche des sujets.', tags: ['Photographie', 'Portrait'] },
+      { id: 4, name: 'Sofia D.', discipline: 'Sculpture', city: 'Athènes', bio: 'Travaille le marbre, intéressée par des projets pluridisciplinaires.', tags: ['Sculpture', 'Marbre'] }
+    ];
+  }
+
+  matchingVals(s, isMobile) {
+    const stripe = (a, b) => `repeating-linear-gradient(135deg, ${a}, ${a} 10px, ${b} 10px, ${b} 20px)`;
+    const candidates = this.matchCandidates();
+    const current = candidates[s.matchIndex % candidates.length];
+    const skip = () => {
+      this.setState(st => ({ matchIndex: st.matchIndex + 1, matchHistory: [{ id: current.id, name: current.name, action: 'passé' }, ...st.matchHistory].slice(0, 5) }));
+    };
+    const canUndo = s.matchHistory.length > 0 && s.matchHistory[0].action === 'passé';
+    return {
+      matchingWrapStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', padding: isMobile ? '20px 10px 40px' : '30px 10px 40px' },
+      matchCardStyle: { width: '100%', maxWidth: '360px', background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: '28px', overflow: 'hidden' },
+      matchPhotoStyle: { height: '220px', background: stripe('#fcefd1', '#f5e2ae') },
+      matchName: current.name, matchDiscipline: current.discipline, matchCity: current.city, matchBio: current.bio,
+      matchTags: current.tags.map(t => ({ label: t, style: { display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '5px 12px', borderRadius: '999px', background: '#dff4ef', color: '#22796b', marginRight: '6px', marginTop: '8px' } })),
+      skipBtnStyle: { flex: 1, fontFamily: FONT, fontSize: '14px', fontWeight: 700, padding: '13px 0', borderRadius: '999px', cursor: 'pointer', border: '1.5px solid var(--color-divider)', background: 'transparent', color: 'var(--color-neutral-700)' },
+      matchBtnStyle: { flex: 1, fontFamily: FONT, fontSize: '14px', fontWeight: 700, padding: '13px 0', borderRadius: '999px', cursor: 'pointer', border: 'none', background: 'var(--color-accent-600)', color: '#fff' },
+      onSkip: skip,
+      onMatch: () => this.setState({ showMatchModal: true }),
+      showMatchModal: s.showMatchModal,
+      closeMatchModal: () => { this.setState(st => ({ showMatchModal: false, matchIndex: st.matchIndex + 1, matchHistory: [{ id: current.id, name: current.name, action: 'contacté' }, ...st.matchHistory].slice(0, 5) })); },
+      matchedName: current.name,
+      matchHistory: s.matchHistory,
+      hasMatchHistory: s.matchHistory.length > 0,
+      canUndoMatch: canUndo,
+      undoLastSkip: () => this.setState(st => ({ matchIndex: Math.max(0, st.matchIndex - 1), matchHistory: st.matchHistory.slice(1) }))
+    };
+  }
+
+  shopVals(s, isMobile) {
+    const pill = (active) => ({ fontSize: '13px', fontWeight: 700, padding: '9px 18px', borderRadius: '999px', cursor: 'pointer', background: active ? 'var(--color-accent-600)' : 'transparent', color: active ? '#fff' : 'var(--color-text)', border: active ? 'none' : '1px solid var(--color-divider)' });
+    const inputStyle = { border: '1px solid var(--color-divider)', background: 'var(--color-surface)', borderRadius: '14px', padding: '12px 16px', fontFamily: FONT, fontSize: '14px', color: 'var(--color-text)', outline: 'none', width: '100%' };
+    const q = (s.shopSearchQuery || '').trim().toLowerCase();
+    const shopCategories = ['all', ...Array.from(new Set(s.shops.map(sh => sh.category)))];
+    const filtered = s.shops.filter(sh =>
+      sh.city === s.shopCity &&
+      (s.shopCategoryFilter === 'all' || sh.category === s.shopCategoryFilter) &&
+      (!q || sh.name.toLowerCase().includes(q) || sh.category.toLowerCase().includes(q) || sh.address.toLowerCase().includes(q))
+    );
+    return {
+      shopSearchQuery: s.shopSearchQuery || '',
+      onShopSearchChange: (e) => this.setState({ shopSearchQuery: e.target.value }),
+      shopCategoryRowStyle: { display: 'flex', gap: '8px', overflowX: 'auto', marginTop: '10px', paddingBottom: '2px' },
+      shopCategoryOptions: shopCategories.map(cat => ({
+        label: cat === 'all' ? 'Toutes catégories' : cat,
+        style: { ...pill(s.shopCategoryFilter === cat || (cat === 'all' && !s.shopCategoryFilter)), whiteSpace: 'nowrap', flex: '0 0 auto' },
+        onClick: () => this.setState({ shopCategoryFilter: cat })
+      })),
+      shopPanelStyle: { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, margin: isMobile ? '0' : '20px 32px', border: isMobile ? 'none' : '1px solid var(--color-divider)', borderRadius: isMobile ? '0' : '24px', background: isMobile ? 'transparent' : 'var(--color-neutral-100)', overflow: 'hidden', position: 'relative' },
+      shopHeaderRowStyle: { padding: isMobile ? '16px 20px 8px' : '24px 24px 8px' },
+      shopTitleStyle: { fontSize: '22px', fontWeight: 700, color: 'var(--color-text)' },
+      shopCityParisStyle: pill(s.shopCity === 'paris'),
+      shopCityAthensStyle: pill(s.shopCity === 'athens'),
+      setShopCityParis: () => this.setState({ shopCity: 'paris' }),
+      setShopCityAthens: () => this.setState({ shopCity: 'athens' }),
+
+      shopBodyRowStyle: { flex: 1, display: 'flex', minHeight: 0, position: 'relative', padding: isMobile ? '0' : '12px 24px 24px', gap: isMobile ? '0' : '20px' },
+      showShopList: !isMobile || s.shopView === 'list',
+      showShopMap: !isMobile || s.shopView === 'map',
+      shopListColumnStyle: { width: isMobile ? '100%' : (s.isTablet ? '52%' : '42%'), overflowY: 'auto', padding: isMobile ? '10px 20px 90px' : '4px' },
+      shopMapColumnStyle: { flex: 1, position: 'relative', height: isMobile ? 'calc(100vh - 160px)' : 'auto', minHeight: isMobile ? 'auto' : '420px' },
+      shopMapRefCallback: (node) => this.setupShopMap(node),
+      showMobileShopToggle: isMobile,
+      mobileShopToggleLabel: s.shopView === 'list' ? '🗺 Carte' : '📋 Liste',
+      toggleMobileShopView: () => this.setState({ shopView: s.shopView === 'list' ? 'map' : 'list' }),
+
+      shopCards: filtered.slice(0, s.shopsVisibleCount).map(sh => {
+        const hovered = s.hoveredShopId === sh.id;
+        return {
+          id: sh.id,
+          cardStyle: {
+            background: 'var(--color-surface)', border: hovered ? '1px solid var(--color-accent-2-700)66' : '1px solid var(--color-divider)',
+            borderRadius: '20px', padding: '18px 20px', marginBottom: '14px',
+            boxShadow: hovered ? '0 8px 24px rgba(63,107,82,.14)' : 'none', transition: 'all .15s'
+          },
+          name: sh.name, category: sh.category, address: sh.address, description: sh.description,
+          hasLink: !!sh.link, link: sh.link,
+          onEnter: () => this.setState({ hoveredShopId: sh.id }),
+          onLeave: () => this.setState({ hoveredShopId: null }),
+          onShare: () => this.copyLink(`kamissa.art/boutiques/${sh.id}`),
+          onDelete: () => this.setState(st => ({ shops: st.shops.filter(x => x.id !== sh.id) }))
+        };
+      }),
+      showEmptyShops: filtered.length === 0 && !s.isLoading,
+      showLoadMoreShops: filtered.length > s.shopsVisibleCount,
+      loadMoreShops: () => this.setState(st => ({ shopsVisibleCount: st.shopsVisibleCount + 6 })),
+
+      showAddShopBtn: true,
+      isLoadingShops: s.isLoading,
+      showShopCards: !s.isLoading,
+      openAddShopDialog: () => this.setState({ showAddShopDialog: true }),
+      showAddShopDialog: s.showAddShopDialog,
+      closeAddShopDialog: () => this.setState({ showAddShopDialog: false, newShopError: '' }),
+      shopInputStyle: inputStyle,
+      shopTextareaStyle: { ...inputStyle, resize: 'vertical', minHeight: '70px', fontFamily: FONT },
+      shopAddBtnStyle: { fontFamily: FONT, fontWeight: 700, fontSize: '14px', color: '#fff', background: 'var(--color-accent-600)', border: 'none', borderRadius: '999px', padding: '13px', cursor: 'pointer', marginTop: '6px' },
+      newShopName: s.newShop.name, newShopCity: s.newShop.city, newShopCategory: s.newShop.category, newShopAddress: s.newShop.address, newShopDescription: s.newShop.description, newShopLink: s.newShop.link,
+      onNewShopName: (e) => this.setState(st => ({ newShop: { ...st.newShop, name: e.target.value } })),
+      onNewShopCity: (e) => this.setState(st => ({ newShop: { ...st.newShop, city: e.target.value } })),
+      onNewShopCategory: (e) => this.setState(st => ({ newShop: { ...st.newShop, category: e.target.value } })),
+      onNewShopAddress: (e) => this.setState(st => ({ newShop: { ...st.newShop, address: e.target.value } })),
+      onNewShopDescription: (e) => this.setState(st => ({ newShop: { ...st.newShop, description: e.target.value } })),
+      onNewShopLink: (e) => this.setState(st => ({ newShop: { ...st.newShop, link: e.target.value } })),
+      addShop: () => {
+        if (!s.newShop.name.trim()) { this.setState({ newShopError: 'Le nom de la boutique est requis.' }); return; }
+        const n = s.newShop;
+        const coords = n.city === 'paris' ? { lat: 48.856 + (Math.random() - 0.5) * 0.05, lng: 2.352 + (Math.random() - 0.5) * 0.05 } : { lat: 37.9838 + (Math.random() - 0.5) * 0.05, lng: 23.7275 + (Math.random() - 0.5) * 0.05 };
+        const newShopObj = { id: Date.now(), ...n, ...coords };
+        this.setState(st => ({ shops: [newShopObj, ...st.shops], showAddShopDialog: false, newShopError: '', newShop: { name: '', city: 'paris', category: 'Peinture', address: '', description: '', link: '' } }));
+        this.addShopMarker(newShopObj);
+        this.fireToast('Boutique ajoutée ✓');
+      },
+      newShopError: s.newShopError,
+      hasNewShopError: !!s.newShopError
+    };
+  }
+
+  eventFilterRowVals(s) {
+    const pill = (active) => ({ fontSize: '13px', fontWeight: 700, padding: '8px 16px', borderRadius: '999px', cursor: 'pointer', whiteSpace: 'nowrap', background: active ? 'var(--color-accent-600)' : 'transparent', color: active ? '#fff' : 'var(--color-text)', border: active ? 'none' : '1px solid var(--color-divider)', flex: '0 0 auto' });
+    const rowStyle = { display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '2px' };
+    const mk = (options, current, setter) => options.map(o => ({
+      label: o.label,
+      style: pill(current === o.value),
+      onClick: () => this.setState({ [setter]: o.value })
+    }));
+    return {
+      eventFilterCityRow: mk([{ label: 'Paris', value: 'paris' }, { label: 'Athènes', value: 'athens' }], s.eventFilterCity, 'eventFilterCity'),
+      eventFilterTypeRow: mk([{ label: 'Tous types', value: 'all' }, { label: 'Vernissage', value: 'Vernissage' }, { label: 'Exposition', value: 'Exposition' }, { label: 'Atelier', value: 'Atelier' }, { label: 'Appel à candidatures', value: 'Appel à candidatures' }, { label: 'Résidence', value: 'Résidence' }, { label: 'Annonce', value: 'Annonce' }], s.eventFilterCategory, 'eventFilterCategory'),
+      eventFilterDisciplineRow: mk([{ label: 'Toutes disciplines', value: 'all' }, { label: 'Peinture', value: 'Peinture' }, { label: 'Sculpture', value: 'Sculpture' }, { label: 'Performance', value: 'Performance' }, { label: 'Céramique', value: 'Céramique' }, { label: 'Pluridisciplinaire', value: 'Pluridisciplinaire' }], s.eventFilterDiscipline, 'eventFilterDiscipline'),
+      eventFilterCostRow: mk([{ label: 'Tous', value: 'all' }, { label: 'Gratuit', value: 'Gratuit' }, { label: 'Payant', value: 'Payant' }], s.eventFilterCost, 'eventFilterCost'),
+      eventFilterRowStyle: rowStyle
+    };
+  }
+
+  greeting() {
+    const h = new Date().getHours();
+    if (h < 12) return 'Bonjour, Dotian';
+    if (h < 18) return 'Bon après-midi, Dotian';
+    return 'Bonsoir, Dotian';
+  }
+
+  notifVals(s) {
+    const unread = s.notifications.filter(n => !n.read).length;
+    return {
+      unreadNotifCount: unread,
+      hasUnreadNotif: unread > 0,
+      showNotifPanel: s.showNotifPanel,
+      toggleNotifPanel: () => this.setState({ showNotifPanel: !s.showNotifPanel }),
+      hasNotifItems: s.notifications.length > 0,
+      showEmptyNotifs: s.notifications.length === 0,
+      notifItems: s.notifications.map(n => ({
+        text: n.text, time: n.time,
+        rowStyle: { padding: '12px 16px', borderBottom: '1px solid var(--color-divider)', cursor: 'pointer', background: n.read ? 'transparent' : 'var(--color-accent-100)33' },
+        onClick: () => this.setState(st => ({ notifications: st.notifications.map(x => x.id === n.id ? { ...x, read: true } : x), screen: 'community', showNotifPanel: false }))
+      })),
+      markAllRead: () => this.setState(st => ({ notifications: st.notifications.map(x => ({ ...x, read: true })) })),
+      showNotifPrefs: s.showNotifPrefs,
+      notifPrefsChevron: s.showNotifPrefs ? '▾' : '▸',
+      toggleNotifPrefs: () => this.setState({ showNotifPrefs: !s.showNotifPrefs }),
+      notifPrefRows: Object.keys(s.notifPrefs).map(cat => {
+        const on = s.notifPrefs[cat];
+        return {
+          label: cat,
+          trackStyle: { width: '38px', height: '22px', borderRadius: '999px', background: on ? 'var(--color-accent-600)' : 'var(--color-divider)', position: 'relative', cursor: 'pointer', flex: '0 0 auto' },
+          knobStyle: { position: 'absolute', top: '2px', left: on ? '18px' : '2px', width: '18px', height: '18px', borderRadius: '999px', background: '#fff', transition: 'left .15s' },
+          onToggle: () => this.setState(st => ({ notifPrefs: { ...st.notifPrefs, [cat]: !st.notifPrefs[cat] } }))
+        };
+      })
+    };
+  }
+
+  settingsVals(s) {
+    const inputStyle = { border: '1px solid var(--color-divider)', background: 'var(--color-bg)', borderRadius: '14px', padding: '12px 16px', fontFamily: FONT, fontSize: '14px', color: 'var(--color-text)', outline: 'none', width: '100%' };
+    return {
+      settingsPanelStyle: { flex: 1, padding: '28px 32px 60px', overflowY: 'auto', maxWidth: '480px' },
+      settingsInputStyle: inputStyle,
+      accountName: s.accountName, accountEmail: s.accountEmail, accountCity: s.accountCity,
+      onAccountNameChange: (e) => this.setState({ accountName: e.target.value }),
+      onAccountEmailChange: (e) => this.setState({ accountEmail: e.target.value }),
+      onAccountCityChange: (e) => this.setState({ accountCity: e.target.value }),
+      accountLanguage: s.accountLanguage,
+      onAccountLanguageChange: (e) => this.setState({ accountLanguage: e.target.value }),
+      settingsCardStyle: { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: '20px', padding: '18px 20px', marginTop: '16px' },
+      deleteAccountStyle: { marginTop: '18px', fontSize: '13px', fontWeight: 700, color: 'var(--color-accent-600)', cursor: 'pointer' },
+      onDeleteAccount: () => {
+        if (window.confirm('Cette action est irréversible. Supprimer définitivement votre compte ?')) {
+          this.setState({ isAuthenticated: false, authView: 'login', screen: 'events' });
+        }
+      }
+    };
+  }
+
+  authVals(s) {
+    const inputStyle = { border: '1px solid var(--color-divider)', background: 'var(--color-surface)', borderRadius: '14px', padding: '13px 16px', fontFamily: FONT, fontSize: '14px', color: 'var(--color-text)', outline: 'none', width: '100%' };
+    const tabPill = (active) => ({ flex: 1, textAlign: 'center', fontSize: '14px', fontWeight: 700, padding: '10px 0', borderRadius: '999px', cursor: 'pointer', background: active ? 'var(--color-accent-600)' : 'transparent', color: active ? '#fff' : 'var(--color-text)' });
+    const submit = () => this.setState(st => ({ isAuthenticated: true, screen: 'events', showWelcomeModal: st.authView === 'signup' }));
+    return {
+      isAuthenticated: s.isAuthenticated,
+      showAuthScreen: !s.isAuthenticated,
+      isLoginView: s.authView === 'login',
+      isSignupView: s.authView === 'signup',
+      authTabLoginStyle: tabPill(s.authView === 'login'),
+      authTabSignupStyle: tabPill(s.authView === 'signup'),
+      setAuthLogin: () => this.setState({ authView: 'login' }),
+      setAuthSignup: () => this.setState({ authView: 'signup' }),
+      authNameValue: s.authForm.name,
+      authEmailValue: s.authForm.email,
+      authPasswordValue: s.authForm.password,
+      onAuthNameChange: (e) => this.setState(st => ({ authForm: { ...st.authForm, name: e.target.value } })),
+      onAuthEmailChange: (e) => this.setState(st => ({ authForm: { ...st.authForm, email: e.target.value } })),
+      onAuthPasswordChange: (e) => this.setState(st => ({ authForm: { ...st.authForm, password: e.target.value } })),
+      authInputStyle: inputStyle,
+      authSubmitLabel: s.authView === 'login' ? 'Se connecter' : 'Créer mon compte',
+      submitAuth: submit,
+      continueAsGuest: submit,
+      showWelcomeModal: s.showWelcomeModal,
+      closeWelcomeModal: () => this.setState({ showWelcomeModal: false }),
+      logout: () => { if (window.confirm('Voulez-vous vraiment vous déconnecter ?')) this.setState({ isAuthenticated: false, authView: 'login', screen: 'events' }); }
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isMobile = s.isMobile;
+    const navBase = { fontSize: '15px', fontWeight: 600, cursor: 'pointer', padding: '10px 16px', borderRadius: '999px', color: 'var(--color-neutral-700)' };
+    const navActive = { ...navBase, color: 'var(--color-accent-600)', background: 'var(--color-accent-100)' };
+
+    const q = s.eventSearchQuery.trim().toLowerCase();
+    const filteredEvents = s.events.filter(e =>
+      (!s.myEventsOnly || e.saved || e.going) &&
+      (s.eventFilterCity === 'all' || e.city === s.eventFilterCity) &&
+      (s.eventFilterCategory === 'all' || e.category === s.eventFilterCategory) &&
+      (s.eventFilterDiscipline === 'all' || e.discipline === s.eventFilterDiscipline) &&
+      (s.eventFilterCost === 'all' || e.cost === s.eventFilterCost) &&
+      (!q || e.title.toLowerCase().includes(q) || e.location.toLowerCase().includes(q) || e.category.toLowerCase().includes(q))
+    );
+    const eventCards = filteredEvents.slice(0, s.eventsVisibleCount).map(ev => {
+      const b = BADGE[ev.category] || BADGE['Annonce'];
+      const c = COST[ev.cost] || COST['Gratuit'];
+      const hovered = s.hoveredId === ev.id;
+      return {
+        id: ev.id,
+        category: ev.category,
+        date: ev.date,
+        title: ev.title,
+        location: ev.location,
+        cost: ev.cost,
+        badgeStyle: { display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '5px 12px', borderRadius: '999px', background: b.bg, color: b.color },
+        costStyle: { display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '5px 12px', borderRadius: '999px', background: c.bg, color: c.color },
+        accentColor: b.color,
+        cardStyle: {
+          position: 'relative', overflow: 'hidden',
+          background: 'var(--color-surface)', border: hovered ? '1px solid var(--color-accent-600)66' : '1px solid var(--color-divider)',
+          borderRadius: '20px', padding: '18px 20px', marginBottom: '14px', cursor: 'default',
+          boxShadow: hovered ? '0 8px 24px rgba(192,103,34,.12)' : 'none', transition: 'all .15s'
+        },
+        onEnter: () => this.setState({ hoveredId: ev.id }),
+        onLeave: () => this.setState({ hoveredId: null }),
+        saveLabel: ev.saved ? 'Sauvegardé ✓' : 'Sauvegarder',
+        saveStyle: { flex: 1, fontFamily: FONT, fontSize: '13px', fontWeight: 700, padding: '10px 0', borderRadius: '999px', cursor: 'pointer', border: '1.5px solid var(--color-accent-2-700)', background: ev.saved ? 'var(--color-accent-2-700)' : 'transparent', color: ev.saved ? '#fff' : 'var(--color-accent-2-700)' },
+        onSave: () => this.setState(st => ({ events: st.events.map(e => e.id === ev.id ? { ...e, saved: !e.saved } : e) })),
+        goingLabel: ev.going ? 'Inscrit ✓' : 'Participer',
+        goingStyle: { flex: 1, fontFamily: FONT, fontSize: '13px', fontWeight: 700, padding: '10px 0', borderRadius: '999px', cursor: 'pointer', border: '1.5px solid var(--color-accent-600)', background: ev.going ? 'var(--color-accent-600)' : 'transparent', color: ev.going ? '#fff' : 'var(--color-accent-600)' },
+        onGoing: () => this.setState(st => ({ events: st.events.map(e => e.id === ev.id ? { ...e, going: !e.going } : e) })),
+        onShare: () => this.copyLink(`kamissa.art/evenements/${ev.id}`)
+      };
+    });
+
+    const communityQ = (s.communitySearchQuery || '').trim().toLowerCase();
+    const messagesForCity = s.messages.filter(m => m.city === s.communityCity && (!communityQ || m.name.toLowerCase().includes(communityQ) || m.text.toLowerCase().includes(communityQ)));
+    const messageCards = messagesForCity.map(m => ({
+      name: m.name, time: m.time, text: m.text,
+      showModTools: !m.self,
+      hasReplies: m.replies.length > 0,
+      threadOpen: m.threadOpen,
+      threadLabel: m.threadOpen ? 'Masquer' : `${m.replies.length} réponse${m.replies.length > 1 ? 's' : ''}`,
+      onToggleThread: () => this.setState(st => ({ messages: st.messages.map(mm => mm.id === m.id ? { ...mm, threadOpen: !mm.threadOpen } : mm) })),
+      onReply: () => {},
+      replies: m.replies
+    }));
+
+    const tabPill = (active) => ({ fontSize: '14px', fontWeight: 700, padding: '10px 20px', borderRadius: '999px', cursor: 'pointer', background: active ? 'var(--color-accent-600)' : 'transparent', color: active ? '#fff' : 'var(--color-text)', border: active ? 'none' : '1px solid var(--color-divider)' });
+
+    return {
+      ...this.authVals(s),
+      ...this.settingsVals(s),
+      ...this.notifVals(s),
+      rootStyle: { fontFamily: FONT, background: 'var(--color-bg)', color: 'var(--color-text)', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' },
+      showToast: s.showToast,
+      toastMessage: s.toastMessage,
+      toastStyle: { position: 'fixed', left: '50%', bottom: '32px', transform: 'translateX(-50%)', background: 'var(--color-text)', color: '#fff', fontSize: '14px', fontWeight: 600, padding: '13px 22px', borderRadius: '999px', boxShadow: '0 12px 32px rgba(32,28,22,.28)', zIndex: 3000 },
+      showDesktopNav: !isMobile && s.isAuthenticated,
+      showMobileTopBar: isMobile && s.isAuthenticated,
+      showMobileTabs: isMobile && s.isAuthenticated,
+      showMainApp: s.isAuthenticated,
+      navEventsStyle: s.screen === 'events' ? navActive : navBase,
+      navCommunityStyle: { ...(s.screen === 'community' ? navActive : navBase), position: 'relative' },
+      navCalendarStyle: s.screen === 'calendar' ? navActive : navBase,
+      goEvents: () => this.setState({ screen: 'events' }),
+      goCommunity: () => this.setState({ screen: 'community' }),
+      goCalendar: () => this.setState({ screen: 'calendar' }),
+      goProfile: () => this.setState({ screen: 'profile' }),
+      goShop: () => this.setState({ screen: 'shop' }),
+
+      mainAreaStyle: { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' },
+
+      isEventsScreen: s.screen === 'events',
+      isCommunityScreen: s.screen === 'community',
+      isCalendarScreen: s.screen === 'calendar',
+      isProfileScreen: s.screen === 'profile',
+      isSettingsScreen: s.screen === 'settings',
+      goSettings: () => this.setState({ screen: 'settings' }),
+      isShopScreen: s.screen === 'shop',
+      isPlaceholderScreen: false,
+
+      eventsPanelStyle: { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, margin: isMobile ? '0' : '20px 32px', border: isMobile ? 'none' : '1px solid var(--color-divider)', borderRadius: isMobile ? '0' : '24px', background: isMobile ? 'transparent' : 'var(--color-neutral-100)', overflow: 'hidden', position: 'relative' },
+      showDesktopSearch: !isMobile,
+      eventsHeaderRowStyle: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '16px 20px 8px' : '24px 24px 8px' },
+      myEventsBtnStyle: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, padding: '9px 16px', borderRadius: '999px', border: '1px solid var(--color-divider)', background: s.myEventsOnly ? 'var(--color-accent-600)' : 'transparent', color: s.myEventsOnly ? '#fff' : 'var(--color-text)', cursor: 'pointer' },
+      myEventsIconFill: s.myEventsOnly ? '#ffffff' : 'none',
+      toggleMyEvents: () => this.setState({ myEventsOnly: !s.myEventsOnly }),
+
+      eventsBodyRowStyle: { flex: 1, display: 'flex', minHeight: 0, position: 'relative', padding: isMobile ? '0' : '12px 24px 24px', gap: isMobile ? '0' : '20px' },
+      showEventsList: !isMobile || s.mobileEventsView === 'list',
+      showEventsMap: !isMobile || s.mobileEventsView === 'map',
+      listColumnStyle: { width: isMobile ? '100%' : (s.isTablet ? '52%' : '42%'), overflowY: 'auto', padding: isMobile ? '10px 20px 90px' : '4px 4px 4px 4px' },
+      mapColumnStyle: { flex: 1, position: 'relative', height: isMobile ? 'calc(100vh - 120px)' : 'auto', minHeight: isMobile ? 'auto' : '420px' },
+      mapRefCallback: (node) => this.setupMap(node),
+      showAddEventBtn: true,
+      openAddDialog: () => this.setState({ showAddDialog: true }),
+      showMobileMapToggle: isMobile,
+      mobileMapToggleLabel: s.mobileEventsView === 'list' ? '🗺 Carte' : '📋 Liste',
+      toggleMobileMapView: () => this.setState({ mobileEventsView: s.mobileEventsView === 'list' ? 'map' : 'list' }),
+
+      eventSearchQuery: s.eventSearchQuery,
+      onEventSearchChange: (e) => this.setState({ eventSearchQuery: e.target.value }),
+      toggleEventFilters: () => this.setState({ showEventFilters: !s.showEventFilters }),
+      showEventFilters: s.showEventFilters,
+      eventFilterBtnStyle: { width: '44px', height: '44px', flex: '0 0 auto', borderRadius: '999px', border: '1px solid var(--color-divider)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: s.showEventFilters ? 'var(--color-accent-600)' : 'var(--color-bg)' },
+      eventFilterIconColor: s.showEventFilters ? '#fff' : 'var(--color-text)',
+      ...this.eventFilterRowVals(s),
+
+      greetingText: this.greeting(),
+      weekHighlightText: `${filteredEvents.filter(e => e.city === 'paris').length} événements cette semaine à Paris`,
+      eventCards,
+      showEmptyEvents: eventCards.length === 0 && !s.isLoading,
+      isLoadingEvents: s.isLoading,
+      showEventCards: !s.isLoading,
+      skeletonRows: [1, 2, 3],
+      showLoadMoreEvents: filteredEvents.length > s.eventsVisibleCount,
+      loadMoreEvents: () => this.setState(st => ({ eventsVisibleCount: st.eventsVisibleCount + 6 })),
+      showProfileNudge: !s.profileNudgeDismissed,
+      dismissProfileNudge: () => this.setState({ profileNudgeDismissed: true }),
+
+      communityPanelStyle: { flex: 1, padding: isMobile ? '18px 20px 20px' : '24px 32px 32px', overflowY: 'auto' },
+      tabCommunityStyle: tabPill(s.communityTab === 'community'),
+      tabArtistsStyle: tabPill(s.communityTab === 'artists'),
+      tabMatchingStyle: tabPill(s.communityTab === 'matching'),
+      setTabCommunity: () => this.setState({ communityTab: 'community' }),
+      setTabArtists: () => this.setState({ communityTab: 'artists' }),
+      setTabMatching: () => this.setState({ communityTab: 'matching' }),
+      isCommunityTab: s.communityTab === 'community',
+      isArtistsTab: s.communityTab === 'artists',
+      isMatchingTab: s.communityTab === 'matching',
+
+      cityParisStyle: tabPill(s.communityCity === 'paris'),
+      cityAthensStyle: tabPill(s.communityCity === 'athens'),
+      setCityParis: () => this.setState({ communityCity: 'paris' }),
+      setCityAthens: () => this.setState({ communityCity: 'athens' }),
+      communityTitle: s.communityCity === 'paris' ? 'Communauté de Paris' : "Communauté d'Athènes",
+      communitySearchQuery: s.communitySearchQuery || '',
+      onCommunitySearchChange: (e) => this.setState({ communitySearchQuery: e.target.value }),
+      messagesListStyle: {},
+      messageCards,
+      showEmptyCommunity: messageCards.length === 0,
+      messageInput: s.messageInput,
+      onMessageInputChange: (e) => this.setState({ messageInput: e.target.value }),
+      onSendMessage: () => {
+        if (!s.messageInput.trim()) return;
+        this.setState(st => ({
+          messages: [...st.messages, { id: Date.now(), name: 'Vous', time: "à l'instant", text: st.messageInput, self: true, city: st.communityCity, replies: [], threadOpen: false }],
+          messageInput: ''
+        }));
+      },
+
+      ...this.calendarVals(s, isMobile),
+      ...this.profileVals(s, isMobile),
+      ...this.shopVals(s, isMobile),
+      ...this.matchingVals(s, isMobile),
+      ...this.artistsVals(s, isMobile),
+
+      artistCards: [
+        { name: 'Léa Fontaine', discipline: 'Peinture', city: 'Paris' },
+        { name: 'Yiannis K.', discipline: 'Céramique', city: 'Athènes' },
+        { name: 'Nour Idrissi', discipline: 'Photographie', city: 'Paris' },
+        { name: 'Sofia D.', discipline: 'Sculpture', city: 'Athènes' }
+      ],
+
+      tabBarEventsStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', cursor: 'pointer', padding: '4px 10px' },
+      tabBarCommunityStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', cursor: 'pointer', padding: '4px 10px' },
+      tabBarCalendarStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', cursor: 'pointer', padding: '4px 10px' },
+      tabBarProfileStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', cursor: 'pointer', padding: '4px 10px' },
+      tabBarEventsColor: s.screen === 'events' ? 'var(--color-accent-600)' : 'var(--color-neutral-700)',
+      tabBarCommunityColor: s.screen === 'community' ? 'var(--color-accent-600)' : 'var(--color-neutral-700)',
+      tabBarCalendarColor: s.screen === 'calendar' ? 'var(--color-accent-600)' : 'var(--color-neutral-700)',
+      tabBarProfileColor: s.screen === 'profile' ? 'var(--color-accent-600)' : 'var(--color-neutral-700)',
+
+      showAddDialog: s.showAddDialog,
+      closeAddDialog: () => this.setState({ showAddDialog: false, newEventError: '' }),
+      stopPropagation: (e) => e.stopPropagation(),
+      newEventTitle: s.newEvent.title,
+      newEventDate: s.newEvent.date,
+      newEventCategory: s.newEvent.category,
+      newEventCity: s.newEvent.city,
+      newEventCost: s.newEvent.cost,
+      onNewTitleChange: (e) => this.setState(st => ({ newEvent: { ...st.newEvent, title: e.target.value } })),
+      onNewDateChange: (e) => this.setState(st => ({ newEvent: { ...st.newEvent, date: e.target.value } })),
+      onNewCategoryChange: (e) => this.setState(st => ({ newEvent: { ...st.newEvent, category: e.target.value } })),
+      onNewCityChange: (e) => this.setState(st => ({ newEvent: { ...st.newEvent, city: e.target.value } })),
+      onNewCostChange: (e) => this.setState(st => ({ newEvent: { ...st.newEvent, cost: e.target.value } })),
+      submitNewEvent: () => {
+        const n = this.state.newEvent;
+        if (!n.title.trim()) { this.setState({ newEventError: "Le titre de l'événement est requis." }); return; }
+        const id = Date.now();
+        const coords = n.city === 'paris'
+          ? { lat: 48.856 + (Math.random() - 0.5) * 0.05, lng: 2.352 + (Math.random() - 0.5) * 0.05 }
+          : { lat: 37.9838 + (Math.random() - 0.5) * 0.05, lng: 23.7275 + (Math.random() - 0.5) * 0.05 };
+        const ev = { id, category: n.category, discipline: n.category, cost: n.cost, date: n.date || 'À définir', isoDate: this.isoOf(new Date()), title: n.title, location: (n.city === 'paris' ? 'Paris' : 'Athènes') + ' · ' + n.category, city: n.city, saved: false, going: false, ...coords };
+        this.setState(st => ({
+          events: [ev, ...st.events], showAddDialog: false, newEventError: '', newEvent: { title: '', date: '', category: 'Vernissage', city: 'paris', cost: 'Gratuit' },
+          notifications: st.notifPrefs[ev.category] ? [{ id: Date.now() + 1, text: `Nouveau · ${ev.category} : ${ev.title}`, time: "à l'instant", read: false }, ...st.notifications] : st.notifications
+        }));
+        this.addMarkerForEvent(ev);
+        this.fireToast('Événement ajouté ✓');
+      },
+      newEventError: s.newEventError,
+      hasNewEventError: !!s.newEventError
+    };
+  }
+}
+</script>
+</body>
+</html>

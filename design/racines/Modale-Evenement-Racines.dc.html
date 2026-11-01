@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Kamissa — Ajouter un événement, direction Racines</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1100px; position: relative; background: #fdfcf9; color: #12110e; font-family: 'Hanken Grotesk', system-ui, sans-serif; overflow: hidden;">
+  <div aria-hidden="true" style="padding: 120px 40px 0; max-width: 1360px; margin: 0 auto;">
+    <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 120px; line-height: 0.85; text-transform: uppercase;">Événements</p>
+    <p style="margin: 8px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 36px;">L'art partout, tout le temps.</p>
+    <div style="margin-top: 40px; display: flex; gap: 32px;"><div style="flex: 1; height: 600px; border-top: 1px solid #12110e;"></div><div style="flex: 1.3; height: 600px; background: #efeadf;"></div></div>
+  </div>
+
+  <div style="position: absolute; inset: 0; background: rgba(18,17,14,.45); display: flex; align-items: center; justify-content: center; padding: 24px;">
+    <div role="dialog" aria-modal="true" aria-labelledby="ev-title" style="width: 100%; max-width: 620px; box-sizing: border-box; background: #fdfcf9; padding: 40px 44px 44px; box-shadow: 0 30px 80px rgba(18,17,14,.3);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid #12110e;">
+        <div>
+          <p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #6e6a61;">( Nouveau )</p>
+          <h2 id="ev-title" style="margin: 6px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 48px; line-height: 0.95;">Ajouter <em>un événement</em></h2>
+        </div>
+        <a href="Accueil-Racines.dc.html" aria-label="Fermer" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #e4dfd4; display: flex; align-items: center; justify-content: center; color: #12110e; text-decoration: none; font-size: 16px;">✕</a>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 22px; margin-top: 26px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label for="ev-t" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Titre de l'événement</label>
+          <input id="ev-t" value="{{ title }}" onChange="{{ onTitle }}" placeholder="Titre de l'événement" aria-invalid="{{ invalid }}" aria-describedby="ev-err" style="{{ titleStyle }}" />
+          <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+            <p id="ev-err" style="margin: 4px 0 0; font-size: 13px; font-weight: 600; color: #9e3a1e;">Le titre de l'événement est requis.</p>
+          </sc-if>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label for="ev-d" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Date</label>
+          <input id="ev-d" placeholder="Date (ex: Ven. 14 août)" style="min-height: 48px; border: 0; border-bottom: 1px solid #12110e; background: transparent; font-family: 'Instrument Serif', serif; font-size: 26px; color: #12110e;" />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span id="ev-cat" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Catégorie</span>
+          <div role="radiogroup" aria-labelledby="ev-cat" style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="6"><button role="radio" aria-checked="{{ c.checked }}" onClick="{{ c.pick }}" style="{{ c.style }}"><span aria-hidden="true" style="{{ c.sq }}"></span>{{ c.label }}</button></sc-for>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="ev-v" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Ville</label>
+            <select id="ev-v" style="min-height: 48px; border: 0; border-bottom: 1px solid #12110e; background: transparent; font-family: 'Instrument Serif', serif; font-size: 26px; color: #12110e;"><option value="paris">Paris</option><option value="athens">Athènes</option></select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="ev-c" style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6e6a61;">Coût</label>
+            <select id="ev-c" style="min-height: 48px; border: 0; border-bottom: 1px solid #12110e; background: transparent; font-family: 'Instrument Serif', serif; font-size: 26px; color: #12110e;"><option value="Gratuit">Gratuit</option><option value="Payant">Payant</option></select>
+          </div>
+        </div>
+        <button onClick="{{ submit }}" style="margin-top: 10px; min-height: 56px; border-radius: 999px; border: 0; background: #12110e; color: #fdfcf9; font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;">Créer l'événement</button>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <p role="status" style="position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); margin: 0; padding: 14px 26px; border-radius: 999px; background: #46684a; color: #ffffff; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;">Événement ajouté ✓</p>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+const CAT = { 'Vernissage': '#a3867d', 'Atelier': '#cb9a56', 'Appel à candidatures': '#337c83', 'Exposition': '#5a7580', 'Annonce': '#9b8b73', 'Résidence': '#5f8763' };
+class Component extends DCLogic {
+  state = { title: '', cat: 'Vernissage', error: false, toast: false };
+  renderVals() {
+    const st = this.state;
+    return {
+      title: st.title, hasError: st.error, invalid: String(st.error), toast: st.toast,
+      onTitle: (e) => this.setState({ title: e.target.value, error: false }),
+      titleStyle: { minHeight: '48px', border: 0, borderBottom: st.error ? '2px solid #9e3a1e' : '1px solid #12110e', background: 'transparent', fontFamily: "'Instrument Serif', serif", fontSize: '26px', color: '#12110e' },
+      cats: Object.keys(CAT).map(c => {
+        const a = st.cat === c;
+        return { label: c, checked: String(a), pick: () => this.setState({ cat: c }),
+          sq: { width: '8px', height: '8px', background: CAT[c] },
+          style: { display: 'flex', alignItems: 'center', gap: '8px', minHeight: '40px', padding: '0 14px', borderRadius: '999px', border: a ? '1px solid #12110e' : '1px solid #e4dfd4', background: a ? '#12110e' : 'transparent', color: a ? '#fdfcf9' : '#12110e', fontFamily: 'inherit', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' } };
+      }),
+      submit: () => { if (!st.title.trim()) this.setState({ error: true, toast: false }); else this.setState({ toast: true, error: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
