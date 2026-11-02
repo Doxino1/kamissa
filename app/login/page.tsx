@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -33,6 +33,18 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [resending, setResending] = useState(false);
+
+  // Arrivée depuis un lien d'email expiré ou déjà utilisé (/auth/confirm ou
+  // /auth/callback renvoient ici avec ?error=lien_invalide) : on l'explique
+  // plutôt que d'afficher la page de connexion sans un mot.
+  useEffect(() => {
+    function showLinkError() {
+      if (new URLSearchParams(window.location.search).get("error") === "lien_invalide") {
+        setError(t.auth.linkInvalid);
+      }
+    }
+    showLinkError();
+  }, [t]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

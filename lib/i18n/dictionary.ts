@@ -141,6 +141,7 @@ export interface Dictionary {
     resetEmailSent: string;
     accountCreated: string;
     accountExists: string;
+    linkInvalid: string;
     resendConfirmation: string;
     resendConfirmationSent: string;
     acceptTermsPrefix: string;
@@ -534,6 +535,7 @@ export const fr: Dictionary = {
     resetEmailSent: "Si un compte existe pour cette adresse, un lien de réinitialisation vient d'être envoyé.",
     accountCreated: "Compte créé ! Vérifie ta boîte mail pour confirmer ton adresse avant de te connecter.",
     accountExists: "Un compte existe déjà avec cet email. Connecte-toi, ou clique sur « Mot de passe oublié ? » si tu ne t'en souviens plus.",
+    linkInvalid: "Ce lien a expiré ou a déjà été utilisé. Redemande un email : clique sur « Mot de passe oublié ? » ou réessaie de t'inscrire.",
     resendConfirmation: "Tu n'as pas reçu l'email ?",
     resendConfirmationSent: "Email de confirmation renvoyé — vérifie ta boîte mail.",
     acceptTermsPrefix: "J'accepte les ",
@@ -933,6 +935,7 @@ export const en: Dictionary = {
     resetEmailSent: "If an account exists for this address, a reset link was just sent.",
     accountCreated: "Account created! Check your inbox to confirm your address before signing in.",
     accountExists: "An account already exists with this email. Sign in, or click “Forgot password?” if you don't remember it.",
+    linkInvalid: "This link has expired or has already been used. Request a new email: click “Forgot password?” or try signing up again.",
     resendConfirmation: "Didn't get the email?",
     resendConfirmationSent: "Confirmation email resent — check your inbox.",
     acceptTermsPrefix: "I accept the ",
@@ -1330,6 +1333,7 @@ export const el: Dictionary = {
     resetEmailSent: "Αν υπάρχει λογαριασμός για αυτή τη διεύθυνση, μόλις στάλθηκε σύνδεσμος επαναφοράς.",
     accountCreated: "Ο λογαριασμός δημιουργήθηκε! Έλεγξε τα εισερχόμενά σου για να επιβεβαιώσεις πριν συνδεθείς.",
     accountExists: "Υπάρχει ήδη λογαριασμός με αυτό το email. Συνδέσου ή πάτησε «Ξέχασες τον κωδικό;» αν δεν τον θυμάσαι.",
+    linkInvalid: "Αυτός ο σύνδεσμος έληξε ή έχει ήδη χρησιμοποιηθεί. Ζήτησε νέο email: πάτησε «Ξέχασες τον κωδικό;» ή δοκίμασε ξανά την εγγραφή.",
     resendConfirmation: "Δεν έλαβες το email;",
     resendConfirmationSent: "Το email επιβεβαίωσης στάλθηκε ξανά — έλεγξε τα εισερχόμενά σου.",
     acceptTermsPrefix: "Αποδέχομαι τους ",

@@ -75,6 +75,12 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) return;
       supabase.from("profiles").update({ langue_preferee: next }).eq("id", user.id).then();
+      // Les modèles d'email Supabase choisissent leur langue d'après
+      // user_metadata.langue (renseignée à l'inscription) : on la garde
+      // alignée sur la langue choisie dans l'app.
+      if (user.user_metadata?.langue !== next) {
+        supabase.auth.updateUser({ data: { langue: next } }).then();
+      }
     });
   }
 
