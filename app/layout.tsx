@@ -38,7 +38,7 @@ const notoSerif = Noto_Serif({
 
 export const metadata: Metadata = {
   title: "Kamissa",
-  description: "Événements, matching et communauté pour artistes à Paris et Athènes",
+  description: "Événements, matching et communauté pour artistes",
 };
 
 export default async function RootLayout({
