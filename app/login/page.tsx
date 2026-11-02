@@ -124,9 +124,6 @@ export default function LoginPage() {
         <p className="relative mt-2.5 font-display text-[clamp(1.5rem,4vw,3.25rem)] italic leading-tight">
           {t.evenements.tagline}
         </p>
-        <p className="relative mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-foreground-muted">
-          ( {t.villeLabels.Paris} · {t.villeLabels["Athènes"]} )
-        </p>
       </section>
 
       <main className="flex w-full flex-[1_1_420px] flex-col justify-center px-6 py-12 md:max-w-[520px] md:px-14 md:py-16">
