@@ -3,7 +3,6 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { SaveButtons } from "@/components/SaveButtons";
 import { CalendarButtons } from "@/components/CalendarButtons";
 import { EventTypeBadge } from "@/components/EventTypeBadge";
@@ -15,6 +14,8 @@ import { useSavedEvents } from "@/lib/use-saved-events";
 import { useGoingFollows } from "@/lib/use-going-follows";
 import { createClient } from "@/lib/supabase/client";
 import { useLocale } from "@/lib/i18n/context";
+import { BackLink, PageHeader } from "@/components/PageHeader";
+import { TEXT_ACTION } from "@/lib/form-styles";
 
 export default function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -40,7 +41,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-2xl px-4 py-8">
+      <div className="mx-auto w-full max-w-[1360px] px-4 py-10 md:px-10">
         <p className="text-sm text-foreground-muted">{t.common.loading}</p>
       </div>
     );
@@ -48,7 +49,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   if (error) {
     return (
-      <div className="mx-auto w-full max-w-2xl px-4 py-8">
+      <div className="mx-auto w-full max-w-[1360px] px-4 py-10 md:px-10">
         <p className="text-sm text-danger">{t.eventDetail.loadError(error)}</p>
       </div>
     );
@@ -71,55 +72,72 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   );
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <Link href="/" className="flex items-center gap-1 text-sm text-foreground-muted hover:text-foreground">
-        <ArrowLeft size={14} strokeWidth={1.75} />
-        {t.eventDetail.back}
-      </Link>
+    <div className="pb-16">
+      <PageHeader
+        eyebrow={
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
+            <BackLink href="/">{t.eventDetail.back}</BackLink>
+            <EventTypeBadge type={event.type} />
+            {event.coutType && <CostBadge type={event.coutType} />}
+          </div>
+        }
+        title={localizedTitle(event, locale)}
+        compact
+        subtitle={t.villeLabels[event.ville]}
+      />
 
-      <div className="mt-4 flex items-center justify-between gap-2 text-xs text-foreground-muted">
-        <div className="flex items-center gap-1.5">
-          <EventTypeBadge type={event.type} />
-          {event.coutType && <CostBadge type={event.coutType} />}
-        </div>
-        <span>{t.villeLabels[event.ville]}</span>
-      </div>
+      <main className="mx-auto flex max-w-[1360px] flex-wrap gap-x-14 gap-y-8 px-4 pt-8 md:px-10">
+        <div className="min-w-0 flex-[999_1_480px]">
+          <p className="whitespace-pre-line font-display text-2xl leading-snug md:text-[28px]">
+            {localizedDescription(event, locale)}
+          </p>
 
-      <h1 className="mt-3 text-2xl font-semibold">{localizedTitle(event, locale)}</h1>
-      <p className="mt-1 text-sm text-foreground-muted">{date}</p>
-      <p className="mt-1 text-sm text-foreground-muted">{event.lieu}</p>
-      {event.coutDetail && <p className="mt-1 text-sm text-foreground-muted">{event.coutDetail}</p>}
-
-      <p className="mt-6 text-base leading-relaxed">{localizedDescription(event, locale)}</p>
-
-      {event.type === "annonce" && (
-        <p className="mt-4 rounded-lg bg-foreground/5 px-3 py-2 text-xs text-foreground-muted">
-          {t.eventDetail.annonceDisclaimer}
-        </p>
-      )}
-
-      {goingFollows.length > 0 && (
-        <p className="mt-4 text-sm text-foreground-muted">
-          {t.eventDetail.goingFollows(
-            goingFollows.map((f) => f.nom).join(", "),
-            goingFollows.length
+          {event.type === "annonce" && (
+            <p className="mt-6 border-l-2 border-foreground pl-4 text-sm text-text-soft">
+              {t.eventDetail.annonceDisclaimer}
+            </p>
           )}
-        </p>
-      )}
+        </div>
 
-      <div className="mt-6">
-        <CalendarButtons event={event} />
-      </div>
+        <aside className="min-w-0 flex-[1_1_300px] md:max-w-[380px]">
+          <div className="border-t border-foreground">
+            <div className="border-b border-border py-4">
+              <p className="font-display text-2xl leading-tight first-letter:uppercase">{date}</p>
+            </div>
+            <div className="border-b border-border py-4">
+              <p className="font-display text-2xl leading-tight">{event.lieu}</p>
+            </div>
+            {event.coutDetail && (
+              <div className="border-b border-border py-4">
+                <p className="text-[15px] text-text-soft">{event.coutDetail}</p>
+              </div>
+            )}
+          </div>
 
-      <div className="mt-6">
-        {canSave ? (
-          <SaveButtons status={saved[event.id]} onChange={(status) => setStatus(event.id, status)} />
-        ) : (
-          <Link href="/login" className="text-sm text-foreground/40 hover:text-foreground-muted">
-            {t.saveButtons.loginToSave}
-          </Link>
-        )}
-      </div>
+          {goingFollows.length > 0 && (
+            <p className="mt-5 text-sm text-text-soft">
+              {t.eventDetail.goingFollows(
+                goingFollows.map((f) => f.nom).join(", "),
+                goingFollows.length
+              )}
+            </p>
+          )}
+
+          <div className="mt-6">
+            {canSave ? (
+              <SaveButtons status={saved[event.id]} onChange={(status) => setStatus(event.id, status)} />
+            ) : (
+              <Link href="/login" className={TEXT_ACTION}>
+                {t.saveButtons.loginToSave}
+              </Link>
+            )}
+          </div>
+
+          <div className="mt-6">
+            <CalendarButtons event={event} />
+          </div>
+        </aside>
+      </main>
     </div>
   );
 }

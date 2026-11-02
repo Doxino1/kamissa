@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { portfolioPdfUrl } from "@/lib/upload";
@@ -11,6 +11,14 @@ import { BlockReportActions } from "@/components/BlockReportActions";
 import { ContactLinks } from "@/components/ContactLinks";
 import { sendNotification } from "@/lib/notify";
 import { ProfileType } from "@/lib/types";
+import { TAB_NUMBER } from "@/components/PageHeader";
+
+function initials(nom: string) {
+  const parts = nom.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0][0].toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
 
 interface PublicProfile {
   id: string;
@@ -136,7 +144,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
 
   if (profile === undefined) {
     return (
-      <div className="mx-auto w-full max-w-2xl px-4 py-8">
+      <div className="mx-auto w-full max-w-[1240px] px-4 py-10 md:px-10">
         <p className="text-sm text-foreground-muted">{t.common.loading}</p>
       </div>
     );
@@ -144,121 +152,180 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
 
   if (profile === null) {
     return (
-      <div className="mx-auto w-full max-w-2xl px-4 py-8">
+      <div className="mx-auto w-full max-w-[1240px] px-4 py-10 md:px-10">
         <p className="text-sm text-danger">{t.artiste.notFound}</p>
       </div>
     );
   }
 
   const isOwn = viewerId === profile.id;
+  const disciplineLabels = profile.disciplines.map((d) => t.disciplineLabels[d] ?? d);
+  const ville = t.villeLabels[profile.ville as "Paris" | "Athènes"] ?? profile.ville;
+  const subtitle = [disciplineLabels.join(", ").toLowerCase(), ville].filter(Boolean).join(", ");
+  const showPortfolio = profile.portfolio_public || isOwn;
+  const showPosts = profile.posts_public || isOwn;
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <div className="flex items-center justify-between gap-2">
-        <div>
-          <h1 className="flex items-center gap-1.5 text-xl font-black">
+    <div className="pb-16">
+      {/* Identité : même composition que /profil (nom en très grand, avatar posé dessus). */}
+      <section className="relative mx-auto max-w-[1240px] px-4 pb-10 pt-8 text-center md:px-10 md:pt-14">
+        <div className="relative pt-[96px] md:min-h-[340px] md:pt-[92px]">
+          <div aria-hidden="true" className="hidden md:block">
+            <span className="absolute left-[4%] top-[30px] h-[110px] w-[150px] bg-gradient-to-br from-cat-expo to-[#3f5761]" />
+            <span className="absolute left-[16%] top-[230px] h-[150px] w-[120px] bg-gradient-to-br from-cat-atelier to-[#a87b3e]" />
+            <span className="absolute right-[6%] top-[10px] h-20 w-[110px] bg-gradient-to-br from-cat-annonce to-[#7d6f5a]" />
+            <span className="absolute right-[12%] top-[210px] h-[130px] w-[170px] bg-gradient-to-br from-cat-residence to-accent-secondary" />
+          </div>
+          <div
+            aria-hidden="true"
+            className="absolute left-1/2 top-0 flex h-[104px] w-[104px] -translate-x-1/2 items-center justify-center rounded-full border-[6px] border-background bg-cat-vernissage font-display text-5xl text-background md:h-[132px] md:w-[132px] md:text-[64px]"
+          >
+            {initials(profile.nom)}
+          </div>
+          <h1 className="relative mt-6 break-words font-display text-[clamp(3.5rem,15vw,13.75rem)] uppercase leading-[0.82] tracking-[-0.02em] md:mt-[110px]">
             {profile.nom}
             {profile.verified && (profile.type_profil === "galerie" || profile.type_profil === "institution") && (
-              <span title={t.artiste.verified}>
-                <BadgeCheck size={18} strokeWidth={2} className="text-accent" />
+              <span title={t.artiste.verified} className="ml-3 inline-block align-top">
+                <BadgeCheck strokeWidth={1.5} className="h-[0.3em] w-[0.3em] text-accent-secondary" />
               </span>
             )}
           </h1>
-          <p className="text-sm text-foreground-muted">
-            {t.profileTypeLabels[profile.type_profil]} · {t.villeLabels[profile.ville as "Paris" | "Athènes"]}
-          </p>
+          {subtitle && (
+            <p className="relative mt-1.5 font-display text-[clamp(1.75rem,5.5vw,4.75rem)] italic leading-none">
+              {subtitle}
+            </p>
+          )}
         </div>
-        {!isOwn && viewerId && (
-          <button
-            type="button"
-            onClick={toggleFollow}
-            className={`rounded-lg border px-4 py-1.5 text-sm font-medium transition ${
-              following
-                ? "border-border hover:border-foreground/40"
-                : "border-accent bg-accent text-accent-foreground hover:bg-accent-hover"
-            }`}
-          >
-            {following ? t.artiste.unfollow : t.artiste.follow}
-          </button>
-        )}
-      </div>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <span className="rounded-full border border-foreground px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em]">
+            {t.profileTypeLabels[profile.type_profil]}
+          </span>
+        </div>
+      </section>
 
-      <p className="mt-1 text-xs text-foreground/40">
-        {t.artiste.followers(followerCount)} · {t.artiste.following(followingCount)}
-      </p>
-
-      {!isOwn && viewerId && (
-        <BlockReportActions
-          targetUserId={profile.id}
-          targetName={profile.nom}
-          onBlocked={() => router.push("/artistes")}
-          className="mt-2"
-        />
-      )}
-
-      {profile.bio && <p className="mt-4 text-sm">{profile.bio}</p>}
-      <p className="mt-2 text-sm text-foreground-muted">
-        {profile.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
-      </p>
-
-      <div className="mt-3">
-        <ContactLinks
-          email={profile.email_contact}
-          instagram={profile.instagram_handle}
-          tiktok={profile.tiktok_handle}
-          twitter={profile.twitter_handle}
-        />
-      </div>
-
-      <h2 className="mt-8 text-sm font-medium text-foreground-muted">{t.artiste.portfolio}</h2>
-      {(profile.portfolio_public || isOwn) && pdfUrl && (
-        <a
-          href={pdfUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 inline-block text-sm font-medium underline underline-offset-4"
-        >
-          {t.portfolio.pdfView}
-        </a>
-      )}
-      {profile.portfolio_public || isOwn ? (
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {portfolio.map((item) => (
-            <div key={item.id} className="rounded-lg border border-border p-2">
-              {item.image_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={item.image_url} alt={item.titre} className="aspect-square w-full rounded object-cover" />
-              ) : (
-                <div className="aspect-square w-full rounded bg-foreground/5" />
-              )}
-              <p className="mt-2 text-sm font-medium">{item.titre}</p>
-              <p className="text-xs text-foreground-muted">
-                {[item.technique, item.annee].filter(Boolean).join(" · ")}
-              </p>
+      {/* Chiffres, bio, suivi et contact. */}
+      <section className="mx-auto grid max-w-[1240px] gap-x-10 border-t border-border px-4 pb-14 pt-6 md:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] md:px-10">
+        <dl className="grid grid-cols-3 gap-3 pt-7">
+          {[
+            [t.profil.postsLabel, posts.length],
+            [t.profil.followersLabel, followerCount],
+            [t.profil.followingLabel, followingCount],
+          ].map(([label, value]) => (
+            <div key={label} className="flex flex-col-reverse">
+              <dt className="text-xs uppercase tracking-[0.1em] text-foreground-muted">{label}</dt>
+              <dd className="font-display text-[56px] leading-none md:text-[64px]">{value}</dd>
             </div>
           ))}
+        </dl>
+        {profile.bio && (
+          <div className="pt-7">
+            <h2 className="mb-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-foreground-muted">
+              {t.profil.bio}
+            </h2>
+            <p className="font-display text-2xl leading-[1.2] md:text-[28px]">{profile.bio}</p>
+          </div>
+        )}
+        <div className="flex flex-col items-start gap-4 pt-7">
+          {!isOwn && viewerId && (
+            <button
+              type="button"
+              onClick={toggleFollow}
+              className={`inline-flex min-h-11 items-center rounded-full px-[22px] text-[13px] font-semibold uppercase tracking-[0.06em] transition ${
+                following
+                  ? "border border-foreground hover:bg-surface-hover"
+                  : "bg-foreground text-background hover:bg-accent-hover"
+              }`}
+            >
+              {following ? t.artiste.unfollow : t.artiste.follow}
+            </button>
+          )}
+          <ContactLinks
+            email={profile.email_contact}
+            instagram={profile.instagram_handle}
+            tiktok={profile.tiktok_handle}
+            twitter={profile.twitter_handle}
+          />
+          {!isOwn && viewerId && (
+            <BlockReportActions
+              targetUserId={profile.id}
+              targetName={profile.nom}
+              onBlocked={() => router.push("/artistes")}
+            />
+          )}
         </div>
-      ) : (
-        <p className="mt-2 text-sm text-foreground/40">{t.portfolio.private}</p>
-      )}
+      </section>
 
-      <h2 className="mt-8 text-sm font-medium text-foreground-muted">{t.artiste.posts}</h2>
-      {profile.posts_public || isOwn ? (
-        <div className="mt-3 grid grid-cols-3 gap-1">
-          {posts.map((post) => (
-            <Link key={post.id} href={`/posts/${post.id}`} className="aspect-square">
-              {post.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={post.image} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <div className="h-full w-full bg-foreground/5" />
-              )}
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p className="mt-2 text-sm text-foreground/40">{t.posts.private}</p>
-      )}
+      <section className="mx-auto max-w-[1240px] px-4 md:px-10">
+        <h2 className="flex items-baseline gap-2.5 border-t border-foreground py-[22px] font-display text-[28px] md:text-[40px]">
+          <span className={TAB_NUMBER}>( 01 )</span>
+          {t.artiste.portfolio}
+        </h2>
+        {showPortfolio ? (
+          <>
+            {pdfUrl && (
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mb-6 inline-flex min-h-11 items-center rounded-full bg-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover"
+              >
+                {t.portfolio.pdfView}
+              </a>
+            )}
+            <div className="grid grid-cols-1 gap-x-7 gap-y-10 sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+              {portfolio.map((item, i) => (
+                <figure key={item.id} className="flex flex-col gap-3">
+                  {item.image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.image_url}
+                      alt={item.titre}
+                      className={`w-full object-cover ${i % 2 === 0 ? "aspect-[4/5]" : "aspect-square"}`}
+                    />
+                  ) : (
+                    <div className={`w-full bg-placeholder ${i % 2 === 0 ? "aspect-[4/5]" : "aspect-square"}`} />
+                  )}
+                  <figcaption className="flex items-baseline justify-between gap-3">
+                    <span className="font-display text-[26px] leading-tight">{item.titre}</span>
+                    <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground-muted">
+                      {[item.technique, item.annee].filter(Boolean).join(" · ")}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="flex items-center gap-2 font-display text-2xl text-foreground-muted">
+            <Lock size={18} strokeWidth={1.5} />
+            {t.portfolio.private}
+          </p>
+        )}
+
+        <h2 className="mt-14 flex items-baseline gap-2.5 border-t border-foreground py-[22px] font-display text-[28px] md:text-[40px]">
+          <span className={TAB_NUMBER}>( 02 )</span>
+          {t.artiste.posts}
+        </h2>
+        {showPosts ? (
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] md:gap-7">
+            {posts.map((post) => (
+              <Link key={post.id} href={`/posts/${post.id}`} className="aspect-[4/5]">
+                {post.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={post.image} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <div className="h-full w-full bg-placeholder" />
+                )}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="flex items-center gap-2 font-display text-2xl text-foreground-muted">
+            <Lock size={18} strokeWidth={1.5} />
+            {t.posts.private}
+          </p>
+        )}
+      </section>
     </div>
   );
 }

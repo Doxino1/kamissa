@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { IMAGE_ACCEPT, uploadErrorMessage, uploadImage } from "@/lib/upload";
 import { useT } from "@/lib/i18n/context";
+import { BackLink, PageHeader } from "@/components/PageHeader";
+import { DANGER_ACTION, FIELD, FIELD_INPUT, FIELD_LABEL, FIELD_TEXTAREA, FILE_INPUT, PRIMARY_BUTTON, SECTION } from "@/lib/form-styles";
 
 interface LibraryItem {
   id: string;
@@ -98,64 +100,62 @@ export default function BibliothequePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
-      <h1 className="text-xl font-black">{t.library.title}</h1>
-      <p className="mt-1 text-sm text-foreground-muted">{t.library.subtitle}</p>
+    <div className="pb-16">
+      <PageHeader
+        title={t.library.title}
+        subtitle={t.library.subtitle}
+        eyebrow={<BackLink href="/profil">{t.nav.profil}</BackLink>}
+      />
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
-        <input
-          type="text"
-          required
-          placeholder={t.library.titre}
-          value={titre}
-          onChange={(e) => setTitre(e.target.value)}
-          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-        <textarea
-          placeholder={t.library.contenu}
-          value={contenu}
-          onChange={(e) => setContenu(e.target.value)}
-          rows={3}
-          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-        <input
-          type="file"
-          accept={IMAGE_ACCEPT}
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="text-sm text-foreground-muted file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-bold file:text-foreground hover:file:bg-background"
-        />
-        {error && <p className="text-sm text-danger">{error}</p>}
-        <button
-          type="submit"
-          disabled={saving}
-          className="self-start rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
+      <main className="mx-auto flex max-w-[1280px] flex-wrap gap-x-14 px-4 md:px-10">
+        <form
+          onSubmit={handleSubmit}
+          className={`${SECTION} flex min-w-0 flex-[1_1_320px] flex-col gap-[22px] self-start md:max-w-[420px]`}
         >
-          {saving ? "…" : t.library.add}
-        </button>
-      </form>
+          <label className={FIELD}>
+            <span className={FIELD_LABEL}>{t.library.titre}</span>
+            <input type="text" required value={titre} onChange={(e) => setTitre(e.target.value)} className={FIELD_INPUT} />
+          </label>
+          <label className={FIELD}>
+            <span className={FIELD_LABEL}>{t.library.contenu}</span>
+            <textarea value={contenu} onChange={(e) => setContenu(e.target.value)} rows={4} className={FIELD_TEXTAREA} />
+          </label>
+          <label className={FIELD}>
+            <span className={FIELD_LABEL}>{t.library.image}</span>
+            <input
+              type="file"
+              accept={IMAGE_ACCEPT}
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              className={`${FILE_INPUT} mt-2`}
+            />
+          </label>
+          {error && <p className="text-sm font-semibold text-danger">{error}</p>}
+          <button type="submit" disabled={saving} className={`${PRIMARY_BUTTON} self-start`}>
+            {saving ? "…" : t.library.add}
+          </button>
+        </form>
 
-      <div className="mt-6 flex flex-col gap-3 md:grid md:grid-cols-3 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
-        {items !== null && items.length === 0 && (
-          <p className="col-span-full text-sm text-foreground-muted">{t.library.empty}</p>
-        )}
-        {(items ?? []).map((item) => (
-          <div key={item.id} className="rounded-lg border border-border p-4">
-            {item.image_url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={item.image_url} alt={item.titre} className="mb-2 max-h-48 rounded object-cover md:aspect-square md:max-h-none md:w-full" />
-            )}
-            <h3 className="font-medium">{item.titre}</h3>
-            {item.contenu && <p className="mt-1 text-sm text-foreground/70">{item.contenu}</p>}
-            <button
-              type="button"
-              onClick={() => handleDelete(item.id)}
-              className="mt-2 text-xs text-danger hover:underline"
-            >
-              {t.library.delete}
-            </button>
-          </div>
-        ))}
-      </div>
+        <div className="mt-7 min-w-0 flex-[999_1_560px] border-t border-foreground">
+          {items !== null && items.length === 0 && (
+            <p className="py-6 font-display text-2xl text-foreground-muted">{t.library.empty}</p>
+          )}
+          {(items ?? []).map((item) => (
+            <article key={item.id} className="flex flex-wrap gap-x-6 gap-y-3 border-b border-border py-6">
+              {item.image_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={item.image_url} alt={item.titre} className="aspect-square w-[140px] shrink-0 object-cover" />
+              )}
+              <div className="min-w-0 flex-[1_1_240px]">
+                <h3 className="font-display text-[28px] leading-tight">{item.titre}</h3>
+                {item.contenu && <p className="mt-2 whitespace-pre-line text-sm text-text-soft">{item.contenu}</p>}
+                <button type="button" onClick={() => handleDelete(item.id)} className={`${DANGER_ACTION} mt-3`}>
+                  {t.library.delete}
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }

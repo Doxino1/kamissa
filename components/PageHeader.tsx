@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 // En-tête de page « Racines » : petit sur-titre facultatif, titre en très
 // grandes capitales serif, ligne en italique ; le contenu de droite (filtres,
 // navigation…) se range en bas à droite et passe dessous sur petit écran.
@@ -7,12 +9,15 @@ export function PageHeader({
   subtitle,
   children,
   bordered = true,
+  compact = false,
 }: {
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   children?: React.ReactNode;
   bordered?: boolean;
+  // Titres longs (événements, pages légales) : taille réduite, sans capitales.
+  compact?: boolean;
 }) {
   return (
     <section
@@ -22,7 +27,11 @@ export function PageHeader({
     >
       <div className="min-w-0">
         {eyebrow}
-        <h1 className="break-words pt-[0.12em] font-display text-[clamp(3.25rem,12vw,7.5rem)] uppercase leading-none">
+        <h1
+          className={`break-words pt-[0.12em] font-display leading-none ${
+            compact ? "max-w-[18ch] text-[clamp(2.5rem,7vw,5.25rem)]" : "text-[clamp(3.25rem,12vw,7.5rem)] uppercase"
+          }`}
+        >
           {title}
         </h1>
         {subtitle && (
@@ -50,4 +59,16 @@ export const TAB_NUMBER = "shrink-0 whitespace-nowrap font-sans text-xs not-ital
 
 export function tabNumber(n: number) {
   return `( ${String(n).padStart(2, "0")} )`;
+}
+
+// Sur-titre de retour (« ‹ Profil ») des sous-pages.
+export function BackLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex min-h-11 items-center gap-1 text-xs font-semibold uppercase tracking-[0.12em] text-foreground-muted hover:text-foreground"
+    >
+      ‹ {children}
+    </Link>
+  );
 }

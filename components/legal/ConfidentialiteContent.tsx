@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { BackLink, PageHeader } from "@/components/PageHeader";
 import { useLocale } from "@/lib/i18n/context";
 
 const BACK: Record<string, string> = { fr: "Retour", en: "Back", el: "Πίσω" };
@@ -15,8 +14,8 @@ function FR() {
   return (
     <>
       <section>
-        <h2 className="font-medium">Responsable du traitement</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Responsable du traitement</h2>
+        <p className="mt-2 text-text-soft">
           L&rsquo;éditeur du site (voir les Mentions légales) est responsable du traitement des données décrites
           ici.
           <br />
@@ -28,8 +27,8 @@ function FR() {
       </section>
 
       <section>
-        <h2 className="font-medium">Données collectées et pourquoi</h2>
-        <ul className="mt-2 flex flex-col gap-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Données collectées et pourquoi</h2>
+        <ul className="mt-2 flex flex-col gap-2 text-text-soft">
           <li>
             <strong className="text-foreground">Compte et profil</strong> — email, nom, ville, discipline(s), type
             de profil, bio, langue préférée : nécessaires pour créer ton compte et te montrer un contenu pertinent
@@ -63,8 +62,8 @@ function FR() {
       </section>
 
       <section>
-        <h2 className="font-medium">Base légale</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Base légale</h2>
+        <p className="mt-2 text-text-soft">
           Le traitement repose sur l&rsquo;exécution du service que tu utilises en créant un compte (fonctionnement
           du site, mise en relation, communauté). L&rsquo;email hebdomadaire est envoyé par défaut aux comptes
           actifs ; tu peux le désactiver à tout moment dans Réglages.
@@ -72,8 +71,8 @@ function FR() {
       </section>
 
       <section>
-        <h2 className="font-medium">Qui a accès à ces données</h2>
-        <ul className="mt-2 flex flex-col gap-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Qui a accès à ces données</h2>
+        <ul className="mt-2 flex flex-col gap-2 text-text-soft">
           <li>
             <strong className="text-foreground">Supabase</strong> — hébergement de la base de données, de
             l&rsquo;authentification et des fichiers (images).
@@ -91,12 +90,12 @@ function FR() {
             personnelle).
           </li>
         </ul>
-        <p className="mt-2 text-foreground-muted">Ces données ne sont ni vendues, ni utilisées à des fins publicitaires.</p>
+        <p className="mt-2 text-text-soft">Ces données ne sont ni vendues, ni utilisées à des fins publicitaires.</p>
       </section>
 
       <section>
-        <h2 className="font-medium">Durée de conservation</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Durée de conservation</h2>
+        <p className="mt-2 text-text-soft">
           Tes données sont conservées tant que ton compte existe. À la suppression de ton compte, ton profil et
           tout ton contenu privé (posts, portfolio, bibliothèque, messages, tags, abonnements) sont supprimés
           définitivement. Les événements que tu as publiés restent visibles (ils ont déjà été partagés avec la
@@ -105,12 +104,12 @@ function FR() {
       </section>
 
       <section>
-        <h2 className="font-medium">Tes droits</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Tes droits</h2>
+        <p className="mt-2 text-text-soft">
           Conformément au RGPD, tu disposes d&rsquo;un droit d&rsquo;accès, de rectification, d&rsquo;effacement et
           de portabilité de tes données.
         </p>
-        <ul className="mt-2 flex flex-col gap-1 text-foreground-muted">
+        <ul className="mt-2 flex flex-col gap-1 text-text-soft">
           <li>
             <strong className="text-foreground">Rectification</strong> — modifie ton profil directement dans
             Réglages.
@@ -140,8 +139,8 @@ function EN() {
   return (
     <>
       <section>
-        <h2 className="font-medium">Data controller</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Data controller</h2>
+        <p className="mt-2 text-text-soft">
           The site&rsquo;s publisher (see the Legal Notice) is responsible for the processing of the data
           described here.
           <br />
@@ -153,8 +152,8 @@ function EN() {
       </section>
 
       <section>
-        <h2 className="font-medium">Data collected and why</h2>
-        <ul className="mt-2 flex flex-col gap-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Data collected and why</h2>
+        <ul className="mt-2 flex flex-col gap-2 text-text-soft">
           <li>
             <strong className="text-foreground">Account and profile</strong> — email, name, city, discipline(s),
             profile type, bio, preferred language: needed to create your account and show you relevant content by
@@ -187,8 +186,8 @@ function EN() {
       </section>
 
       <section>
-        <h2 className="font-medium">Legal basis</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Legal basis</h2>
+        <p className="mt-2 text-text-soft">
           Processing is based on performing the service you use by creating an account (running the site,
           matching, community). The weekly email is sent by default to active accounts; you can turn it off at
           any time in Settings.
@@ -196,8 +195,8 @@ function EN() {
       </section>
 
       <section>
-        <h2 className="font-medium">Who has access to this data</h2>
-        <ul className="mt-2 flex flex-col gap-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Who has access to this data</h2>
+        <ul className="mt-2 flex flex-col gap-2 text-text-soft">
           <li>
             <strong className="text-foreground">Supabase</strong> — hosts the database, authentication, and files
             (images).
@@ -214,12 +213,12 @@ function EN() {
             addresses (only receives the address entered, no personal data).
           </li>
         </ul>
-        <p className="mt-2 text-foreground-muted">This data is never sold or used for advertising.</p>
+        <p className="mt-2 text-text-soft">This data is never sold or used for advertising.</p>
       </section>
 
       <section>
-        <h2 className="font-medium">Retention period</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Retention period</h2>
+        <p className="mt-2 text-text-soft">
           Your data is kept for as long as your account exists. When you delete your account, your profile and
           all your private content (posts, portfolio, library, messages, tags, follows) are permanently deleted.
           Events you&rsquo;ve published stay visible (they&rsquo;ve already been shared with the community) but
@@ -228,11 +227,11 @@ function EN() {
       </section>
 
       <section>
-        <h2 className="font-medium">Your rights</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Your rights</h2>
+        <p className="mt-2 text-text-soft">
           Under the GDPR, you have the right to access, rectify, erase, and port your data.
         </p>
-        <ul className="mt-2 flex flex-col gap-1 text-foreground-muted">
+        <ul className="mt-2 flex flex-col gap-1 text-text-soft">
           <li>
             <strong className="text-foreground">Rectification</strong> — edit your profile directly in Settings.
           </li>
@@ -261,8 +260,8 @@ function EL() {
   return (
     <>
       <section>
-        <h2 className="font-medium">Υπεύθυνος επεξεργασίας</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Υπεύθυνος επεξεργασίας</h2>
+        <p className="mt-2 text-text-soft">
           Ο εκδότης του ιστότοπου (δες τις Νομικές Σημειώσεις) είναι υπεύθυνος για την επεξεργασία των δεδομένων
           που περιγράφονται εδώ.
           <br />
@@ -274,8 +273,8 @@ function EL() {
       </section>
 
       <section>
-        <h2 className="font-medium">Δεδομένα που συλλέγονται και γιατί</h2>
-        <ul className="mt-2 flex flex-col gap-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Δεδομένα που συλλέγονται και γιατί</h2>
+        <ul className="mt-2 flex flex-col gap-2 text-text-soft">
           <li>
             <strong className="text-foreground">Λογαριασμός και προφίλ</strong> — email, όνομα, πόλη,
             ειδικότητα/ες, τύπος προφίλ, βιογραφικό, προτιμώμενη γλώσσα: απαραίτητα για τη δημιουργία του
@@ -308,8 +307,8 @@ function EL() {
       </section>
 
       <section>
-        <h2 className="font-medium">Νομική βάση</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Νομική βάση</h2>
+        <p className="mt-2 text-text-soft">
           Η επεξεργασία βασίζεται στην εκτέλεση της υπηρεσίας που χρησιμοποιείς δημιουργώντας λογαριασμό
           (λειτουργία του ιστότοπου, αντιστοίχιση, κοινότητα). Το εβδομαδιαίο email αποστέλλεται από προεπιλογή σε
           ενεργούς λογαριασμούς· μπορείς να το απενεργοποιήσεις ανά πάσα στιγμή από τις Ρυθμίσεις.
@@ -317,8 +316,8 @@ function EL() {
       </section>
 
       <section>
-        <h2 className="font-medium">Ποιος έχει πρόσβαση σε αυτά τα δεδομένα</h2>
-        <ul className="mt-2 flex flex-col gap-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Ποιος έχει πρόσβαση σε αυτά τα δεδομένα</h2>
+        <ul className="mt-2 flex flex-col gap-2 text-text-soft">
           <li>
             <strong className="text-foreground">Supabase</strong> — φιλοξενία της βάσης δεδομένων, της
             ταυτοποίησης χρηστών και των αρχείων (εικόνες).
@@ -336,14 +335,14 @@ function EL() {
             εκδηλώσεων και καταστημάτων (λαμβάνει μόνο τη διεύθυνση που καταχωρήθηκε, χωρίς προσωπικά δεδομένα).
           </li>
         </ul>
-        <p className="mt-2 text-foreground-muted">
+        <p className="mt-2 text-text-soft">
           Αυτά τα δεδομένα δεν πωλούνται ούτε χρησιμοποιούνται για διαφημιστικούς σκοπούς.
         </p>
       </section>
 
       <section>
-        <h2 className="font-medium">Διάρκεια διατήρησης</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Διάρκεια διατήρησης</h2>
+        <p className="mt-2 text-text-soft">
           Τα δεδομένα σου διατηρούνται όσο υπάρχει ο λογαριασμός σου. Με τη διαγραφή του λογαριασμού σου, το
           προφίλ σου και όλο το ιδιωτικό σου περιεχόμενο (posts, portfolio, βιβλιοθήκη, μηνύματα, ετικέτες,
           ακολουθήσεις) διαγράφονται οριστικά. Οι εκδηλώσεις που έχεις δημοσιεύσει παραμένουν ορατές (έχουν ήδη
@@ -352,11 +351,11 @@ function EL() {
       </section>
 
       <section>
-        <h2 className="font-medium">Τα δικαιώματά σου</h2>
-        <p className="mt-2 text-foreground-muted">
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Τα δικαιώματά σου</h2>
+        <p className="mt-2 text-text-soft">
           Σύμφωνα με τον ΓΚΠΔ, έχεις δικαίωμα πρόσβασης, διόρθωσης, διαγραφής και φορητότητας των δεδομένων σου.
         </p>
-        <ul className="mt-2 flex flex-col gap-1 text-foreground-muted">
+        <ul className="mt-2 flex flex-col gap-1 text-text-soft">
           <li>
             <strong className="text-foreground">Διόρθωση</strong> — επεξεργάσου το προφίλ σου απευθείας στις
             Ρυθμίσεις.
@@ -386,15 +385,10 @@ export function ConfidentialiteContent() {
   const { locale } = useLocale();
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <Link href="/" className="flex items-center gap-1 text-sm text-foreground-muted hover:text-foreground">
-        <ArrowLeft size={14} strokeWidth={1.75} />
-        {BACK[locale]}
-      </Link>
+    <div className="pb-16">
+      <PageHeader compact title={TITLE[locale]} eyebrow={<BackLink href="/">{BACK[locale]}</BackLink>} />
 
-      <h1 className="font-display mt-4 text-xl font-semibold">{TITLE[locale]}</h1>
-
-      <div className="mt-6 flex flex-col gap-6 text-sm leading-relaxed">
+      <div className="mx-auto flex max-w-[1360px] flex-col px-4 pt-4 text-[15px] leading-relaxed md:px-10 [&>section]:max-w-[760px] [&>section]:border-b [&>section]:border-border [&>section]:py-6">
         {locale === "fr" && <FR />}
         {locale === "en" && <EN />}
         {locale === "el" && <EL />}

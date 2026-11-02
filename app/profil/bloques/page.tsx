@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
+import { BackLink, PageHeader } from "@/components/PageHeader";
+import { SECONDARY_BUTTON } from "@/lib/form-styles";
 
 interface BlockedUser {
   blocked_id: string;
@@ -52,30 +54,28 @@ export default function UtilisateursBloquesPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-black">{t.safety.blockedUsersTitle}</h1>
+    <div className="pb-16">
+      <PageHeader
+        title={t.safety.blockedUsersTitle}
+        eyebrow={<BackLink href="/profil/parametres">{t.profil.settingsTitle}</BackLink>}
+      />
 
-      <div className="mt-6 flex flex-col gap-2">
-        {blocked === null && <p className="text-sm text-foreground-muted">{t.common.loading}</p>}
-        {blocked !== null && blocked.length === 0 && (
-          <p className="text-sm text-foreground-muted">{t.safety.noBlockedUsers}</p>
-        )}
-        {(blocked ?? []).map((b) => (
-          <div
-            key={b.blocked_id}
-            className="flex items-center justify-between rounded-lg border border-border p-3"
-          >
-            <span className="text-sm">{b.blocked_nom || "—"}</span>
-            <button
-              type="button"
-              onClick={() => handleUnblock(b.blocked_id)}
-              className="rounded-lg border border-border px-3 py-1 text-xs hover:border-foreground/40"
-            >
-              {t.safety.unblock}
-            </button>
-          </div>
-        ))}
-      </div>
+      <main className="mx-auto max-w-[1280px] px-4 md:px-10">
+        <div className="mt-7 max-w-[720px] border-t border-foreground">
+          {blocked === null && <p className="py-6 text-sm text-foreground-muted">{t.common.loading}</p>}
+          {blocked !== null && blocked.length === 0 && (
+            <p className="py-6 font-display text-2xl text-foreground-muted">{t.safety.noBlockedUsers}</p>
+          )}
+          {(blocked ?? []).map((b) => (
+            <div key={b.blocked_id} className="flex min-h-[68px] items-center justify-between gap-4 border-b border-border">
+              <span className="font-display text-[26px] leading-tight">{b.blocked_nom || "—"}</span>
+              <button type="button" onClick={() => handleUnblock(b.blocked_id)} className={SECONDARY_BUTTON}>
+                {t.safety.unblock}
+              </button>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }

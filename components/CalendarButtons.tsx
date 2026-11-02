@@ -9,12 +9,12 @@ export function CalendarButtons({ event }: { event: ArtEvent }) {
   const { locale, t } = useLocale();
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       <a
         href={googleCalendarUrl(event, locale)}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs hover:border-foreground/40"
+        className="flex min-h-10 items-center gap-1.5 rounded-full border border-foreground px-4 text-xs font-semibold uppercase tracking-[0.08em] transition hover:bg-surface-hover"
       >
         <CalendarPlus size={14} strokeWidth={1.75} />
         {t.eventDetail.addToGoogleCalendar}
@@ -22,7 +22,7 @@ export function CalendarButtons({ event }: { event: ArtEvent }) {
       <button
         type="button"
         onClick={() => downloadIcs(event, locale)}
-        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs hover:border-foreground/40"
+        className="flex min-h-10 items-center gap-1.5 rounded-full border border-foreground px-4 text-xs font-semibold uppercase tracking-[0.08em] transition hover:bg-surface-hover"
       >
         <Download size={14} strokeWidth={1.75} />
         {t.eventDetail.addToAppleCalendar}

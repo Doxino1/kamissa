@@ -4,16 +4,24 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
+import { pillClass } from "@/components/EventFilterBar";
+import { META, PRIMARY_BUTTON, TEXT_ACTION } from "@/lib/form-styles";
 import { DISCIPLINES, MATCHING_TAGS, MatchingTag, PROFILE_TYPES, ProfileType, Ville } from "@/lib/types";
 
 const VILLES: Ville[] = ["Paris", "Athènes"];
 const TOTAL_STEPS = 5;
 
-function chipClass(active: boolean) {
-  return `rounded-lg border px-3 py-1 text-sm transition ${
+const STEP_TITLE = "font-display text-[clamp(2.5rem,8vw,4.5rem)] leading-none";
+const STEP_HINT = "mt-3 text-[15px] text-text-soft";
+const OPTION_LIST = "mt-7 flex flex-col border-t border-foreground";
+
+// Choix unique (ville, type de profil) : lignes séparées par des filets, en
+// grand serif ; l'option retenue passe en italique soulignée, comme un onglet.
+function optionClass(active: boolean) {
+  return `flex min-h-16 items-center border-b border-border text-left font-display text-[28px] transition md:text-[34px] ${
     active
-      ? "border-accent bg-accent text-accent-foreground"
-      : "border-border hover:border-foreground/40"
+      ? "italic text-foreground underline decoration-1 underline-offset-8"
+      : "text-muted-strong hover:text-foreground"
   }`;
 }
 
@@ -95,33 +103,21 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <p className="text-xs text-foreground/50">{t.onboarding.stepLabel(step, TOTAL_STEPS)}</p>
-      <div className="mt-2 flex gap-1">
+    <div className="mx-auto w-full max-w-[760px] px-4 pb-16 pt-8 md:px-10 md:pt-14">
+      <p className={META}>{t.onboarding.stepLabel(step, TOTAL_STEPS)}</p>
+      <div className="mt-3 flex gap-1.5">
         {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-          <div
-            key={i}
-            className={`h-1 flex-1 rounded-full ${i < step ? "bg-accent" : "bg-foreground/10"}`}
-          />
+          <div key={i} className={`h-[3px] flex-1 ${i < step ? "bg-foreground" : "bg-border"}`} />
         ))}
       </div>
 
       {step === 1 && (
-        <div className="mt-6">
-          <h1 className="font-display text-xl font-medium">{t.onboarding.step1Title}</h1>
-          <p className="mt-1 text-sm text-foreground-muted">{t.onboarding.step1Hint}</p>
-          <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-10">
+          <h1 className={STEP_TITLE}>{t.onboarding.step1Title}</h1>
+          <p className={STEP_HINT}>{t.onboarding.step1Hint}</p>
+          <div className={OPTION_LIST}>
             {VILLES.map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => setVille(v)}
-                className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
-                  ville === v
-                    ? "border-accent bg-accent text-accent-foreground"
-                    : "border-border hover:border-foreground/40"
-                }`}
-              >
+              <button key={v} type="button" onClick={() => setVille(v)} className={optionClass(ville === v)}>
                 {t.villeLabels[v]}
               </button>
             ))}
@@ -130,12 +126,12 @@ export default function OnboardingPage() {
       )}
 
       {step === 2 && (
-        <div className="mt-6">
-          <h1 className="font-display text-xl font-medium">{t.onboarding.step2Title}</h1>
-          <p className="mt-1 text-sm text-foreground-muted">{t.onboarding.step2Hint}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-10">
+          <h1 className={STEP_TITLE}>{t.onboarding.step2Title}</h1>
+          <p className={STEP_HINT}>{t.onboarding.step2Hint}</p>
+          <div className="mt-7 flex flex-wrap gap-2">
             {DISCIPLINES.map((d) => (
-              <button key={d} type="button" onClick={() => toggleDiscipline(d)} className={chipClass(disciplines.includes(d))}>
+              <button key={d} type="button" onClick={() => toggleDiscipline(d)} className={pillClass(disciplines.includes(d))}>
                 {t.disciplineLabels[d]}
               </button>
             ))}
@@ -144,20 +140,11 @@ export default function OnboardingPage() {
       )}
 
       {step === 3 && (
-        <div className="mt-6">
-          <h1 className="font-display text-xl font-medium">{t.onboarding.step3Title}</h1>
-          <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-10">
+          <h1 className={STEP_TITLE}>{t.onboarding.step3Title}</h1>
+          <div className={OPTION_LIST}>
             {PROFILE_TYPES.map((pt) => (
-              <button
-                key={pt}
-                type="button"
-                onClick={() => setTypeProfil(pt)}
-                className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
-                  typeProfil === pt
-                    ? "border-accent bg-accent text-accent-foreground"
-                    : "border-border hover:border-foreground/40"
-                }`}
-              >
+              <button key={pt} type="button" onClick={() => setTypeProfil(pt)} className={optionClass(typeProfil === pt)}>
                 {t.profileTypeLabels[pt]}
               </button>
             ))}
@@ -166,12 +153,12 @@ export default function OnboardingPage() {
       )}
 
       {step === 4 && (
-        <div className="mt-6">
-          <h1 className="font-display text-xl font-medium">{t.onboarding.step4Title}</h1>
-          <p className="mt-1 text-sm text-foreground-muted">{t.onboarding.step4Hint}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-10">
+          <h1 className={STEP_TITLE}>{t.onboarding.step4Title}</h1>
+          <p className={STEP_HINT}>{t.onboarding.step4Hint}</p>
+          <div className="mt-7 flex flex-wrap gap-2">
             {MATCHING_TAGS.map((tag) => (
-              <button key={tag} type="button" onClick={() => toggleMatchingTag(tag)} className={chipClass(matchingTags.includes(tag))}>
+              <button key={tag} type="button" onClick={() => toggleMatchingTag(tag)} className={pillClass(matchingTags.includes(tag))}>
                 {t.matchingTagLabels[tag]}
               </button>
             ))}
@@ -180,16 +167,18 @@ export default function OnboardingPage() {
       )}
 
       {step === 5 && (
-        <div className="mt-6">
-          <h1 className="font-display text-xl font-medium">{t.onboarding.step5Title}</h1>
-          <p className="mt-1 text-sm text-foreground-muted">{t.onboarding.step5Intro}</p>
-          <div className="mt-4 rounded-lg border border-border p-4">
-            <p className="text-xs text-foreground/50">{t.weeklyEmail.subject(3, t.villeLabels[ville])}</p>
-            <p className="mt-3 text-sm font-medium">{t.weeklyEmail.greeting(nom || "…")}</p>
-            <p className="mt-2 text-sm text-foreground/70">{t.weeklyEmail.intro(t.villeLabels[ville])}</p>
-            <ul className="mt-3 flex flex-col gap-2">
+        <div className="mt-10">
+          <h1 className={STEP_TITLE}>{t.onboarding.step5Title}</h1>
+          <p className={STEP_HINT}>{t.onboarding.step5Intro}</p>
+          <div className="mt-7 border-l border-foreground pl-5">
+            <p className="text-xs uppercase tracking-[0.1em] text-foreground-muted">
+              {t.weeklyEmail.subject(3, t.villeLabels[ville])}
+            </p>
+            <p className="mt-3 font-display text-2xl">{t.weeklyEmail.greeting(nom || "…")}</p>
+            <p className="mt-2 text-sm text-text-soft">{t.weeklyEmail.intro(t.villeLabels[ville])}</p>
+            <ul className="mt-3 flex flex-col gap-1.5">
               {t.onboarding.step5ExampleEvents.map((line) => (
-                <li key={line} className="text-sm text-foreground/80">
+                <li key={line} className="text-sm">
                   {line}
                 </li>
               ))}
@@ -198,20 +187,20 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {error && <p className="mt-3 text-sm text-danger">{error}</p>}
+      {error && <p className="mt-5 text-sm font-semibold text-danger">{error}</p>}
 
-      <div className="mt-6 flex items-center justify-between gap-2">
+      <div className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-6">
         {step > 1 ? (
-          <button type="button" onClick={goBack} className="text-sm text-foreground-muted hover:text-foreground">
-            {t.onboarding.back}
+          <button type="button" onClick={goBack} className={TEXT_ACTION}>
+            ‹ {t.onboarding.back}
           </button>
         ) : (
           <span />
         )}
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           {step === 4 && (
-            <button type="button" onClick={goNext} className="text-sm text-foreground-muted hover:text-foreground">
+            <button type="button" onClick={goNext} className={TEXT_ACTION}>
               {t.onboarding.skip}
             </button>
           )}
@@ -221,17 +210,12 @@ export default function OnboardingPage() {
               type="button"
               onClick={goNext}
               disabled={step === 2 && disciplines.length === 0}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-40"
+              className={`${PRIMARY_BUTTON} disabled:opacity-40`}
             >
               {t.onboarding.next}
             </button>
           ) : (
-            <button
-              type="button"
-              onClick={finish}
-              disabled={saving}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
-            >
+            <button type="button" onClick={finish} disabled={saving} className={PRIMARY_BUTTON}>
               {saving ? "…" : t.onboarding.finish}
             </button>
           )}

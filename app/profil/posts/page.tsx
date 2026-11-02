@@ -6,6 +6,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { IMAGE_ACCEPT, uploadErrorMessage, uploadImage } from "@/lib/upload";
 import { useT } from "@/lib/i18n/context";
+import { BackLink, PageHeader } from "@/components/PageHeader";
+import { FIELD, FIELD_LABEL, FIELD_TEXTAREA, FILE_INPUT, PRIMARY_BUTTON, SECTION, SECTION_TITLE } from "@/lib/form-styles";
 
 interface Post {
   id: string;
@@ -91,58 +93,60 @@ export default function MesPostsPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
-      <h1 className="text-xl font-black">{t.posts.title}</h1>
+    <div className="pb-16">
+      <PageHeader title={t.posts.title} eyebrow={<BackLink href="/profil">{t.nav.profil}</BackLink>} />
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
-        <input
-          type="file"
-          accept={IMAGE_ACCEPT}
-          required
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="text-sm text-foreground-muted file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-bold file:text-foreground hover:file:bg-background"
-        />
-        <textarea
-          placeholder={t.posts.legende}
-          value={legende}
-          onChange={(e) => setLegende(e.target.value)}
-          rows={2}
-          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-        {error && <p className="text-sm text-danger">{error}</p>}
-        <button
-          type="submit"
-          disabled={saving}
-          className="self-start rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
+      <main className="mx-auto flex max-w-[1280px] flex-wrap gap-x-14 px-4 md:px-10">
+        <form
+          onSubmit={handleSubmit}
+          className={`${SECTION} flex min-w-0 flex-[1_1_320px] flex-col gap-[22px] self-start md:max-w-[420px]`}
         >
-          {saving ? "…" : t.posts.publish}
-        </button>
-      </form>
+          <h2 className={`${SECTION_TITLE} mb-0`}>{t.posts.publish}</h2>
+          <label className={FIELD}>
+            <span className={FIELD_LABEL}>{t.portfolio.image}</span>
+            <input
+              type="file"
+              accept={IMAGE_ACCEPT}
+              required
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              className={`${FILE_INPUT} mt-2`}
+            />
+          </label>
+          <label className={FIELD}>
+            <span className={FIELD_LABEL}>{t.posts.legende}</span>
+            <textarea value={legende} onChange={(e) => setLegende(e.target.value)} rows={3} className={FIELD_TEXTAREA} />
+          </label>
+          {error && <p className="text-sm font-semibold text-danger">{error}</p>}
+          <button type="submit" disabled={saving} className={`${PRIMARY_BUTTON} self-start`}>
+            {saving ? "…" : t.posts.publish}
+          </button>
+        </form>
 
-      <div className="mt-6 grid grid-cols-3 gap-1 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
-        {posts !== null && posts.length === 0 && (
-          <p className="col-span-full text-sm text-foreground-muted">{t.posts.empty}</p>
-        )}
-        {(posts ?? []).map((post) => (
-          <div key={post.id} className="group relative aspect-square">
-            <Link href={`/posts/${post.id}`}>
-              {post.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={post.image} alt={post.legende ?? ""} className="h-full w-full object-cover" />
-              ) : (
-                <div className="h-full w-full bg-foreground/5" />
-              )}
-            </Link>
-            <button
-              type="button"
-              onClick={() => handleDelete(post.id)}
-              className="absolute right-1 top-1 rounded-full bg-background/80 px-2 py-0.5 text-xs text-danger opacity-0 transition group-hover:opacity-100"
-            >
-              {t.posts.delete}
-            </button>
-          </div>
-        ))}
-      </div>
+        <div className="mt-7 grid min-w-0 flex-[999_1_560px] grid-cols-3 content-start gap-1.5 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+          {posts !== null && posts.length === 0 && (
+            <p className="col-span-full font-display text-2xl text-foreground-muted">{t.posts.empty}</p>
+          )}
+          {(posts ?? []).map((post) => (
+            <div key={post.id} className="group relative aspect-square">
+              <Link href={`/posts/${post.id}`}>
+                {post.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={post.image} alt={post.legende ?? ""} className="h-full w-full object-cover" />
+                ) : (
+                  <div className="h-full w-full bg-placeholder" />
+                )}
+              </Link>
+              <button
+                type="button"
+                onClick={() => handleDelete(post.id)}
+                className="absolute right-1.5 top-1.5 min-h-8 rounded-full bg-background px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-danger opacity-0 transition focus:opacity-100 group-hover:opacity-100"
+              >
+                {t.posts.delete}
+              </button>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }

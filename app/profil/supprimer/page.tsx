@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
+import { BackLink, PageHeader } from "@/components/PageHeader";
+import { FIELD, FIELD_INPUT, FIELD_LABEL } from "@/lib/form-styles";
 
 export default function SupprimerComptePage() {
   const t = useT();
@@ -34,30 +36,33 @@ export default function SupprimerComptePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-black text-danger">{t.account.deleteAccount}</h1>
-      <p className="mt-3 text-sm text-foreground/70">{t.account.deleteWarning}</p>
+    <div className="pb-16">
+      <PageHeader
+        title={t.account.deleteAccount}
+        eyebrow={<BackLink href="/profil/parametres">{t.profil.settingsTitle}</BackLink>}
+      />
 
-      <label className="mt-6 block text-sm text-foreground-muted">
-        {t.account.deleteConfirmLabel(t.account.deleteConfirmWord)}
-        <input
-          type="text"
-          value={confirmText}
-          onChange={(e) => setConfirmText(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-      </label>
+      <main className="mx-auto max-w-[1280px] px-4 md:px-10">
+        <div className="mt-7 flex max-w-[560px] flex-col gap-[22px] border-l-2 border-danger pl-5">
+          <p className="font-display text-2xl leading-snug text-text-soft">{t.account.deleteWarning}</p>
 
-      {error && <p className="mt-2 text-sm text-danger">{error}</p>}
+          <label className={FIELD}>
+            <span className={FIELD_LABEL}>{t.account.deleteConfirmLabel(t.account.deleteConfirmWord)}</span>
+            <input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} className={FIELD_INPUT} />
+          </label>
 
-      <button
-        type="button"
-        onClick={handleDelete}
-        disabled={!canDelete || deleting}
-        className="mt-4 w-full rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition disabled:opacity-40"
-      >
-        {deleting ? "…" : t.account.deleteButton}
-      </button>
+          {error && <p className="text-sm font-semibold text-danger">{error}</p>}
+
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={!canDelete || deleting}
+            className="min-h-14 self-start rounded-full bg-danger px-8 text-[13px] font-semibold uppercase tracking-[0.12em] text-white transition hover:opacity-90 disabled:opacity-40"
+          >
+            {deleting ? "…" : t.account.deleteButton}
+          </button>
+        </div>
+      </main>
     </div>
   );
 }

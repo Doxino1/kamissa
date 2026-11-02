@@ -13,6 +13,19 @@ import {
   uploadPortfolioPdf,
 } from "@/lib/upload";
 import { useT } from "@/lib/i18n/context";
+import { BackLink, PageHeader } from "@/components/PageHeader";
+import {
+  DANGER_ACTION,
+  FIELD,
+  FIELD_INPUT,
+  FIELD_LABEL,
+  FILE_INPUT,
+  META,
+  PRIMARY_BUTTON,
+  SECONDARY_BUTTON,
+  SECTION,
+  SECTION_TITLE,
+} from "@/lib/form-styles";
 
 interface PortfolioItem {
   id: string;
@@ -179,111 +192,99 @@ export default function PortfolioPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
-      <h1 className="text-xl font-black">{t.portfolio.title}</h1>
+    <div className="pb-16">
+      <PageHeader title={t.portfolio.title} eyebrow={<BackLink href="/profil">{t.nav.profil}</BackLink>} />
 
-      <section className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
-        <h2 className="text-sm font-medium text-foreground-muted">{t.portfolio.pdfTitle}</h2>
-        <p className="text-sm text-foreground-muted">{t.portfolio.pdfHint}</p>
-        {pdfUrl && (
-          <a
-            href={pdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-medium underline underline-offset-4"
-          >
-            {t.portfolio.pdfView}
-          </a>
-        )}
-        <div className="flex flex-wrap items-center gap-3">
-          <label
-            className={`inline-flex cursor-pointer items-center rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover ${
-              pdfSaving ? "pointer-events-none opacity-50" : ""
-            }`}
-          >
-            {pdfSaving ? "…" : pdfPath ? t.portfolio.pdfReplace : t.portfolio.pdfUpload}
-            <input type="file" accept={PDF_ACCEPT} onChange={handlePdfChange} disabled={pdfSaving} className="sr-only" />
-          </label>
-          {pdfPath && (
-            <button
-              type="button"
-              onClick={handlePdfRemove}
-              disabled={pdfSaving}
-              className="text-sm text-danger hover:underline disabled:opacity-50"
-            >
-              {t.portfolio.pdfRemove}
-            </button>
-          )}
-        </div>
-        {pdfError && <p className="text-sm text-danger">{pdfError}</p>}
-      </section>
-
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
-        <h2 className="text-sm font-medium text-foreground-muted">{t.portfolio.addTitle}</h2>
-        <input
-          type="text"
-          required
-          placeholder={t.portfolio.titre}
-          value={titre}
-          onChange={(e) => setTitre(e.target.value)}
-          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-        <input
-          type="text"
-          placeholder={t.portfolio.technique}
-          value={technique}
-          onChange={(e) => setTechnique(e.target.value)}
-          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-        <input
-          type="number"
-          placeholder={t.portfolio.annee}
-          value={annee}
-          onChange={(e) => setAnnee(e.target.value)}
-          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-foreground/50"
-        />
-        <input
-          type="file"
-          accept={IMAGE_ACCEPT}
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="text-sm text-foreground-muted file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-bold file:text-foreground hover:file:bg-background"
-        />
-        {error && <p className="text-sm text-danger">{error}</p>}
-        <button
-          type="submit"
-          disabled={saving}
-          className="self-start rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover disabled:opacity-50"
-        >
-          {saving ? "…" : t.portfolio.add}
-        </button>
-      </form>
-
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-[14px] min-[75rem]:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
-        {items !== null && items.length === 0 && (
-          <p className="col-span-full text-sm text-foreground-muted">{t.portfolio.empty}</p>
-        )}
-        {(items ?? []).map((item) => (
-          <div key={item.id} className="rounded-lg border border-border p-2">
-            {item.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={item.image_url} alt={item.titre} className="aspect-square w-full rounded object-cover" />
-            ) : (
-              <div className="aspect-square w-full rounded bg-foreground/5" />
+      <main className="mx-auto flex max-w-[1280px] flex-wrap gap-x-14 px-4 md:px-10">
+        <div className="min-w-0 flex-[1_1_320px] md:max-w-[420px]">
+          <section className={SECTION}>
+            <h2 className={SECTION_TITLE}>{t.portfolio.pdfTitle}</h2>
+            <p className="text-sm text-text-soft">{t.portfolio.pdfHint}</p>
+            {pdfUrl && (
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-block font-display text-2xl underline decoration-1 underline-offset-[6px] hover:italic"
+              >
+                {t.portfolio.pdfView}
+              </a>
             )}
-            <p className="mt-2 text-sm font-medium">{item.titre}</p>
-            <p className="text-xs text-foreground-muted">
-              {[item.technique, item.annee].filter(Boolean).join(" · ")}
-            </p>
-            <button
-              type="button"
-              onClick={() => handleDelete(item.id)}
-              className="mt-1 text-xs text-danger hover:underline"
-            >
-              {t.portfolio.delete}
+            <div className="mt-5 flex flex-wrap items-center gap-4">
+              <label className={`${SECONDARY_BUTTON} cursor-pointer ${pdfSaving ? "pointer-events-none opacity-50" : ""}`}>
+                {pdfSaving ? "…" : pdfPath ? t.portfolio.pdfReplace : t.portfolio.pdfUpload}
+                <input type="file" accept={PDF_ACCEPT} onChange={handlePdfChange} disabled={pdfSaving} className="sr-only" />
+              </label>
+              {pdfPath && (
+                <button type="button" onClick={handlePdfRemove} disabled={pdfSaving} className={DANGER_ACTION}>
+                  {t.portfolio.pdfRemove}
+                </button>
+              )}
+            </div>
+            {pdfError && <p className="mt-3 text-sm font-semibold text-danger">{pdfError}</p>}
+          </section>
+
+          <form onSubmit={handleSubmit} className={`${SECTION} flex flex-col gap-[22px]`}>
+            <h2 className={`${SECTION_TITLE} mb-0`}>{t.portfolio.addTitle}</h2>
+            <label className={FIELD}>
+              <span className={FIELD_LABEL}>{t.portfolio.titre}</span>
+              <input type="text" required value={titre} onChange={(e) => setTitre(e.target.value)} className={FIELD_INPUT} />
+            </label>
+            <div className="grid grid-cols-[1fr_120px] gap-x-6">
+              <label className={FIELD}>
+                <span className={FIELD_LABEL}>{t.portfolio.technique}</span>
+                <input type="text" value={technique} onChange={(e) => setTechnique(e.target.value)} className={FIELD_INPUT} />
+              </label>
+              <label className={FIELD}>
+                <span className={FIELD_LABEL}>{t.portfolio.annee}</span>
+                <input type="number" value={annee} onChange={(e) => setAnnee(e.target.value)} className={FIELD_INPUT} />
+              </label>
+            </div>
+            <label className={FIELD}>
+              <span className={FIELD_LABEL}>{t.portfolio.image}</span>
+              <input
+                type="file"
+                accept={IMAGE_ACCEPT}
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                className={`${FILE_INPUT} mt-2`}
+              />
+            </label>
+            {error && <p className="text-sm font-semibold text-danger">{error}</p>}
+            <button type="submit" disabled={saving} className={`${PRIMARY_BUTTON} self-start`}>
+              {saving ? "…" : t.portfolio.add}
             </button>
-          </div>
-        ))}
-      </div>
+          </form>
+        </div>
+
+        <div className="mt-7 grid min-w-0 flex-[999_1_560px] grid-cols-1 content-start gap-x-7 gap-y-10 sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
+          {items !== null && items.length === 0 && (
+            <p className="col-span-full font-display text-2xl text-foreground-muted">{t.portfolio.empty}</p>
+          )}
+          {(items ?? []).map((item, i) => (
+            <figure key={item.id} className="flex flex-col gap-3">
+              {item.image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.image_url}
+                  alt={item.titre}
+                  className={`w-full object-cover ${i % 2 === 0 ? "aspect-[4/5]" : "aspect-square"}`}
+                />
+              ) : (
+                <div className={`w-full bg-placeholder ${i % 2 === 0 ? "aspect-[4/5]" : "aspect-square"}`} />
+              )}
+              <figcaption className="flex flex-col gap-1">
+                <span className="font-display text-[26px] leading-tight">{item.titre}</span>
+                <span className="flex items-center justify-between gap-3">
+                  <span className={META}>{[item.technique, item.annee].filter(Boolean).join(" · ")}</span>
+                  <button type="button" onClick={() => handleDelete(item.id)} className={DANGER_ACTION}>
+                    {t.portfolio.delete}
+                  </button>
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }

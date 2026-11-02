@@ -3,6 +3,8 @@
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { EventForm, EventFormValues } from "@/components/EventForm";
+import { BackLink, PageHeader } from "@/components/PageHeader";
+import { DANGER_ACTION } from "@/lib/form-styles";
 import { createClient } from "@/lib/supabase/client";
 import { VILLE_TIMEZONES, utcIsoToZonedParts, zonedTimeToUtcIso } from "@/lib/timezone";
 import { useT } from "@/lib/i18n/context";
@@ -118,7 +120,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
 
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-sm px-4 py-8">
+      <div className="mx-auto w-full max-w-[1360px] px-4 py-10 md:px-10">
         <p className="text-sm text-foreground-muted">{t.common.loading}</p>
       </div>
     );
@@ -126,32 +128,35 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
 
   if (notAllowed || !initial) {
     return (
-      <div className="mx-auto w-full max-w-sm px-4 py-8">
+      <div className="mx-auto w-full max-w-[1360px] px-4 py-10 md:px-10">
         <p className="text-sm text-danger">404</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm px-4 py-8">
-      <h1 className="text-xl font-black">{t.evenements.editLink}</h1>
-
-      <EventForm
-        initial={initial}
-        submitLabel={t.profil.save}
-        successMessage={t.profil.saved}
-        onSubmit={handleSubmit}
-        extra={
-          <button
-            type="button"
-            onClick={handleWithdraw}
-            disabled={withdrawing}
-            className="mt-1 self-start text-sm text-danger hover:underline disabled:opacity-50"
-          >
-            {withdrawing ? "…" : t.evenements.withdrawLink}
-          </button>
-        }
-      />
+    <div className="pb-16">
+      <PageHeader title={t.evenements.editLink} eyebrow={<BackLink href="/">{t.eventDetail.back}</BackLink>} />
+      <main className="mx-auto max-w-[1360px] px-4 pt-8 md:px-10">
+        <div className="max-w-[640px]">
+          <EventForm
+            initial={initial}
+            submitLabel={t.profil.save}
+            successMessage={t.profil.saved}
+            onSubmit={handleSubmit}
+            extra={
+              <button
+                type="button"
+                onClick={handleWithdraw}
+                disabled={withdrawing}
+                className={`${DANGER_ACTION} mt-1 self-start disabled:opacity-50`}
+              >
+                {withdrawing ? "…" : t.evenements.withdrawLink}
+              </button>
+            }
+          />
+        </div>
+      </main>
     </div>
   );
 }
