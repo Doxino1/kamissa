@@ -67,7 +67,7 @@ export default function LoginPage() {
       return;
     }
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -78,6 +78,14 @@ export default function LoginPage() {
     setLoading(false);
     if (signUpError) {
       setError(signUpError.message);
+      return;
+    }
+    // Email déjà inscrit et confirmé : Supabase répond sans erreur (pour ne
+    // pas révéler quelles adresses existent) mais n'envoie aucun email, et
+    // renvoie un utilisateur sans identité. On oriente vers la connexion
+    // plutôt que d'annoncer un email de confirmation qui n'arrivera pas.
+    if (signUpData.user?.identities?.length === 0) {
+      setError(t.auth.accountExists);
       return;
     }
     setMessage(t.auth.accountCreated);
