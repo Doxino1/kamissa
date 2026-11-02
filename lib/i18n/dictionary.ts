@@ -42,6 +42,8 @@ export interface Dictionary {
     cancel: string;
     delete: string;
     profileNotFound: string;
+    imageUnsupported: string;
+    imageTooLarge: string;
     public: string;
     prive: string;
     loadMore: string;
@@ -443,6 +445,8 @@ export const fr: Dictionary = {
     cancel: "Annuler",
     delete: "Supprimer",
     profileNotFound: "Profil introuvable.",
+    imageUnsupported: "Cette photo n'a pas pu être lue (format RAW/DNG ou non pris en charge). Choisis une photo en JPEG ou PNG, ou désactive ProRAW dans l'appareil photo de ton iPhone.",
+    imageTooLarge: "Cette photo est trop lourde, même après réduction. Choisis une image plus légère.",
     public: "Public",
     prive: "Privé",
     loadMore: "Charger plus",
@@ -842,6 +846,8 @@ export const en: Dictionary = {
     cancel: "Cancel",
     delete: "Delete",
     profileNotFound: "Profile not found.",
+    imageUnsupported: "This photo couldn't be read (RAW/DNG or unsupported format). Pick a JPEG or PNG photo, or turn off ProRAW in your iPhone camera.",
+    imageTooLarge: "This photo is too large, even after resizing. Pick a lighter image.",
     public: "Public",
     prive: "Private",
     loadMore: "Load more",
@@ -1239,6 +1245,8 @@ export const el: Dictionary = {
     cancel: "Ακύρωση",
     delete: "Διαγραφή",
     profileNotFound: "Το προφίλ δεν βρέθηκε.",
+    imageUnsupported: "Δεν ήταν δυνατή η ανάγνωση της φωτογραφίας (μορφή RAW/DNG ή μη υποστηριζόμενη). Διάλεξε φωτογραφία JPEG ή PNG ή απενεργοποίησε το ProRAW στην κάμερα του iPhone.",
+    imageTooLarge: "Η φωτογραφία είναι πολύ μεγάλη, ακόμη και μετά τη μείωση. Διάλεξε μια πιο ελαφριά εικόνα.",
     public: "Δημόσιο",
     prive: "Ιδιωτικό",
     loadMore: "Φόρτωση περισσότερων",

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { uploadImage } from "@/lib/upload";
+import { IMAGE_ACCEPT, uploadErrorMessage, uploadImage } from "@/lib/upload";
 import { useT } from "@/lib/i18n/context";
 
 interface LibraryItem {
@@ -61,10 +61,10 @@ export default function BibliothequePage() {
 
     let imageUrl: string | null = null;
     if (file) {
-      const { url, error: uploadError } = await uploadImage(userId, "bibliotheque", file);
-      if (uploadError) {
+      const { url, error: uploadError, errorCode } = await uploadImage(userId, "bibliotheque", file);
+      if (!url) {
         setSaving(false);
-        setError(uploadError);
+        setError(uploadErrorMessage(t, errorCode, uploadError));
         return;
       }
       imageUrl = url;
@@ -120,7 +120,7 @@ export default function BibliothequePage() {
         />
         <input
           type="file"
-          accept="image/*"
+          accept={IMAGE_ACCEPT}
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           className="text-sm text-foreground-muted file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-bold file:text-foreground hover:file:bg-background"
         />

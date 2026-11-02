@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { uploadImage } from "@/lib/upload";
+import { IMAGE_ACCEPT, uploadErrorMessage, uploadImage } from "@/lib/upload";
 import { useT } from "@/lib/i18n/context";
 
 interface Post {
@@ -58,10 +58,10 @@ export default function MesPostsPage() {
     setSaving(true);
     setError(null);
 
-    const { url, error: uploadError } = await uploadImage(userId, "posts", file);
-    if (uploadError || !url) {
+    const { url, error: uploadError, errorCode } = await uploadImage(userId, "posts", file);
+    if (!url) {
       setSaving(false);
-      setError(uploadError ?? "Upload failed");
+      setError(uploadErrorMessage(t, errorCode, uploadError));
       return;
     }
 
@@ -97,7 +97,7 @@ export default function MesPostsPage() {
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
         <input
           type="file"
-          accept="image/*"
+          accept={IMAGE_ACCEPT}
           required
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           className="text-sm text-foreground-muted file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:py-2 file:text-sm file:font-bold file:text-foreground hover:file:bg-background"
