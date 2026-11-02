@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { BadgeCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
+import { portfolioPdfUrl } from "@/lib/upload";
 import { BlockReportActions } from "@/components/BlockReportActions";
 import { ContactLinks } from "@/components/ContactLinks";
 import { sendNotification } from "@/lib/notify";
@@ -25,6 +26,7 @@ interface PublicProfile {
   instagram_handle: string | null;
   tiktok_handle: string | null;
   twitter_handle: string | null;
+  portfolio_pdf: string | null;
 }
 
 interface PortfolioItem {
@@ -48,6 +50,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
   const [profile, setProfile] = useState<PublicProfile | null | undefined>(undefined);
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [following, setFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
@@ -68,7 +71,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
           supabase
             .from("profiles")
             .select(
-              "id, nom, bio, ville, disciplines, type_profil, portfolio_public, posts_public, verified, email_contact, instagram_handle, tiktok_handle, twitter_handle"
+              "id, nom, bio, ville, disciplines, type_profil, portfolio_public, posts_public, verified, email_contact, instagram_handle, tiktok_handle, twitter_handle, portfolio_pdf"
             )
             .eq("id", id)
             .single(),
@@ -92,6 +95,12 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
       setPosts(userPosts ?? []);
       setFollowerCount(followers ?? 0);
       setFollowingCount(follows ?? 0);
+
+      // URL signée refusée par le stockage si le portfolio est privé.
+      if (prof?.portfolio_pdf) {
+        const url = await portfolioPdfUrl(prof.portfolio_pdf);
+        if (active) setPdfUrl(url);
+      }
 
       if (user) {
         const { data: existing } = await supabase
@@ -202,6 +211,16 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
       </div>
 
       <h2 className="mt-8 text-sm font-medium text-foreground-muted">{t.artiste.portfolio}</h2>
+      {(profile.portfolio_public || isOwn) && pdfUrl && (
+        <a
+          href={pdfUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block text-sm font-medium underline underline-offset-4"
+        >
+          {t.portfolio.pdfView}
+        </a>
+      )}
       {profile.portfolio_public || isOwn ? (
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {portfolio.map((item) => (

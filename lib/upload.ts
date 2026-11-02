@@ -161,3 +161,49 @@ export async function uploadImage(
 
   return { url: publicUrl, error: null, errorCode: null };
 }
+
+// ---------------------------------------------------------------------------
+// Portfolio complet en PDF (migration 0033) : bucket privé "portfolios", lu
+// par URL signée. La policy de lecture n'accorde l'accès qu'au propriétaire
+// ou si son portfolio est public : le réglage public / privé s'applique donc
+// aussi au fichier, pas seulement à l'affichage du lien.
+// ---------------------------------------------------------------------------
+
+export const PDF_ACCEPT = "application/pdf,.pdf";
+const PDF_MAX_BYTES = 20 * 1024 * 1024; // limite du bucket "portfolios"
+const PDF_URL_TTL_S = 60 * 60;
+
+export type PdfErrorCode = "not_pdf" | "too_large";
+
+// Vérifie la signature "%PDF" plutôt que le seul type MIME, que certains
+// navigateurs laissent vide ou déduisent de l'extension.
+async function isPdf(file: File) {
+  const head = new Uint8Array(await file.slice(0, 5).arrayBuffer());
+  return String.fromCharCode(...head).startsWith("%PDF");
+}
+
+export async function uploadPortfolioPdf(
+  userId: string,
+  file: File
+): Promise<{ path: string | null; error: string | null; errorCode: PdfErrorCode | null }> {
+  if (!(await isPdf(file))) return { path: null, error: null, errorCode: "not_pdf" };
+  if (file.size > PDF_MAX_BYTES) return { path: null, error: null, errorCode: "too_large" };
+
+  const supabase = createClient();
+  const path = `${userId}/${Date.now()}-${crypto.randomUUID()}.pdf`;
+  const { error } = await supabase.storage
+    .from("portfolios")
+    .upload(path, file, { contentType: "application/pdf" });
+  if (error) return { path: null, error: error.message, errorCode: null };
+  return { path, error: null, errorCode: null };
+}
+
+export async function removePortfolioPdf(path: string) {
+  await createClient().storage.from("portfolios").remove([path]);
+}
+
+// null si le portfolio est privé (et qu'on n'en est pas le propriétaire).
+export async function portfolioPdfUrl(path: string): Promise<string | null> {
+  const { data } = await createClient().storage.from("portfolios").createSignedUrl(path, PDF_URL_TTL_S);
+  return data?.signedUrl ?? null;
+}

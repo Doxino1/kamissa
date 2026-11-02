@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Lock, Settings } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
+import { portfolioPdfUrl } from "@/lib/upload";
 import { Toggle } from "@/components/Toggle";
 import { serifTabClass, tabLabelClass, TAB_NUMBER } from "@/components/PageHeader";
 import { ProfileType, Ville } from "@/lib/types";
@@ -58,6 +59,7 @@ export default function ProfilPage() {
   const [ville, setVille] = useState<Ville | null>(null);
   const [portfolioPublic, setPortfolioPublic] = useState(true);
   const [postsPublic, setPostsPublic] = useState(true);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const [tab, setTab] = useState<Tab>("posts");
   const [posts, setPosts] = useState<Post[]>([]);
@@ -90,7 +92,7 @@ export default function ProfilPage() {
       ] = await Promise.all([
         supabase
           .from("profiles")
-          .select("nom, ville, disciplines, type_profil, bio, portfolio_public, posts_public")
+          .select("nom, ville, disciplines, type_profil, bio, portfolio_public, posts_public, portfolio_pdf")
           .eq("id", user.id)
           .single(),
         supabase.from("posts").select("id, image, legende").eq("user_id", user.id).order("date", { ascending: false }),
@@ -113,6 +115,10 @@ export default function ProfilPage() {
         setVille((data.ville as Ville) ?? null);
         setPortfolioPublic(data.portfolio_public);
         setPostsPublic(data.posts_public);
+        if (data.portfolio_pdf) {
+          const url = await portfolioPdfUrl(data.portfolio_pdf);
+          if (active) setPdfUrl(url);
+        }
       }
       setPosts(userPosts ?? []);
       setPortfolio(items ?? []);
@@ -283,6 +289,17 @@ export default function ProfilPage() {
               <p className="font-display text-[28px] leading-tight md:text-[34px]">{t.profil.portfolioSubtitle}</p>
               <Toggle checked={portfolioPublic} onChange={(v) => setVisibility("portfolio_public", v)} />
             </div>
+
+            {pdfUrl && (
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex min-h-11 items-center rounded-full bg-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover"
+              >
+                {t.portfolio.pdfView}
+              </a>
+            )}
 
             <div className="mt-6 grid grid-cols-1 gap-x-7 gap-y-10 sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
               {portfolio.map((item, i) => (

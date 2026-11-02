@@ -3,7 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { IMAGE_ACCEPT, uploadErrorMessage, uploadImage } from "@/lib/upload";
+import {
+  IMAGE_ACCEPT,
+  PDF_ACCEPT,
+  portfolioPdfUrl,
+  removePortfolioPdf,
+  uploadErrorMessage,
+  uploadImage,
+  uploadPortfolioPdf,
+} from "@/lib/upload";
 import { useT } from "@/lib/i18n/context";
 
 interface PortfolioItem {
@@ -27,6 +35,11 @@ export default function PortfolioPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [pdfPath, setPdfPath] = useState<string | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [pdfSaving, setPdfSaving] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+
   async function load(uid: string) {
     const supabase = createClient();
     const { data } = await supabase
@@ -35,6 +48,13 @@ export default function PortfolioPage() {
       .eq("user_id", uid)
       .order("created_at", { ascending: false });
     setItems(data ?? []);
+  }
+
+  async function loadPdf(uid: string) {
+    const { data } = await createClient().from("profiles").select("portfolio_pdf").eq("id", uid).single();
+    const path = data?.portfolio_pdf ?? null;
+    setPdfPath(path);
+    setPdfUrl(path ? await portfolioPdfUrl(path) : null);
   }
 
   useEffect(() => {
@@ -49,6 +69,7 @@ export default function PortfolioPage() {
         }
         setUserId(user.id);
         load(user.id);
+        loadPdf(user.id);
       });
     return () => {
       active = false;
@@ -94,6 +115,62 @@ export default function PortfolioPage() {
     load(userId);
   }
 
+  // Le nouveau fichier est envoyé et enregistré avant de retirer l'ancien :
+  // un échec en cours de route laisse le profil sur un PDF valide.
+  async function handlePdfChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const picked = e.target.files?.[0];
+    e.target.value = "";
+    if (!userId || !picked) return;
+    setPdfSaving(true);
+    setPdfError(null);
+
+    const { path, error: uploadError, errorCode } = await uploadPortfolioPdf(userId, picked);
+    if (!path) {
+      setPdfSaving(false);
+      setPdfError(
+        errorCode === "not_pdf"
+          ? t.portfolio.pdfInvalid
+          : errorCode === "too_large"
+            ? t.portfolio.pdfTooLarge
+            : (uploadError ?? "Upload failed")
+      );
+      return;
+    }
+
+    const { error: updateError } = await createClient()
+      .from("profiles")
+      .update({ portfolio_pdf: path })
+      .eq("id", userId);
+    if (updateError) {
+      await removePortfolioPdf(path);
+      setPdfSaving(false);
+      setPdfError(updateError.message);
+      return;
+    }
+    if (pdfPath) await removePortfolioPdf(pdfPath);
+    await loadPdf(userId);
+    setPdfSaving(false);
+  }
+
+  async function handlePdfRemove() {
+    if (!userId || !pdfPath) return;
+    setPdfSaving(true);
+    setPdfError(null);
+    const { error: updateError } = await createClient()
+      .from("profiles")
+      .update({ portfolio_pdf: null })
+      .eq("id", userId);
+    if (updateError) {
+      setPdfSaving(false);
+      setPdfError(updateError.message);
+      return;
+    }
+    await removePortfolioPdf(pdfPath);
+    setPdfPath(null);
+    setPdfUrl(null);
+    setPdfSaving(false);
+  }
+
   async function handleDelete(id: string) {
     if (!userId) return;
     const supabase = createClient();
@@ -104,6 +181,42 @@ export default function PortfolioPage() {
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8 md:max-w-none md:px-10 md:pb-10 md:pt-7">
       <h1 className="text-xl font-black">{t.portfolio.title}</h1>
+
+      <section className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
+        <h2 className="text-sm font-medium text-foreground-muted">{t.portfolio.pdfTitle}</h2>
+        <p className="text-sm text-foreground-muted">{t.portfolio.pdfHint}</p>
+        {pdfUrl && (
+          <a
+            href={pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium underline underline-offset-4"
+          >
+            {t.portfolio.pdfView}
+          </a>
+        )}
+        <div className="flex flex-wrap items-center gap-3">
+          <label
+            className={`inline-flex cursor-pointer items-center rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition hover:bg-accent-hover ${
+              pdfSaving ? "pointer-events-none opacity-50" : ""
+            }`}
+          >
+            {pdfSaving ? "…" : pdfPath ? t.portfolio.pdfReplace : t.portfolio.pdfUpload}
+            <input type="file" accept={PDF_ACCEPT} onChange={handlePdfChange} disabled={pdfSaving} className="sr-only" />
+          </label>
+          {pdfPath && (
+            <button
+              type="button"
+              onClick={handlePdfRemove}
+              disabled={pdfSaving}
+              className="text-sm text-danger hover:underline disabled:opacity-50"
+            >
+              {t.portfolio.pdfRemove}
+            </button>
+          )}
+        </div>
+        {pdfError && <p className="text-sm text-danger">{pdfError}</p>}
+      </section>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 rounded-lg border border-border p-4 md:max-w-[480px]">
         <h2 className="text-sm font-medium text-foreground-muted">{t.portfolio.addTitle}</h2>

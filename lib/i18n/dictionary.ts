@@ -281,6 +281,14 @@ export interface Dictionary {
     empty: string;
     delete: string;
     private: string;
+    pdfTitle: string;
+    pdfHint: string;
+    pdfUpload: string;
+    pdfReplace: string;
+    pdfRemove: string;
+    pdfView: string;
+    pdfInvalid: string;
+    pdfTooLarge: string;
   };
 
   posts: {
@@ -686,6 +694,14 @@ export const fr: Dictionary = {
     empty: "Ton portfolio est vide — ajoute ta première pièce.",
     delete: "Supprimer",
     private: "Portfolio privé",
+    pdfTitle: "Portfolio complet (PDF)",
+    pdfHint: "Tu as déjà un portfolio mis en page ? Joins-le en PDF (20 Mo max). Il suit le réglage public / privé de ton portfolio.",
+    pdfUpload: "Envoyer un PDF",
+    pdfReplace: "Remplacer",
+    pdfRemove: "Retirer",
+    pdfView: "Voir le portfolio (PDF)",
+    pdfInvalid: "Ce fichier n'est pas un PDF.",
+    pdfTooLarge: "Ce PDF dépasse 20 Mo. Exporte-le en qualité « écran » ou « web » pour l'alléger.",
   },
   posts: {
     title: "Mes posts",
@@ -1085,6 +1101,14 @@ export const en: Dictionary = {
     empty: "Your portfolio's empty — add your first piece.",
     delete: "Delete",
     private: "Private portfolio",
+    pdfTitle: "Full portfolio (PDF)",
+    pdfHint: "Already have a laid-out portfolio? Attach it as a PDF (20 MB max). It follows your portfolio's public / private setting.",
+    pdfUpload: "Upload a PDF",
+    pdfReplace: "Replace",
+    pdfRemove: "Remove",
+    pdfView: "View portfolio (PDF)",
+    pdfInvalid: "This file isn't a PDF.",
+    pdfTooLarge: "This PDF is over 20 MB. Export it at \"screen\" or \"web\" quality to make it lighter.",
   },
   posts: {
     title: "My posts",
@@ -1485,6 +1509,14 @@ export const el: Dictionary = {
     empty: "Το portfolio σου είναι άδειο — πρόσθεσε το πρώτο σου έργο.",
     delete: "Διαγραφή",
     private: "Ιδιωτικό portfolio",
+    pdfTitle: "Πλήρες portfolio (PDF)",
+    pdfHint: "Έχεις ήδη έτοιμο portfolio; Επισύναψέ το σε PDF (έως 20 MB). Ακολουθεί τη ρύθμιση δημόσιο / ιδιωτικό του portfolio σου.",
+    pdfUpload: "Ανέβασμα PDF",
+    pdfReplace: "Αντικατάσταση",
+    pdfRemove: "Αφαίρεση",
+    pdfView: "Δες το portfolio (PDF)",
+    pdfInvalid: "Αυτό το αρχείο δεν είναι PDF.",
+    pdfTooLarge: "Το PDF ξεπερνά τα 20 MB. Εξήγαγέ το σε ποιότητα «οθόνης» ή «web» για να γίνει πιο ελαφρύ.",
   },
   posts: {
     title: "Τα posts μου",
