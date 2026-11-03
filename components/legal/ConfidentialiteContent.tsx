@@ -20,8 +20,8 @@ function FR() {
           ici.
           <br />
           Contact :{" "}
-          <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-            dotian.diarra@aliecom.com
+          <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
           </a>
         </p>
       </section>
@@ -124,8 +124,8 @@ function FR() {
           </li>
           <li>
             <strong className="text-foreground">Autre demande</strong> — écris à{" "}
-            <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-              dotian.diarra@aliecom.com
+            <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+              contact@kamissa.app
             </a>
             .
           </li>
@@ -145,8 +145,8 @@ function EN() {
           described here.
           <br />
           Contact:{" "}
-          <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-            dotian.diarra@aliecom.com
+          <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
           </a>
         </p>
       </section>
@@ -245,8 +245,8 @@ function EN() {
           </li>
           <li>
             <strong className="text-foreground">Other request</strong> — write to{" "}
-            <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-              dotian.diarra@aliecom.com
+            <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+              contact@kamissa.app
             </a>
             .
           </li>
@@ -266,8 +266,8 @@ function EL() {
           που περιγράφονται εδώ.
           <br />
           Επικοινωνία:{" "}
-          <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-            dotian.diarra@aliecom.com
+          <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
           </a>
         </p>
       </section>
@@ -370,8 +370,8 @@ function EL() {
           </li>
           <li>
             <strong className="text-foreground">Άλλο αίτημα</strong> — γράψε στο{" "}
-            <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-              dotian.diarra@aliecom.com
+            <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+              contact@kamissa.app
             </a>
             .
           </li>

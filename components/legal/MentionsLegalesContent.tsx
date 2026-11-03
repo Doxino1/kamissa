@@ -28,8 +28,8 @@ function FR() {
         </p>
         <p className="mt-2 text-text-soft">
           Contact éditeur :{" "}
-          <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-            dotian.diarra@aliecom.com
+          <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
           </a>
         </p>
       </section>
@@ -101,8 +101,8 @@ function EN() {
         </p>
         <p className="mt-2 text-text-soft">
           Publisher contact:{" "}
-          <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-            dotian.diarra@aliecom.com
+          <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
           </a>
         </p>
       </section>
@@ -172,8 +172,8 @@ function EL() {
         </p>
         <p className="mt-2 text-text-soft">
           Επικοινωνία εκδότη:{" "}
-          <a href="mailto:dotian.diarra@aliecom.com" className="underline hover:text-foreground">
-            dotian.diarra@aliecom.com
+          <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
           </a>
         </p>
       </section>
