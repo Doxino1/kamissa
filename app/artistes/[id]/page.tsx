@@ -12,6 +12,7 @@ import { ContactLinks } from "@/components/ContactLinks";
 import { sendNotification } from "@/lib/notify";
 import { ProfileType } from "@/lib/types";
 import { TAB_NUMBER } from "@/components/PageHeader";
+import { PostThumb } from "@/components/PostMedia";
 
 function initials(nom: string) {
   const parts = nom.trim().split(/\s+/).filter(Boolean);
@@ -48,6 +49,7 @@ interface PortfolioItem {
 interface Post {
   id: string;
   image: string | null;
+  video: string | null;
 }
 
 export default function ArtisteProfilPage({ params }: { params: Promise<{ id: string }> }) {
@@ -90,7 +92,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
             .order("created_at", { ascending: false }),
           supabase
             .from("posts")
-            .select("id, image")
+            .select("id, image, video")
             .eq("user_id", id)
             .order("date", { ascending: false }),
           supabase.from("follows").select("*", { count: "exact", head: true }).eq("followed_id", id),
@@ -310,12 +312,7 @@ export default function ArtisteProfilPage({ params }: { params: Promise<{ id: st
           <div className="grid grid-cols-2 gap-4 md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] md:gap-7">
             {posts.map((post) => (
               <Link key={post.id} href={`/posts/${post.id}`} className="aspect-[4/5]">
-                {post.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={post.image} alt="" className="h-full w-full object-cover" />
-                ) : (
-                  <div className="h-full w-full bg-placeholder" />
-                )}
+                <PostThumb post={post} />
               </Link>
             ))}
           </div>

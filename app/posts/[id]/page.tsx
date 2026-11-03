@@ -8,10 +8,12 @@ import { useT } from "@/lib/i18n/context";
 import { BlockReportActions } from "@/components/BlockReportActions";
 import { sendNotification } from "@/lib/notify";
 import { FIELD_INPUT, SECONDARY_BUTTON } from "@/lib/form-styles";
+import { PostMedia } from "@/components/PostMedia";
 
 interface PostDetail {
   id: string;
   image: string | null;
+  video: string | null;
   legende: string | null;
   user_id: string;
   profiles: { nom: string } | null;
@@ -70,7 +72,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
       const { data } = await supabase
         .from("posts")
-        .select("id, image, legende, user_id, profiles!posts_user_id_fkey(nom)")
+        .select("id, image, video, legende, user_id, profiles!posts_user_id_fkey(nom)")
         .eq("id", id)
         .single();
       if (!active) return;
@@ -125,12 +127,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="mx-auto flex w-full max-w-[1240px] flex-wrap gap-x-14 gap-y-8 px-4 pb-16 pt-8 md:px-10 md:pt-12">
       <div className="min-w-0 flex-[999_1_480px]">
-        {post.image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={post.image} alt={post.legende ?? ""} className="max-h-[80vh] w-full object-contain object-left-top" />
-        ) : (
-          <div className="aspect-[4/5] w-full bg-placeholder" />
-        )}
+        <PostMedia post={post} />
       </div>
 
       <div className="min-w-0 flex-[1_1_320px] md:max-w-[420px]">

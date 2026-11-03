@@ -4,12 +4,13 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 type AdminClient = ReturnType<typeof createAdminClient>;
 
-// Fichiers rangés par lib/upload.ts : images/{userId}/{portfolio|posts|bibliotheque}/…
-// et portfolios/{userId}/….
+// Fichiers rangés par lib/upload.ts : images/{userId}/{portfolio|posts|bibliotheque}/…,
+// videos/{userId}/posts/… et portfolios/{userId}/….
 const STORAGE_FOLDERS: { bucket: string; prefix: (userId: string) => string }[] = [
   { bucket: "images", prefix: (id) => `${id}/portfolio` },
   { bucket: "images", prefix: (id) => `${id}/posts` },
   { bucket: "images", prefix: (id) => `${id}/bibliotheque` },
+  { bucket: "videos", prefix: (id) => `${id}/posts` },
   { bucket: "portfolios", prefix: (id) => id },
 ];
 

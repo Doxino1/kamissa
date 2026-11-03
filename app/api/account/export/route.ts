@@ -18,7 +18,7 @@ export async function GET() {
   const [{ data: profile }, { data: posts }, { data: submittedEvents }, { data: savedEvents }] =
     await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).single(),
-      supabase.from("posts").select("id, image, legende, date").eq("user_id", user.id),
+      supabase.from("posts").select("id, image, video, legende, date").eq("user_id", user.id),
       supabase
         .from("events")
         .select("id, titre, description, type, discipline, ville, date, lieu, statut")

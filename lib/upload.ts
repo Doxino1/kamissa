@@ -207,3 +207,63 @@ export async function portfolioPdfUrl(path: string): Promise<string | null> {
   const { data } = await createClient().storage.from("portfolios").createSignedUrl(path, PDF_URL_TTL_S);
   return data?.signedUrl ?? null;
 }
+
+// ---------------------------------------------------------------------------
+// Vidéos des posts (migration 0034) : bucket public "videos", 50 Mo maximum
+// (limite par fichier de l'offre gratuite de Supabase). Pas de compression
+// dans le navigateur : l'iPhone fournit déjà une version compressée quand on
+// choisit une vidéo dans la photothèque.
+// ---------------------------------------------------------------------------
+
+const VIDEO_TYPES = ["video/mp4", "video/quicktime", "video/webm"];
+export const VIDEO_ACCEPT = VIDEO_TYPES.join(",");
+export const POST_MEDIA_ACCEPT = `${IMAGE_ACCEPT},${VIDEO_ACCEPT}`;
+const VIDEO_MAX_BYTES = 50 * 1024 * 1024;
+
+export function isVideoFile(file: File) {
+  return file.type.startsWith("video/") || /\.(mp4|mov|m4v|webm)$/i.test(file.name);
+}
+
+export type VideoErrorCode = "video_unsupported" | "video_too_large";
+
+export function videoErrorMessage(
+  t: { common: { videoUnsupported: string; videoTooLarge: string } },
+  errorCode: VideoErrorCode | null,
+  error: string | null
+) {
+  if (errorCode === "video_unsupported") return t.common.videoUnsupported;
+  if (errorCode === "video_too_large") return t.common.videoTooLarge;
+  return error ?? "Upload failed";
+}
+
+export async function uploadVideo(
+  userId: string,
+  file: File
+): Promise<{ url: string | null; error: string | null; errorCode: VideoErrorCode | null }> {
+  // Certains navigateurs laissent le type vide : on le déduit de l'extension.
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  const contentType =
+    file.type || (ext === "mov" ? "video/quicktime" : ext === "webm" ? "video/webm" : "video/mp4");
+  if (!VIDEO_TYPES.includes(contentType)) return { url: null, error: null, errorCode: "video_unsupported" };
+  if (file.size > VIDEO_MAX_BYTES) return { url: null, error: null, errorCode: "video_too_large" };
+
+  const supabase = createClient();
+  const fileExt = contentType === "video/quicktime" ? "mov" : contentType === "video/webm" ? "webm" : "mp4";
+  const path = `${userId}/posts/${Date.now()}-${crypto.randomUUID()}.${fileExt}`;
+  const { error } = await supabase.storage.from("videos").upload(path, file, { contentType });
+  if (error) return { url: null, error: error.message, errorCode: null };
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("videos").getPublicUrl(path);
+  return { url: publicUrl, error: null, errorCode: null };
+}
+
+// Supprime le fichier d'un post supprimé, d'après son URL publique
+// (…/storage/v1/object/public/{bucket}/{chemin}). Sans effet sur une URL
+// étrangère au stockage du projet.
+export async function removeUploadedFile(url: string | null) {
+  const match = url?.match(/\/storage\/v1\/object\/public\/(images|videos)\/(.+)$/);
+  if (!match) return;
+  await createClient().storage.from(match[1]).remove([decodeURIComponent(match[2])]);
+}

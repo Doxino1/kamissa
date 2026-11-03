@@ -4,14 +4,33 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { IMAGE_ACCEPT, uploadErrorMessage, uploadImage } from "@/lib/upload";
+import {
+  POST_MEDIA_ACCEPT,
+  isVideoFile,
+  removeUploadedFile,
+  uploadErrorMessage,
+  uploadImage,
+  uploadVideo,
+  videoErrorMessage,
+} from "@/lib/upload";
+import { PostThumb } from "@/components/PostMedia";
 import { useT } from "@/lib/i18n/context";
 import { BackLink, PageHeader } from "@/components/PageHeader";
-import { FIELD, FIELD_LABEL, FIELD_TEXTAREA, FILE_INPUT, PRIMARY_BUTTON, SECTION, SECTION_TITLE } from "@/lib/form-styles";
+import {
+  FIELD,
+  FIELD_HINT,
+  FIELD_LABEL,
+  FIELD_TEXTAREA,
+  FILE_INPUT,
+  PRIMARY_BUTTON,
+  SECTION,
+  SECTION_TITLE,
+} from "@/lib/form-styles";
 
 interface Post {
   id: string;
   image: string | null;
+  video: string | null;
   legende: string | null;
 }
 
@@ -25,12 +44,14 @@ export default function MesPostsPage() {
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Change après chaque publication pour vider le champ fichier.
+  const [formKey, setFormKey] = useState(0);
 
   async function load(uid: string) {
     const supabase = createClient();
     const { data } = await supabase
       .from("posts")
-      .select("id, image, legende")
+      .select("id, image, video, legende")
       .eq("user_id", uid)
       .order("date", { ascending: false });
     setPosts(data ?? []);
@@ -60,17 +81,31 @@ export default function MesPostsPage() {
     setSaving(true);
     setError(null);
 
-    const { url, error: uploadError, errorCode } = await uploadImage(userId, "posts", file);
-    if (!url) {
-      setSaving(false);
-      setError(uploadErrorMessage(t, errorCode, uploadError));
-      return;
+    const video = isVideoFile(file);
+    let url: string | null;
+    if (video) {
+      const result = await uploadVideo(userId, file);
+      url = result.url;
+      if (!url) {
+        setSaving(false);
+        setError(videoErrorMessage(t, result.errorCode, result.error));
+        return;
+      }
+    } else {
+      const result = await uploadImage(userId, "posts", file);
+      url = result.url;
+      if (!url) {
+        setSaving(false);
+        setError(uploadErrorMessage(t, result.errorCode, result.error));
+        return;
+      }
     }
 
     const supabase = createClient();
     const { error: insertError } = await supabase.from("posts").insert({
       user_id: userId,
-      image: url,
+      image: video ? null : url,
+      video: video ? url : null,
       legende: legende || null,
     });
 
@@ -82,13 +117,15 @@ export default function MesPostsPage() {
 
     setLegende("");
     setFile(null);
+    setFormKey((k) => k + 1);
     load(userId);
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(post: Post) {
     if (!userId) return;
     const supabase = createClient();
-    await supabase.from("posts").delete().eq("id", id);
+    const { error: deleteError } = await supabase.from("posts").delete().eq("id", post.id);
+    if (!deleteError) await removeUploadedFile(post.video ?? post.image);
     load(userId);
   }
 
@@ -98,19 +135,21 @@ export default function MesPostsPage() {
 
       <main className="mx-auto flex max-w-[1280px] flex-wrap gap-x-14 px-4 md:px-10">
         <form
+          key={formKey}
           onSubmit={handleSubmit}
           className={`${SECTION} flex min-w-0 flex-[1_1_320px] flex-col gap-[22px] self-start md:max-w-[420px]`}
         >
           <h2 className={`${SECTION_TITLE} mb-0`}>{t.posts.publish}</h2>
           <label className={FIELD}>
-            <span className={FIELD_LABEL}>{t.portfolio.image}</span>
+            <span className={FIELD_LABEL}>{t.posts.media}</span>
             <input
               type="file"
-              accept={IMAGE_ACCEPT}
+              accept={POST_MEDIA_ACCEPT}
               required
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               className={`${FILE_INPUT} mt-2`}
             />
+            <span className={`${FIELD_HINT} mt-1.5`}>{t.posts.mediaHint}</span>
           </label>
           <label className={FIELD}>
             <span className={FIELD_LABEL}>{t.posts.legende}</span>
@@ -128,17 +167,12 @@ export default function MesPostsPage() {
           )}
           {(posts ?? []).map((post) => (
             <div key={post.id} className="group relative aspect-square">
-              <Link href={`/posts/${post.id}`}>
-                {post.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={post.image} alt={post.legende ?? ""} className="h-full w-full object-cover" />
-                ) : (
-                  <div className="h-full w-full bg-placeholder" />
-                )}
+              <Link href={`/posts/${post.id}`} className="block h-full">
+                <PostThumb post={post} />
               </Link>
               <button
                 type="button"
-                onClick={() => handleDelete(post.id)}
+                onClick={() => handleDelete(post)}
                 className="absolute right-1.5 top-1.5 min-h-8 rounded-full bg-background px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-danger opacity-0 transition focus:opacity-100 group-hover:opacity-100"
               >
                 {t.posts.delete}

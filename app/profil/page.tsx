@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { portfolioPdfUrl } from "@/lib/upload";
 import { Toggle } from "@/components/Toggle";
+import { PostThumb } from "@/components/PostMedia";
 import { serifTabClass, tabLabelClass, TAB_NUMBER } from "@/components/PageHeader";
 import { ProfileType, Ville } from "@/lib/types";
 
@@ -16,6 +17,7 @@ type Tab = "posts" | "portfolio";
 interface Post {
   id: string;
   image: string | null;
+  video: string | null;
   legende: string | null;
 }
 
@@ -95,7 +97,7 @@ export default function ProfilPage() {
           .select("nom, ville, disciplines, type_profil, bio, portfolio_public, posts_public, portfolio_pdf")
           .eq("id", user.id)
           .single(),
-        supabase.from("posts").select("id, image, legende").eq("user_id", user.id).order("date", { ascending: false }),
+        supabase.from("posts").select("id, image, video, legende").eq("user_id", user.id).order("date", { ascending: false }),
         supabase
           .from("portfolio_items")
           .select("id, titre, technique, annee, image_url")
@@ -271,12 +273,7 @@ export default function ProfilPage() {
               </Link>
               {posts.map((post) => (
                 <Link key={post.id} href={`/posts/${post.id}`} className="aspect-[4/5]">
-                  {post.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={post.image} alt={post.legende ?? ""} className="h-full w-full object-cover" />
-                  ) : (
-                    <div className="h-full w-full bg-placeholder" />
-                  )}
+                  <PostThumb post={post} />
                 </Link>
               ))}
             </div>
