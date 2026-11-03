@@ -15,6 +15,7 @@ import { useGoingFollows } from "@/lib/use-going-follows";
 import { createClient } from "@/lib/supabase/client";
 import { useLocale } from "@/lib/i18n/context";
 import { BackLink, PageHeader } from "@/components/PageHeader";
+import { LinkifiedText } from "@/components/LinkifiedText";
 import { TEXT_ACTION } from "@/lib/form-styles";
 
 export default function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -89,7 +90,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
       <main className="mx-auto flex max-w-[1360px] flex-wrap gap-x-14 gap-y-8 px-4 pt-8 md:px-10">
         <div className="min-w-0 flex-[999_1_480px]">
           <p className="whitespace-pre-line font-display text-2xl leading-snug md:text-[28px]">
-            {localizedDescription(event, locale)}
+            <LinkifiedText text={localizedDescription(event, locale)} />
           </p>
 
           {event.type === "annonce" && (

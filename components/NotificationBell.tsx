@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Bell } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { AppNotification, useNotifications } from "@/lib/use-notifications";
+import { useMediaQuery } from "@/lib/use-media-query";
+import { Modal } from "./Modal";
 
 function notificationHref(n: AppNotification): string {
   if (n.type === "comment" && n.postId) return `/posts/${n.postId}`;
@@ -17,14 +20,20 @@ export function NotificationBell({ userId }: { userId: string | null }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { notifications, unreadCount, markAllRead } = useNotifications(userId);
+  // Sur téléphone, le petit panneau accroché à la cloche recouvrait la page :
+  // on ouvre plutôt la modale plein écran des fenêtres d'ajout.
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   useEffect(() => {
+    // La modale (téléphone) se ferme par son bouton ou Échap ; la rendre hors
+    // du conteneur ferait passer chaque clic dedans pour un clic extérieur.
+    if (isMobile) return;
     function onClickOutside(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener("mousedown", onClickOutside);
     return () => document.removeEventListener("mousedown", onClickOutside);
-  }, []);
+  }, [isMobile]);
 
   if (!userId) return null;
 
@@ -34,6 +43,47 @@ export function NotificationBell({ userId }: { userId: string | null }) {
     if (n.type === "match") return t.notifications.typeMatch(nom);
     return t.notifications.typeComment(nom);
   }
+
+  const markAllButton = unreadCount > 0 && (
+    <button
+      type="button"
+      onClick={markAllRead}
+      className="min-h-8 text-[11px] font-semibold uppercase tracking-[0.1em] text-accent-secondary"
+    >
+      {t.notifications.markAllRead}
+    </button>
+  );
+
+  const list = (
+    <>
+      {notifications.length === 0 && (
+        <p className="px-5 py-8 text-center text-sm text-foreground-muted">{t.notifications.empty}</p>
+      )}
+
+      <div className={`flex flex-col overflow-y-auto ${isMobile ? "" : "max-h-80"}`}>
+        {notifications.map((n) => (
+          <Link
+            key={n.id}
+            href={notificationHref(n)}
+            onClick={() => setOpen(false)}
+            className={`border-b border-border px-4 py-3 text-[13px] transition hover:bg-surface-hover md:min-h-0 ${
+              n.read ? "" : "bg-surface-selected"
+            } ${isMobile ? "min-h-12 px-6 py-4 text-[15px]" : ""}`}
+          >
+            {label(n)}
+          </Link>
+        ))}
+      </div>
+
+      <Link
+        href="/profil/parametres"
+        onClick={() => setOpen(false)}
+        className={`block py-3 text-[11px] font-semibold uppercase tracking-[0.1em] ${isMobile ? "px-6 pt-5" : "px-4"}`}
+      >
+        {t.notifications.prefsTitle}
+      </Link>
+    </>
+  );
 
   return (
     <div className="relative" ref={containerRef}>
@@ -50,49 +100,25 @@ export function NotificationBell({ userId }: { userId: string | null }) {
         )}
       </button>
 
-      {open && (
+      {open && !isMobile && (
         <div className="absolute right-0 z-[1050] mt-2 w-80 overflow-hidden border border-border bg-background shadow-modal">
           <div className="flex items-center justify-between gap-2 border-b border-foreground px-4 py-3.5">
             <span className="font-display text-2xl leading-none">{t.notifications.title}</span>
-            {unreadCount > 0 && (
-              <button
-                type="button"
-                onClick={markAllRead}
-                className="text-[11px] font-semibold uppercase tracking-[0.1em] text-accent-secondary"
-              >
-                {t.notifications.markAllRead}
-              </button>
-            )}
+            {markAllButton}
           </div>
-
-          {notifications.length === 0 && (
-            <p className="px-5 py-8 text-center text-sm text-foreground-muted">{t.notifications.empty}</p>
-          )}
-
-          <div className="flex max-h-80 flex-col overflow-y-auto">
-            {notifications.map((n) => (
-              <Link
-                key={n.id}
-                href={notificationHref(n)}
-                onClick={() => setOpen(false)}
-                className={`border-b border-border px-4 py-3 text-[13px] transition hover:bg-surface-hover ${
-                  n.read ? "" : "bg-surface-selected"
-                }`}
-              >
-                {label(n)}
-              </Link>
-            ))}
-          </div>
-
-          <Link
-            href="/profil/parametres"
-            onClick={() => setOpen(false)}
-            className="block px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.1em]"
-          >
-            {t.notifications.prefsTitle}
-          </Link>
+          {list}
         </div>
       )}
+
+      {open &&
+        isMobile &&
+        createPortal(
+          <Modal title={t.notifications.title} onClose={() => setOpen(false)}>
+            {unreadCount > 0 && <div className="-mt-2 mb-3 flex justify-end">{markAllButton}</div>}
+            <div className="-mx-6 border-t border-border">{list}</div>
+          </Modal>,
+          document.body
+        )}
     </div>
   );
 }

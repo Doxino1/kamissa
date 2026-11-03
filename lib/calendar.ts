@@ -31,7 +31,30 @@ export function googleCalendarUrl(event: ArtEvent, locale: Locale): string {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
-function icsContent(event: ArtEvent, locale: Locale): string {
+// RFC 5545 : une ligne ne dépasse pas 75 octets, la suite repart sur une
+// ligne commençant par une espace. On coupe par caractère pour ne jamais
+// scinder un caractère accentué ou grec (plusieurs octets en UTF-8).
+function foldIcsLine(line: string): string {
+  const encoder = new TextEncoder();
+  const out: string[] = [];
+  let current = "";
+  let bytes = 0;
+  for (const char of line) {
+    const size = encoder.encode(char).length;
+    const limit = out.length === 0 ? 75 : 74;
+    if (bytes + size > limit) {
+      out.push(current);
+      current = "";
+      bytes = 0;
+    }
+    current += char;
+    bytes += size;
+  }
+  out.push(current);
+  return out.join("\r\n ");
+}
+
+export function icsContent(event: ArtEvent, locale: Locale): string {
   const start = new Date(event.date);
   const end = new Date(start.getTime() + DEFAULT_DURATION_MS);
 
@@ -39,6 +62,8 @@ function icsContent(event: ArtEvent, locale: Locale): string {
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
     "PRODID:-//Kamissa//FR",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
     "BEGIN:VEVENT",
     `UID:${event.id}@kamissa`,
     `DTSTAMP:${toIcsUtc(new Date())}`,
@@ -51,17 +76,16 @@ function icsContent(event: ArtEvent, locale: Locale): string {
     "END:VCALENDAR",
   ];
 
-  return lines.join("\r\n");
+  return lines.map(foldIcsLine).join("\r\n") + "\r\n";
 }
 
-export function downloadIcs(event: ArtEvent, locale: Locale) {
-  const blob = new Blob([icsContent(event, locale)], { type: "text/calendar;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${event.titre.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "evenement"}.ics`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+export function icsFileName(event: ArtEvent): string {
+  return `${event.titre.normalize("NFD").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase() || "evenement"}.ics`;
+}
+
+// Fichier servi par app/api/events/[id]/ics : sur iPhone, Safari ne propose
+// « Ajouter au calendrier » que pour un vrai lien vers un fichier text/calendar,
+// pas pour un fichier fabriqué dans la page et téléchargé.
+export function icsUrl(event: ArtEvent, locale: Locale): string {
+  return `/api/events/${event.id}/ics?lang=${locale}`;
 }
