@@ -9,7 +9,7 @@ import { useToast } from "@/lib/toast-context";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { useMinimumLoading } from "@/lib/use-minimum-loading";
 import { useT } from "@/lib/i18n/context";
-import { Ville } from "@/lib/types";
+import { SHOP_CATEGORIES, Ville } from "@/lib/types";
 import { AddShopModal } from "@/components/AddShopModal";
 import { CardSkeleton } from "@/components/CardSkeleton";
 import { rowNumber } from "@/components/EventCard";
@@ -110,8 +110,14 @@ export default function BoutiquesPage() {
     .filter((s) => s.ville === ville)
     .filter((s) => s.statut === "publie" || s.soumis_par === userId);
 
+  // Toutes les catégories, même sans boutique pour l'instant (sinon on ne
+  // découvre jamais qu'on peut en ajouter une), plus d'éventuelles anciennes
+  // valeurs encore présentes en base.
   const categories = useMemo(
-    () => Array.from(new Set(byVille.map((s) => s.discipline).filter((d): d is string => !!d))),
+    () =>
+      Array.from(
+        new Set<string>([...SHOP_CATEGORIES, ...byVille.map((s) => s.discipline).filter((d): d is string => !!d)])
+      ),
     [byVille]
   );
 

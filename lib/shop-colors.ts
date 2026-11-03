@@ -5,6 +5,9 @@ const SHOP_CATEGORY_COLORS: Record<string, string> = {
   Sculpture: "var(--cat-atelier)",
   Performance: "var(--cat-residence)",
   Multidisciplinaire: "var(--cat-expo)",
+  Poterie: "var(--cat-residence)",
+  Broderie: "var(--cat-open-call)",
+  Costumes: "var(--cat-annonce)",
 };
 
 export function shopCategoryColor(discipline: string | null) {

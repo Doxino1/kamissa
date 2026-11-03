@@ -44,6 +44,8 @@ export interface Dictionary {
     profileNotFound: string;
     imageUnsupported: string;
     imageTooLarge: string;
+    videoUnsupported: string;
+    videoTooLarge: string;
     public: string;
     prive: string;
     loadMore: string;
@@ -294,6 +296,8 @@ export interface Dictionary {
   posts: {
     title: string;
     legende: string;
+    media: string;
+    mediaHint: string;
     publish: string;
     empty: string;
     comments: string;
@@ -433,6 +437,9 @@ export const fr: Dictionary = {
     Sculpture: "Sculpture",
     Performance: "Performance",
     Multidisciplinaire: "Multidisciplinaire",
+    Poterie: "Poterie",
+    Broderie: "Broderie",
+    Costumes: "Costumes",
   },
   coutLabels: {
     gratuit: "Gratuit",
@@ -455,6 +462,8 @@ export const fr: Dictionary = {
     profileNotFound: "Profil introuvable.",
     imageUnsupported: "Cette photo n'a pas pu être lue (format RAW/DNG ou non pris en charge). Choisis une photo en JPEG ou PNG, ou désactive ProRAW dans l'appareil photo de ton iPhone.",
     imageTooLarge: "Cette photo est trop lourde, même après réduction. Choisis une image plus légère.",
+    videoUnsupported: "Ce format de vidéo n'est pas pris en charge. Utilise une vidéo MP4 ou MOV.",
+    videoTooLarge: "Cette vidéo dépasse 50 Mo. Raccourcis-la ou envoie-la en qualité plus basse.",
     public: "Public",
     prive: "Privé",
     loadMore: "Charger plus",
@@ -706,6 +715,8 @@ export const fr: Dictionary = {
   posts: {
     title: "Mes posts",
     legende: "Légende",
+    media: "Photo ou vidéo",
+    mediaHint: "Vidéo : MP4 ou MOV, 50 Mo maximum.",
     publish: "Publier",
     empty: "Rien à montrer pour l'instant — poste ta première photo.",
     comments: "Commentaires",
@@ -842,6 +853,9 @@ export const en: Dictionary = {
     Sculpture: "Sculpture",
     Performance: "Performance",
     Multidisciplinaire: "Multidisciplinary",
+    Poterie: "Pottery",
+    Broderie: "Embroidery",
+    Costumes: "Costumes",
   },
   coutLabels: {
     gratuit: "Free",
@@ -864,6 +878,8 @@ export const en: Dictionary = {
     profileNotFound: "Profile not found.",
     imageUnsupported: "This photo couldn't be read (RAW/DNG or unsupported format). Pick a JPEG or PNG photo, or turn off ProRAW in your iPhone camera.",
     imageTooLarge: "This photo is too large, even after resizing. Pick a lighter image.",
+    videoUnsupported: "This video format isn't supported. Use an MP4 or MOV video.",
+    videoTooLarge: "This video is over 50 MB. Trim it or send it at a lower quality.",
     public: "Public",
     prive: "Private",
     loadMore: "Load more",
@@ -1113,6 +1129,8 @@ export const en: Dictionary = {
   posts: {
     title: "My posts",
     legende: "Caption",
+    media: "Photo or video",
+    mediaHint: "Video: MP4 or MOV, 50 MB max.",
     publish: "Post",
     empty: "Nothing to show yet — post your first photo.",
     comments: "Comments",
@@ -1249,6 +1267,9 @@ export const el: Dictionary = {
     Sculpture: "Γλυπτική",
     Performance: "Περφόρμανς",
     Multidisciplinaire: "Διεπιστημονικό",
+    Poterie: "Κεραμική",
+    Broderie: "Κέντημα",
+    Costumes: "Κοστούμια",
   },
   coutLabels: {
     gratuit: "Δωρεάν",
@@ -1271,6 +1292,8 @@ export const el: Dictionary = {
     profileNotFound: "Το προφίλ δεν βρέθηκε.",
     imageUnsupported: "Δεν ήταν δυνατή η ανάγνωση της φωτογραφίας (μορφή RAW/DNG ή μη υποστηριζόμενη). Διάλεξε φωτογραφία JPEG ή PNG ή απενεργοποίησε το ProRAW στην κάμερα του iPhone.",
     imageTooLarge: "Η φωτογραφία είναι πολύ μεγάλη, ακόμη και μετά τη μείωση. Διάλεξε μια πιο ελαφριά εικόνα.",
+    videoUnsupported: "Αυτή η μορφή βίντεο δεν υποστηρίζεται. Χρησιμοποίησε βίντεο MP4 ή MOV.",
+    videoTooLarge: "Το βίντεο ξεπερνά τα 50 MB. Κόψ'το ή στείλ'το σε χαμηλότερη ποιότητα.",
     public: "Δημόσιο",
     prive: "Ιδιωτικό",
     loadMore: "Φόρτωση περισσότερων",
@@ -1521,6 +1544,8 @@ export const el: Dictionary = {
   posts: {
     title: "Τα posts μου",
     legende: "Λεζάντα",
+    media: "Φωτογραφία ή βίντεο",
+    mediaHint: "Βίντεο: MP4 ή MOV, έως 50 MB.",
     publish: "Δημοσίευση",
     empty: "Τίποτα να δείξουμε ακόμη — ανέβασε την πρώτη σου φωτογραφία.",
     comments: "Σχόλια",

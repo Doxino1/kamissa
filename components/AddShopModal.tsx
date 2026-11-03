@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { geocode } from "@/lib/geocode";
 import { useToast } from "@/lib/toast-context";
 import { useT } from "@/lib/i18n/context";
-import { DISCIPLINES, Ville } from "@/lib/types";
+import { SHOP_CATEGORIES, Ville } from "@/lib/types";
 import { FIELD_INPUT, FIELD_TEXTAREA, PRIMARY_BUTTON } from "@/lib/form-styles";
 
 export function AddShopModal({
@@ -25,7 +25,7 @@ export function AddShopModal({
   const [adresse, setAdresse] = useState("");
   const [description, setDescription] = useState("");
   const [lien, setLien] = useState("");
-  const [discipline, setDiscipline] = useState<string>(DISCIPLINES[0]);
+  const [discipline, setDiscipline] = useState<string>(SHOP_CATEGORIES[0]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,7 +97,7 @@ export function AddShopModal({
           onChange={(e) => setDiscipline(e.target.value)}
           className={FIELD_INPUT}
         >
-          {DISCIPLINES.map((d) => (
+          {SHOP_CATEGORIES.map((d) => (
             <option key={d} value={d}>
               {t.disciplineLabels[d]}
             </option>

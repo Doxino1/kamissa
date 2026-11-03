@@ -36,6 +36,11 @@ export interface ArtEvent {
 // lib/i18n/dictionary.ts (eventTypeLabels, disciplineLabels, etc.).
 export const EVENT_TYPES: EventType[] = ["vernissage", "expo", "workshop", "open_call", "residency", "annonce"];
 export const DISCIPLINES = ["Peinture", "Sculpture", "Performance", "Multidisciplinaire"] as const;
+// Catégories des boutiques de matériel : distinctes des disciplines des
+// événements (on n'achète pas de matériel de « performance », mais il existe
+// des boutiques de poterie, de broderie ou de costumes). Libellés dans
+// disciplineLabels, couleurs dans lib/shop-colors.ts.
+export const SHOP_CATEGORIES = ["Peinture", "Sculpture", "Poterie", "Broderie", "Costumes", "Multidisciplinaire"] as const;
 export const ANNOUNCEMENT_SUBTYPES: AnnouncementSubtype[] = ["oeuvre", "materiel", "atelier"];
 export const PROFILE_TYPES: ProfileType[] = [
   "artiste_pro",
