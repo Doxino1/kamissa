@@ -1,7 +1,7 @@
 # Modèles d'email Supabase (Kamissa)
 
 À coller dans le tableau de bord Supabase : **Authentication → Emails → Templates**.
-Les emails partent par Resend (SMTP personnalisé, « Kamissa » `<noreply@kamissa.app>`).
+Les emails partent par Resend (SMTP personnalisé, « Kamissa » `<no-reply@kamissa.app>`).
 
 ## Principe
 
