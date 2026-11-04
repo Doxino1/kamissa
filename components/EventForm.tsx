@@ -18,6 +18,7 @@ export interface EventFormValues {
   ville: Ville;
   date: string;
   heure: string;
+  dateFin: string;
   lieu: string;
   coutType: CoutType | "";
   coutDetail: string;
@@ -228,6 +229,20 @@ export function EventForm({
           {t.submission.heureLocale(t.villeLabels[values.ville], VILLE_TIMEZONES[values.ville])}
         </p>
       </div>
+
+      {values.type === "expo" && (
+        <label className="flex flex-col gap-1">
+          <span className={FIELD_LABEL}>{t.submission.dateFinLabel}</span>
+          <input
+            type="date"
+            min={values.date || undefined}
+            value={values.dateFin}
+            onChange={(e) => set("dateFin", e.target.value)}
+            className={FIELD_INPUT}
+          />
+          <span className={`mt-1 ${FIELD_HINT}`}>{t.submission.dateFinHint}</span>
+        </label>
+      )}
 
       {recurrence && onRecurrenceChange && (
         <div className="border-t border-border pt-4">

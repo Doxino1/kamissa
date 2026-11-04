@@ -9,6 +9,7 @@ interface EventRow {
   discipline: string | null;
   ville: string;
   date: string;
+  date_fin: string | null;
   lieu: string | null;
   lat: number | null;
   lng: number | null;
@@ -30,6 +31,7 @@ export function mapEventRow(row: EventRow): ArtEvent {
     discipline: row.discipline ?? "",
     ville: row.ville as ArtEvent["ville"],
     date: row.date,
+    dateFin: row.date_fin,
     lieu: row.lieu ?? "",
     lat: row.lat ?? undefined,
     lng: row.lng ?? undefined,

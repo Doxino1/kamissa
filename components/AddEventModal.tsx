@@ -16,6 +16,7 @@ const INITIAL: EventFormValues = {
   ville: "Paris",
   date: "",
   heure: "19:00",
+  dateFin: "",
   lieu: "",
   coutType: "",
   coutDetail: "",

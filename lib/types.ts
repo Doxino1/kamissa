@@ -20,6 +20,7 @@ export interface ArtEvent {
   discipline: string;
   ville: Ville;
   date: string; // ISO 8601
+  dateFin?: string | null; // ISO 8601, pour les événements qui durent (expositions)
   lieu: string;
   lat?: number;
   lng?: number;

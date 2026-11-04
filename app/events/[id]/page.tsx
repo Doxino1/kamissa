@@ -104,6 +104,13 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           <div className="border-t border-foreground">
             <div className="border-b border-border py-4">
               <p className="font-display text-2xl leading-tight first-letter:uppercase">{date}</p>
+              {event.dateFin && (
+                <p className="mt-1 text-[15px] text-text-soft">
+                  {t.evenements.until(
+                    formatInVille(event.dateFin, event.ville, { day: "numeric", month: "long", year: "numeric" }, locale)
+                  )}
+                </p>
+              )}
             </div>
             <div className="border-b border-border py-4">
               <p className="font-display text-2xl leading-tight">{event.lieu}</p>

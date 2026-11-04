@@ -112,6 +112,7 @@ export interface Dictionary {
     highlightGoing: (titre: string, date: string) => string;
     highlightMatch: string;
     tagline: string;
+    until: (date: string) => string;
     greetingShort: (hour: number, nom: string) => string;
     thisWeekLabel: (count: number, ville: string) => string;
   };
@@ -204,6 +205,8 @@ export interface Dictionary {
     description: string;
     lieu: string;
     heureLocale: (ville: string, tz: string) => string;
+    dateFinLabel: string;
+    dateFinHint: string;
     annonceDisclaimer: string;
     submitted: string;
     submittedTrusted: string;
@@ -526,6 +529,7 @@ export const fr: Dictionary = {
     highlightGoing: (titre, date) => `Prochain événement : ${titre} · ${date}`,
     highlightMatch: "Nouvelle suggestion de matching :",
     tagline: "L'art partout, tout le temps.",
+    until: (date) => `Jusqu'au ${date}`,
     greetingShort: (hour, nom) => (hour < 18 ? `Bonjour, ${nom}` : `Bonsoir, ${nom}`),
     thisWeekLabel: (count, ville) => `événement${count > 1 ? "s" : ""} cette semaine à ${ville}`,
   },
@@ -613,6 +617,8 @@ export const fr: Dictionary = {
     description: "Description",
     lieu: "Lieu",
     heureLocale: (ville, tz) => `Heure locale à ${ville} (${tz}).`,
+    dateFinLabel: "Date de fin (facultatif)",
+    dateFinHint: "L'exposition reste visible jusqu'à cette date.",
     annonceDisclaimer:
       "La transaction (paiement, échange) se fait directement entre vous, en dehors de l'application — on ne s'en occupe pas.",
     submitted: "Envoyé ! On le relit vite fait avant de le publier dans le flux.",
@@ -944,6 +950,7 @@ export const en: Dictionary = {
     highlightGoing: (titre, date) => `Next event: ${titre} · ${date}`,
     highlightMatch: "New matching suggestion:",
     tagline: "Art everywhere, all the time.",
+    until: (date) => `Until ${date}`,
     greetingShort: (hour, nom) => (hour < 12 ? `Good morning, ${nom}` : hour < 18 ? `Good afternoon, ${nom}` : `Good evening, ${nom}`),
     thisWeekLabel: (count, ville) => `event${count > 1 ? "s" : ""} this week in ${ville}`,
   },
@@ -1031,6 +1038,8 @@ export const en: Dictionary = {
     description: "Description",
     lieu: "Venue",
     heureLocale: (ville, tz) => `Local time in ${ville} (${tz}).`,
+    dateFinLabel: "End date (optional)",
+    dateFinHint: "The exhibition stays visible until this date.",
     annonceDisclaimer:
       "The transaction (payment, exchange) happens directly between you, outside the app — we don't handle it.",
     submitted: "Sent! We'll take a quick look before it goes live.",
@@ -1359,6 +1368,7 @@ export const el: Dictionary = {
     highlightGoing: (titre, date) => `Επόμενη εκδήλωση: ${titre} · ${date}`,
     highlightMatch: "Νέα πρόταση αντιστοίχισης:",
     tagline: "Η τέχνη παντού, πάντα.",
+    until: (date) => `Έως ${date}`,
     greetingShort: (hour, nom) => (hour < 18 ? `Καλημέρα, ${nom}` : `Καλησπέρα, ${nom}`),
     thisWeekLabel: (count, ville) => `εκδήλωση${count > 1 ? "εις" : ""} αυτή την εβδομάδα στην ${ville}`,
   },
@@ -1447,6 +1457,8 @@ export const el: Dictionary = {
     description: "Περιγραφή",
     lieu: "Χώρος",
     heureLocale: (ville, tz) => `Τοπική ώρα στην ${ville} (${tz}).`,
+    dateFinLabel: "Ημερομηνία λήξης (προαιρετικά)",
+    dateFinHint: "Η έκθεση παραμένει ορατή έως αυτή την ημερομηνία.",
     annonceDisclaimer:
       "Η συναλλαγή (πληρωμή, ανταλλαγή) γίνεται απευθείας μεταξύ σας, εκτός εφαρμογής — δεν εμπλεκόμαστε.",
     submitted: "Στάλθηκε! Θα της ρίξουμε μια ματιά πριν δημοσιευτεί.",

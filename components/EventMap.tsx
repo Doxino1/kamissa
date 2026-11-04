@@ -16,7 +16,8 @@ import { makePinIcon, setPinActive } from "@/lib/map-pins";
 import { EVENT_TYPE_COLORS } from "./EventTypeBadge";
 import { TILE_URL, TILE_ATTRIBUTION } from "@/lib/map-tiles";
 import { useLocale } from "@/lib/i18n/context";
-import { Locale } from "@/lib/i18n/dictionary";
+import { dictionaries, type Locale } from "@/lib/i18n/dictionary";
+import { isOngoing } from "@/lib/event-dates";
 
 // Repères carrés à la couleur de la catégorie, numérotés comme la liste
 // ( 01 ), ( 02 )… Le repère survolé (depuis la carte ou depuis la liste)
@@ -49,12 +50,16 @@ function ClusterLayer({
       const marker = L.marker([event.lat, event.lng], {
         icon: makePinIcon(event.n, EVENT_TYPE_COLORS[event.type] ?? "var(--cat-annonce)"),
       });
-      const dateStr = formatInVille(
-        event.date,
-        event.ville,
-        { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" },
-        locale
-      );
+      const dateStr = isOngoing(event)
+        ? dictionaries[locale].evenements.until(
+            formatInVille(event.dateFin!, event.ville, { day: "numeric", month: "short" }, locale)
+          )
+        : formatInVille(
+            event.date,
+            event.ville,
+            { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" },
+            locale
+          );
       const titre = escapeHtml(localizedTitle(event, locale));
       const dateHtml = escapeHtml(dateStr);
 

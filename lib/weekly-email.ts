@@ -34,6 +34,7 @@ interface EventRow {
   discipline: string | null;
   ville: string;
   date: string;
+  date_fin: string | null;
   lieu: string | null;
   titre_en: string | null;
   titre_el: string | null;
@@ -56,12 +57,15 @@ function escapeHtml(value: string): string {
 
 function eventHtml(event: EventRow, locale: Locale, siteUrl: string | undefined): string {
   const t = dictionaries[locale];
-  const date = formatInVille(
-    event.date,
-    event.ville as Ville,
-    { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" },
-    locale
-  );
+  const date =
+    event.date_fin && new Date(event.date).getTime() < Date.now()
+      ? t.evenements.until(formatInVille(event.date_fin, event.ville as Ville, { day: "numeric", month: "long" }, locale))
+      : formatInVille(
+          event.date,
+          event.ville as Ville,
+          { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" },
+          locale
+        );
   const link = siteUrl ? `${siteUrl}/events/${event.id}` : null;
   const titreSafe = escapeHtml(
     localizedTitle({ titre: event.titre, titreEn: event.titre_en, titreEl: event.titre_el }, locale)
@@ -180,10 +184,12 @@ export async function sendWeeklyEmails({ dryRun, onLog }: SendWeeklyEmailsOption
       .eq("recoit_email_hebdo", true),
     supabase
       .from("events")
-      .select("id, titre, description, type, discipline, ville, date, lieu, titre_en, titre_el, description_en, description_el")
+      .select("id, titre, description, type, discipline, ville, date, date_fin, lieu, titre_en, titre_el, description_en, description_el")
       .eq("statut", "publie")
-      .gte("date", now.toISOString())
-      .lt("date", in7Days.toISOString())
+      // Ce qui ouvre dans la semaine, et les expositions qui y ferment.
+      .or(
+        `and(date.gte.${now.toISOString()},date.lt.${in7Days.toISOString()}),and(date_fin.gte.${now.toISOString()},date_fin.lt.${in7Days.toISOString()})`
+      )
       .order("date", { ascending: true }),
     supabase.from("matching_tags").select("user_id, tag, created_at"),
     supabase.from("groups").select("id, ville"),

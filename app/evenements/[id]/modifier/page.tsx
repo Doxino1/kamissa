@@ -38,7 +38,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
       const { data, error } = await supabase
         .from("events")
         .select(
-          "titre, description, type, sous_type, discipline, ville, date, lieu, soumis_par, cout_type, cout_detail, statut"
+          "titre, description, type, sous_type, discipline, ville, date, date_fin, lieu, soumis_par, cout_type, cout_detail, statut"
         )
         .eq("id", id)
         .single();
@@ -64,6 +64,7 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
         ville,
         date,
         heure: time,
+        dateFin: data.date_fin ? utcIsoToZonedParts(data.date_fin, VILLE_TIMEZONES[ville]).date : "",
         lieu: data.lieu ?? "",
         coutType: (data.cout_type as CoutType) ?? "",
         coutDetail: data.cout_detail ?? "",
@@ -92,6 +93,10 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
         discipline: values.discipline,
         ville: values.ville,
         date: dateIso,
+        date_fin:
+          values.type === "expo" && values.dateFin
+            ? zonedTimeToUtcIso(values.dateFin, "23:59", VILLE_TIMEZONES[values.ville])
+            : null,
         lieu: values.lieu,
         cout_type: costEligible ? values.coutType || null : null,
         cout_detail: costEligible ? values.coutDetail || null : null,

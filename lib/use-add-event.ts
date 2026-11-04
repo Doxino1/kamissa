@@ -48,6 +48,11 @@ export function useAddEventSubmit(recurrence: RecurrenceValue) {
         discipline: values.discipline,
         ville: values.ville,
         date: occurrenceDate.toISOString(),
+        // Fin de journée, dans le fuseau de la ville de l'événement.
+        date_fin:
+          values.type === "expo" && values.dateFin && occurrences === 1
+            ? zonedTimeToUtcIso(values.dateFin, "23:59", VILLE_TIMEZONES[values.ville])
+            : null,
         lieu: values.lieu,
         soumis_par: user.id,
         lat: coords?.lat ?? null,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { eventEndTime, eventSortTime } from "./event-dates";
 import { ArtEvent, CoutType, EventType, Ville } from "./types";
 
 // Filtres partagés entre la page Événements et la page Calendrier — même
@@ -19,7 +20,7 @@ export function useEventFilters(allEvents: ArtEvent[], now: number) {
   const events = useMemo(() => {
     const q = query.trim().toLowerCase();
     return allEvents
-      .filter((e) => new Date(e.date).getTime() >= now)
+      .filter((e) => eventEndTime(e) >= now)
       .filter((e) => e.ville === ville)
       .filter((e) => types.length === 0 || types.includes(e.type))
       .filter((e) => disciplines.length === 0 || disciplines.includes(e.discipline))
@@ -33,7 +34,7 @@ export function useEventFilters(allEvents: ArtEvent[], now: number) {
           e.titre.toLowerCase().includes(q) ||
           e.description.toLowerCase().includes(q)
       )
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      .sort((a, b) => eventSortTime(a, now) - eventSortTime(b, now));
   }, [allEvents, ville, types, disciplines, cout, query, now]);
 
   return {

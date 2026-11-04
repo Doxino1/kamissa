@@ -10,6 +10,7 @@ import { localizedTitle } from "@/lib/localize-event";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { useLocale } from "@/lib/i18n/context";
 import { useToast } from "@/lib/toast-context";
+import { isOngoing } from "@/lib/event-dates";
 
 // Numéro de ligne façon Racines : ( 01 ), ( 02 )… — le même que sur le repère
 // de la carte.
@@ -41,12 +42,9 @@ export function EventCard({
     navigator.clipboard.writeText(url).then(() => showToast(t.toast.linkCopied));
   }
 
-  const date = formatInVille(
-    event.date,
-    event.ville,
-    { weekday: "short", day: "numeric", month: "short" },
-    locale
-  );
+  const date = isOngoing(event)
+    ? t.evenements.until(formatInVille(event.dateFin!, event.ville, { day: "numeric", month: "short" }, locale))
+    : formatInVille(event.date, event.ville, { weekday: "short", day: "numeric", month: "short" }, locale);
 
   return (
     <article
