@@ -43,6 +43,8 @@ export default function MesPostsPage() {
   const [legende, setLegende] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  // Avancement de l'envoi d'une vidéo, en % (null hors envoi).
+  const [videoProgress, setVideoProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   // Change après chaque publication pour vider le champ fichier.
   const [formKey, setFormKey] = useState(0);
@@ -84,7 +86,9 @@ export default function MesPostsPage() {
     const video = isVideoFile(file);
     let url: string | null;
     if (video) {
-      const result = await uploadVideo(userId, file);
+      setVideoProgress(0);
+      const result = await uploadVideo(userId, file, setVideoProgress);
+      setVideoProgress(null);
       url = result.url;
       if (!url) {
         setSaving(false);
@@ -155,9 +159,17 @@ export default function MesPostsPage() {
             <span className={FIELD_LABEL}>{t.posts.legende}</span>
             <textarea value={legende} onChange={(e) => setLegende(e.target.value)} rows={3} className={FIELD_TEXTAREA} />
           </label>
+          {videoProgress !== null && (
+            <div className="flex flex-col gap-2" role="status">
+              <div className="h-[3px] w-full bg-border">
+                <div className="h-full bg-foreground transition-[width]" style={{ width: `${videoProgress}%` }} />
+              </div>
+              <p className={FIELD_HINT}>{t.posts.videoUploading}</p>
+            </div>
+          )}
           {error && <p className="text-sm font-semibold text-danger">{error}</p>}
           <button type="submit" disabled={saving} className={`${PRIMARY_BUTTON} self-start`}>
-            {saving ? "…" : t.posts.publish}
+            {videoProgress !== null ? `${videoProgress} %` : saving ? "…" : t.posts.publish}
           </button>
         </form>
 

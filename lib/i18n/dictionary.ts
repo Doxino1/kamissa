@@ -298,6 +298,7 @@ export interface Dictionary {
     legende: string;
     media: string;
     mediaHint: string;
+    videoUploading: string;
     publish: string;
     empty: string;
     comments: string;
@@ -717,6 +718,7 @@ export const fr: Dictionary = {
     legende: "Légende",
     media: "Photo ou vidéo",
     mediaHint: "Vidéo : MP4 ou MOV, 50 Mo maximum.",
+    videoUploading: "Envoi de la vidéo : garde cette page ouverte.",
     publish: "Publier",
     empty: "Rien à montrer pour l'instant — poste ta première photo.",
     comments: "Commentaires",
@@ -1131,6 +1133,7 @@ export const en: Dictionary = {
     legende: "Caption",
     media: "Photo or video",
     mediaHint: "Video: MP4 or MOV, 50 MB max.",
+    videoUploading: "Uploading your video: keep this page open.",
     publish: "Post",
     empty: "Nothing to show yet — post your first photo.",
     comments: "Comments",
@@ -1546,6 +1549,7 @@ export const el: Dictionary = {
     legende: "Λεζάντα",
     media: "Φωτογραφία ή βίντεο",
     mediaHint: "Βίντεο: MP4 ή MOV, έως 50 MB.",
+    videoUploading: "Το βίντεο ανεβαίνει: κράτα αυτή τη σελίδα ανοιχτή.",
     publish: "Δημοσίευση",
     empty: "Τίποτα να δείξουμε ακόμη — ανέβασε την πρώτη σου φωτογραφία.",
     comments: "Σχόλια",

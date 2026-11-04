@@ -236,9 +236,17 @@ export function videoErrorMessage(
   return error ?? "Upload failed";
 }
 
+// Envoi par morceaux (protocole TUS, 6 Mo imposés par Supabase) plutôt qu'en un
+// seul bloc : sur réseau mobile, une vidéo met plusieurs minutes à partir. On
+// peut ainsi afficher la progression, et une coupure ne fait pas tout
+// recommencer. Le client TUS n'est chargé que lorsqu'on envoie une vidéo.
+const TUS_CHUNK_BYTES = 6 * 1024 * 1024;
+const TUS_RETRY_DELAYS_MS = [0, 3000, 5000, 10000, 20000];
+
 export async function uploadVideo(
   userId: string,
-  file: File
+  file: File,
+  onProgress?: (percent: number) => void
 ): Promise<{ url: string | null; error: string | null; errorCode: VideoErrorCode | null }> {
   // Certains navigateurs laissent le type vide : on le déduit de l'extension.
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
@@ -248,10 +256,34 @@ export async function uploadVideo(
   if (file.size > VIDEO_MAX_BYTES) return { url: null, error: null, errorCode: "video_too_large" };
 
   const supabase = createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) return { url: null, error: "Unauthorized", errorCode: null };
+
   const fileExt = contentType === "video/quicktime" ? "mov" : contentType === "video/webm" ? "webm" : "mp4";
   const path = `${userId}/posts/${Date.now()}-${crypto.randomUUID()}.${fileExt}`;
-  const { error } = await supabase.storage.from("videos").upload(path, file, { contentType });
-  if (error) return { url: null, error: error.message, errorCode: null };
+  const { Upload } = await import("tus-js-client");
+
+  const uploadError = await new Promise<string | null>((resolve) => {
+    new Upload(file, {
+      // Hôte direct du stockage : recommandé par Supabase pour les gros fichiers.
+      endpoint: `${process.env.NEXT_PUBLIC_SUPABASE_URL!.replace(".supabase.co", ".storage.supabase.co")}/storage/v1/upload/resumable`,
+      headers: {
+        authorization: `Bearer ${session.access_token}`,
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      },
+      chunkSize: TUS_CHUNK_BYTES,
+      retryDelays: TUS_RETRY_DELAYS_MS,
+      uploadDataDuringCreation: true,
+      removeFingerprintOnSuccess: true,
+      metadata: { bucketName: "videos", objectName: path, contentType, cacheControl: "3600" },
+      onProgress: (sent, total) => onProgress?.(Math.round((sent / total) * 100)),
+      onError: (err) => resolve(err.message),
+      onSuccess: () => resolve(null),
+    }).start();
+  });
+  if (uploadError) return { url: null, error: uploadError, errorCode: null };
 
   const {
     data: { publicUrl },
