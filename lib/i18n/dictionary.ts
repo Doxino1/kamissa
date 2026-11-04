@@ -230,14 +230,8 @@ export interface Dictionary {
     noResults: string;
     contact: string;
     noContact: string;
-    pass: string;
     propose: string;
-    historyTitle: string;
-    undo: string;
-    matchedTitle: string;
-    matchedBody: (nom: string) => string;
-    matchedCta: string;
-    noMoreCandidates: string;
+    proposed: string;
   };
 
   communaute: {
@@ -488,7 +482,7 @@ export const fr: Dictionary = {
     empty: "Aucune notification pour l'instant.",
     markAllRead: "Tout marquer comme lu",
     typeFollower: (nom) => `${nom} a commencé à te suivre.`,
-    typeMatch: (nom) => `Nouvelle suggestion de matching : ${nom}.`,
+    typeMatch: (nom) => `${nom} te propose un échange.`,
     typeComment: (nom) => `${nom} a commenté ton post.`,
     prefsTitle: "Notifications",
     prefsFollowers: "Nouveaux abonnés",
@@ -647,14 +641,8 @@ export const fr: Dictionary = {
     noResults: "Personne à te proposer pour l'instant — reviens bientôt.",
     contact: "Contacter",
     noContact: "Pas de contact renseigné",
-    pass: "Passer",
     propose: "Proposer un échange",
-    historyTitle: "Actions récentes",
-    undo: "Annuler",
-    matchedTitle: "Ça matche !",
-    matchedBody: (nom) => `Toi et ${nom} avez proposé un échange chacun de votre côté.`,
-    matchedCta: "Voir le profil",
-    noMoreCandidates: "Plus personne à te proposer pour l'instant — reviens bientôt.",
+    proposed: "Échange proposé",
   },
   communaute: {
     title: (ville) => `Communauté ${ville}`,
@@ -908,7 +896,7 @@ export const en: Dictionary = {
     empty: "No notifications yet.",
     markAllRead: "Mark all as read",
     typeFollower: (nom) => `${nom} started following you.`,
-    typeMatch: (nom) => `New matching suggestion: ${nom}.`,
+    typeMatch: (nom) => `${nom} proposed an exchange.`,
     typeComment: (nom) => `${nom} commented on your post.`,
     prefsTitle: "Notifications",
     prefsFollowers: "New followers",
@@ -1067,14 +1055,8 @@ export const en: Dictionary = {
     noResults: "No one to suggest just yet — check back soon.",
     contact: "Contact",
     noContact: "No contact info provided",
-    pass: "Pass",
     propose: "Propose an exchange",
-    historyTitle: "Recent actions",
-    undo: "Undo",
-    matchedTitle: "It's a match!",
-    matchedBody: (nom) => `You and ${nom} both proposed an exchange.`,
-    matchedCta: "View profile",
-    noMoreCandidates: "No one else to suggest right now — check back soon.",
+    proposed: "Exchange proposed",
   },
   communaute: {
     title: (ville) => `${ville} Community`,
@@ -1326,7 +1308,7 @@ export const el: Dictionary = {
     empty: "Καμία ειδοποίηση ακόμη.",
     markAllRead: "Σήμανση όλων ως αναγνωσμένα",
     typeFollower: (nom) => `Ο/Η ${nom} άρχισε να σε ακολουθεί.`,
-    typeMatch: (nom) => `Νέα πρόταση αντιστοίχισης: ${nom}.`,
+    typeMatch: (nom) => `Πρόταση ανταλλαγής από ${nom}.`,
     typeComment: (nom) => `Ο/Η ${nom} σχολίασε το post σου.`,
     prefsTitle: "Ειδοποιήσεις",
     prefsFollowers: "Νέοι ακόλουθοι",
@@ -1490,14 +1472,8 @@ export const el: Dictionary = {
     noResults: "Κανείς για πρόταση αυτή τη στιγμή — ξαναπέρασε σύντομα.",
     contact: "Επικοινωνία",
     noContact: "Δεν έχει δοθεί στοιχείο επικοινωνίας",
-    pass: "Παράλειψη",
     propose: "Πρόταση ανταλλαγής",
-    historyTitle: "Πρόσφατες ενέργειες",
-    undo: "Αναίρεση",
-    matchedTitle: "Ταίριασμα!",
-    matchedBody: (nom) => `Εσύ και ο/η ${nom} προτείνατε ανταλλαγή ο καθένας από την πλευρά του.`,
-    matchedCta: "Προβολή προφίλ",
-    noMoreCandidates: "Κανείς άλλος για πρόταση αυτή τη στιγμή — ξαναπέρασε σύντομα.",
+    proposed: "Η πρόταση στάλθηκε",
   },
   communaute: {
     title: (ville) => `Κοινότητα ${ville}`,

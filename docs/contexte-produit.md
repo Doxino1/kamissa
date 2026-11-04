@@ -22,7 +22,7 @@ MVP développé en solo, 100 % gratuit, sans paiement. **Claude (chat) = partena
 
 ## Décisions produit
 
-- **Matching asymétrique** : suggestions façon LinkedIn, sans opt-in mutuel. Basé sur tags « je cherche » (atelier partagé, collaboration, mentorat), ville, discipline. Contact par email ou réseaux (Instagram, TikTok, X) ; messagerie interne plus tard. ⚠️ Le prototype Claude Design montre une carte type « swipe » (Passer / Proposer un échange).
+- **Matching asymétrique** : suggestions façon LinkedIn, sans opt-in mutuel. Basé sur tags « je cherche » (atelier partagé, collaboration, mentorat), ville, discipline. Contact par email ou réseaux (Instagram, TikTok, X) ; messagerie interne plus tard. Tranché le 04/11/2026 : suggestions en grille (maquette Racines), plus de carte « swipe ». « Proposer un échange » prévient la personne par une notification.
 - **Annonces ≠ marketplace** : ventes d'œuvres/matériel et partage d'atelier = sous-type d'événement « Annonce ». Transactions hors plateforme, disclaimer explicite.
 - **Annuaire des boutiques** (Rougier & Plé, Boesner…) : couche d'info carte/liste, pas de vente.
 - **Communauté** : un seul groupe par ville, pas de sous-groupes par quartier tant que le volume ne le justifie pas.

@@ -5,29 +5,25 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
-import { Modal } from "@/components/Modal";
+import { ContactLinks } from "@/components/ContactLinks";
 import { sendNotification } from "@/lib/notify";
-import { MatchingTag, ProfileType, Ville } from "@/lib/types";
+import { MatchingTag, Ville } from "@/lib/types";
 
 interface Suggestion {
   id: string;
   nom: string;
-  typeProfil: ProfileType;
   disciplines: string[];
   bio: string;
   sharedTags: MatchingTag[];
+  email: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  twitter: string | null;
 }
 
-interface HistoryEntry {
-  candidateId: string;
-  nom: string;
-  action: "pass" | "propose";
-}
-
-const INDEX_KEY = "kamissa_matchIndex";
-const HISTORY_KEY = "kamissa_matchHistory";
-const MAX_HISTORY = 5;
-
+// Suggestions façon LinkedIn, sans accord mutuel : même ville, une discipline
+// et un tag « je cherche » en commun. On contacte la personne par email ou sur
+// ses réseaux ; « Proposer un échange » la prévient par une notification.
 export function MatchingTab() {
   const t = useT();
   const router = useRouter();
@@ -35,27 +31,9 @@ export function MatchingTab() {
   const [error, setError] = useState<string | null>(null);
   const [myTags, setMyTags] = useState<MatchingTag[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [proposed, setProposed] = useState<Set<string>>(new Set());
   const [ville, setVille] = useState<Ville | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [matchIndex, setMatchIndex] = useState(0);
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [matched, setMatched] = useState<{ id: string; nom: string } | null>(null);
-
-  useEffect(() => {
-    function sync() {
-      const storedIndex = window.localStorage.getItem(INDEX_KEY);
-      if (storedIndex) setMatchIndex(Number(storedIndex) || 0);
-      const storedHistory = window.localStorage.getItem(HISTORY_KEY);
-      if (storedHistory) {
-        try {
-          setHistory(JSON.parse(storedHistory));
-        } catch {
-          // ignore un historique corrompu
-        }
-      }
-    }
-    sync();
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -72,9 +50,11 @@ export function MatchingTab() {
       }
       setUserId(user.id);
 
-      const [{ data: me, error: meError }, { data: myTagRows }] = await Promise.all([
+      const [{ data: me, error: meError }, { data: myTagRows }, { data: sent }, { data: blocks }] = await Promise.all([
         supabase.from("profiles").select("ville, disciplines").eq("id", user.id).single(),
         supabase.from("matching_tags").select("tag").eq("user_id", user.id),
+        supabase.from("matching_proposals").select("to_user_id").eq("from_user_id", user.id),
+        supabase.from("blocks").select("blocker_id, blocked_id"),
       ]);
 
       if (!active) return;
@@ -85,14 +65,21 @@ export function MatchingTab() {
         return;
       }
       setVille(me.ville as Ville);
+      setProposed(new Set((sent ?? []).map((row) => row.to_user_id)));
 
       const mine = (myTagRows ?? []).map((row) => row.tag as MatchingTag);
       setMyTags(mine);
 
+      const blockedIds = new Set<string>();
+      for (const row of blocks ?? []) {
+        if (row.blocker_id === user.id) blockedIds.add(row.blocked_id);
+        if (row.blocked_id === user.id) blockedIds.add(row.blocker_id);
+      }
+
       const [{ data: candidates, error: candidatesError }, { data: allTags }] = await Promise.all([
         supabase
           .from("profiles")
-          .select("id, nom, type_profil, disciplines, bio")
+          .select("id, nom, disciplines, bio, email_contact, instagram_handle, tiktok_handle, twitter_handle")
           .eq("ville", me.ville)
           .neq("id", user.id),
         supabase.from("matching_tags").select("user_id, tag"),
@@ -115,6 +102,7 @@ export function MatchingTab() {
 
       const results: Suggestion[] = [];
       for (const c of candidates ?? []) {
+        if (blockedIds.has(c.id)) continue;
         const candidateDisciplines: string[] = c.disciplines ?? [];
         const candidateTags = tagsByUser.get(c.id) ?? [];
         const sharedDisciplines = candidateDisciplines.filter((d) => me.disciplines.includes(d));
@@ -124,14 +112,19 @@ export function MatchingTab() {
           results.push({
             id: c.id,
             nom: c.nom,
-            typeProfil: c.type_profil as ProfileType,
             disciplines: candidateDisciplines,
             bio: c.bio ?? "",
             sharedTags,
+            email: c.email_contact,
+            instagram: c.instagram_handle,
+            tiktok: c.tiktok_handle,
+            twitter: c.twitter_handle,
           });
         }
       }
 
+      // Les profils qui partagent le plus de tags d'abord.
+      results.sort((a, b) => b.sharedTags.length - a.sharedTags.length);
       setSuggestions(results);
       setLoading(false);
     }
@@ -143,71 +136,25 @@ export function MatchingTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
-  function persistIndex(next: number) {
-    setMatchIndex(next);
-    window.localStorage.setItem(INDEX_KEY, String(next));
-  }
-
-  function persistHistory(next: HistoryEntry[]) {
-    setHistory(next);
-    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
-  }
-
-  function handlePass() {
-    const current = suggestions[matchIndex];
-    if (!current) return;
-    persistHistory(
-      [...history, { candidateId: current.id, nom: current.nom, action: "pass" as const }].slice(-MAX_HISTORY)
-    );
-    persistIndex(matchIndex + 1);
-  }
-
-  async function handlePropose() {
-    const current = suggestions[matchIndex];
-    if (!current || !userId) return;
+  async function handlePropose(candidateId: string) {
+    if (!userId || proposed.has(candidateId)) return;
 
     const supabase = createClient();
-    await supabase.from("matching_proposals").insert({ from_user_id: userId, to_user_id: current.id });
-
-    const { data: reciprocal } = await supabase
+    const { error: insertError } = await supabase
       .from("matching_proposals")
-      .select("id")
-      .eq("from_user_id", current.id)
-      .eq("to_user_id", userId)
-      .maybeSingle();
-
-    persistHistory(
-      [...history, { candidateId: current.id, nom: current.nom, action: "propose" as const }].slice(-MAX_HISTORY)
-    );
-    persistIndex(matchIndex + 1);
-    if (reciprocal) {
-      setMatched({ id: current.id, nom: current.nom });
-      sendNotification({ userId: current.id, actorId: userId, type: "match" }).catch(() => {});
-    }
-  }
-
-  async function handleUndo() {
-    const last = history[history.length - 1];
-    if (!last) return;
-
-    if (last.action === "propose" && userId) {
-      const supabase = createClient();
-      await supabase
-        .from("matching_proposals")
-        .delete()
-        .eq("from_user_id", userId)
-        .eq("to_user_id", last.candidateId);
+      .insert({ from_user_id: userId, to_user_id: candidateId });
+    if (insertError) {
+      setError(insertError.message);
+      return;
     }
 
-    persistHistory(history.slice(0, -1));
-    persistIndex(Math.max(0, matchIndex - 1));
+    setProposed((prev) => new Set(prev).add(candidateId));
+    sendNotification({ userId: candidateId, actorId: userId, type: "match" }).catch(() => {});
   }
 
   if (loading) {
     return <p className="pt-7 text-sm text-foreground-muted">{t.common.loading}</p>;
   }
-
-  const current = suggestions[matchIndex];
 
   return (
     <div className="pt-7">
@@ -219,102 +166,59 @@ export function MatchingTab() {
         <p className="mt-10 font-display text-2xl italic text-foreground-muted">{t.matching.needTag}</p>
       )}
 
-      {!error && myTags.length > 0 && !current && (
-        <p className="mt-10 font-display text-2xl italic text-foreground-muted">{t.matching.noMoreCandidates}</p>
+      {!error && myTags.length > 0 && suggestions.length === 0 && (
+        <p className="mt-10 font-display text-2xl italic text-foreground-muted">{t.matching.noResults}</p>
       )}
 
-      {current && (
-        <article className="mt-8 max-w-[420px] border-t border-foreground pt-[18px]">
-          <div className="flex h-[200px] items-center justify-center bg-gradient-to-br from-cat-atelier to-[#a87b3e]">
-            <span className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-background bg-cat-vernissage font-display text-4xl text-background">
-              {current.nom.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <div className="mt-4 flex items-baseline justify-between gap-3">
-            <Link
-              href={`/artistes/${current.id}`}
-              className="font-display text-[30px] leading-none underline-offset-4 hover:underline"
-            >
-              {current.nom}
-            </Link>
-            <span className="shrink-0 text-xs text-foreground-muted">
-              {t.profileTypeLabels[current.typeProfil]}
-              {ville ? ` · ${t.villeLabels[ville]}` : ""}
-            </span>
-          </div>
-          {current.disciplines.length > 0 && (
-            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.1em] text-accent-secondary">
-              {current.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
-            </p>
-          )}
-          {current.bio && <p className="mt-2.5 font-display text-[22px] italic leading-[1.2]">{current.bio}</p>}
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {current.sharedTags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em]"
-              >
-                {t.matchingTagLabels[tag]}
-              </span>
-            ))}
-          </div>
-          <div className="mt-5 flex gap-2.5">
-            <button
-              type="button"
-              onClick={handlePass}
-              className="min-h-11 flex-1 rounded-full border border-border text-xs font-semibold uppercase tracking-[0.1em] text-foreground-muted transition hover:border-foreground hover:text-foreground"
-            >
-              {t.matching.pass}
-            </button>
-            <button
-              type="button"
-              onClick={handlePropose}
-              className="min-h-11 flex-1 rounded-full bg-foreground text-xs font-semibold uppercase tracking-[0.1em] text-background transition hover:bg-accent-hover"
-            >
-              {t.matching.propose}
-            </button>
-          </div>
-        </article>
-      )}
-
-      {history.length > 0 && (
-        <div className="mt-8 max-w-[420px]">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground-muted">
-              ( {t.matching.historyTitle} )
-            </h2>
-            <button
-              type="button"
-              onClick={handleUndo}
-              className="min-h-8 text-xs font-semibold uppercase tracking-[0.1em] underline underline-offset-4"
-            >
-              {t.matching.undo}
-            </button>
-          </div>
-          <ul className="mt-1 flex flex-col">
-            {[...history].reverse().map((entry, i) => (
-              <li
-                key={`${entry.candidateId}-${history.length - i}`}
-                className="border-b border-border py-2 text-sm"
-              >
-                {entry.action === "pass" ? t.matching.pass : t.matching.propose} — {entry.nom}
-              </li>
-            ))}
-          </ul>
+      {suggestions.length > 0 && (
+        <div className="mt-6 grid grid-cols-1 gap-7 sm:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+          {suggestions.map((s) => {
+            const isProposed = proposed.has(s.id);
+            const hasContact = s.email || s.instagram || s.tiktok || s.twitter;
+            return (
+              <article key={s.id} className="flex flex-col gap-2.5 border-t border-foreground pt-[18px]">
+                <div className="flex items-baseline justify-between gap-3">
+                  <Link
+                    href={`/artistes/${s.id}`}
+                    className="font-display text-[30px] leading-none underline-offset-4 hover:underline"
+                  >
+                    {s.nom}
+                  </Link>
+                  {ville && <span className="shrink-0 text-xs text-foreground-muted">{t.villeLabels[ville]}</span>}
+                </div>
+                {s.disciplines.length > 0 && (
+                  <p className="text-xs font-semibold uppercase tracking-[0.1em] text-accent-secondary">
+                    {s.disciplines.map((d) => t.disciplineLabels[d] ?? d).join(", ")}
+                  </p>
+                )}
+                {s.bio && <p className="font-display text-[22px] italic leading-[1.2]">{s.bio}</p>}
+                <div className="flex flex-wrap gap-1.5">
+                  {s.sharedTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em]"
+                    >
+                      {t.matchingTagLabels[tag]}
+                    </span>
+                  ))}
+                </div>
+                {hasContact ? (
+                  <ContactLinks email={s.email} instagram={s.instagram} tiktok={s.tiktok} twitter={s.twitter} />
+                ) : (
+                  <p className="text-xs text-foreground-muted">{t.matching.noContact}</p>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handlePropose(s.id)}
+                  disabled={isProposed}
+                  className="mt-1.5 min-h-11 self-start rounded-full border border-foreground px-[22px] text-xs font-semibold uppercase tracking-[0.1em] transition hover:bg-surface-hover disabled:border-border disabled:text-foreground-muted disabled:hover:bg-transparent"
+                >
+                  {isProposed ? t.matching.proposed : t.matching.propose}
+                </button>
+              </article>
+            );
+          })}
         </div>
-      )}
-
-      {matched && (
-        <Modal title={t.matching.matchedTitle} onClose={() => setMatched(null)}>
-          <p className="text-[15px] leading-relaxed text-text-soft">{t.matching.matchedBody(matched.nom)}</p>
-          <Link
-            href={`/artistes/${matched.id}`}
-            onClick={() => setMatched(null)}
-            className="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-full bg-foreground text-[13px] font-semibold uppercase tracking-[0.12em] text-background transition hover:bg-accent-hover"
-          >
-            {t.matching.matchedCta}
-          </Link>
-        </Modal>
       )}
     </div>
   );
