@@ -5,10 +5,9 @@ export type ProfileType = "artiste_pro" | "amateur" | "galerie" | "institution" 
 export type MatchingTag = "atelier_partage" | "collaborations" | "mentorat";
 export type CoutType = "gratuit" | "payant";
 
-// Types d'événements pour lesquels le champ coût a un sens — les autres
-// (vernissage/expo/annonce) ne l'affichent jamais, cf. contrainte SQL
-// cout_only_for_paid_types (migration 0024).
-export const EVENT_TYPES_WITH_COST: EventType[] = ["workshop", "open_call", "residency"];
+// Types d'événements pour lesquels le champ coût a un sens : tous sauf les
+// annonces, cf. contrainte SQL cout_not_on_annonce (migration 0035).
+export const EVENT_TYPES_WITH_COST: EventType[] = ["vernissage", "expo", "workshop", "open_call", "residency"];
 
 export type Ville = "Paris" | "Athènes";
 

@@ -23,10 +23,10 @@ export function useEventFilters(allEvents: ArtEvent[], now: number) {
       .filter((e) => e.ville === ville)
       .filter((e) => types.length === 0 || types.includes(e.type))
       .filter((e) => disciplines.length === 0 || disciplines.includes(e.discipline))
-      // Le filtre coût ne doit jamais masquer un événement qui n'a pas ce
-      // champ (vernissage/expo/annonce) — seuls les workshop/open_call/
-      // residency avec un coût non correspondant sont exclus.
-      .filter((e) => !cout || !e.coutType || e.coutType === cout)
+      // Filtre strict : un événement sans prix renseigné n'apparaît ni dans
+      // « Gratuit » ni dans « Payant », pour ne jamais annoncer gratuite une
+      // entrée qui ne l'est pas.
+      .filter((e) => !cout || e.coutType === cout)
       .filter(
         (e) =>
           !q ||
