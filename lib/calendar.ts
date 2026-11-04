@@ -15,6 +15,12 @@ function escapeIcsText(text: string): string {
   return text.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
 }
 
+// Beaucoup de lieux contiennent déjà la ville (« Musée du Louvre, Paris »).
+function eventLocation(event: ArtEvent): string {
+  if (!event.lieu) return event.ville;
+  return event.lieu.includes(event.ville) ? event.lieu : `${event.lieu}, ${event.ville}`;
+}
+
 export function googleCalendarUrl(event: ArtEvent, locale: Locale): string {
   const start = new Date(event.date);
   const end = new Date(start.getTime() + DEFAULT_DURATION_MS);
@@ -25,7 +31,7 @@ export function googleCalendarUrl(event: ArtEvent, locale: Locale): string {
     text: localizedTitle(event, locale),
     dates,
     details: localizedDescription(event, locale),
-    location: `${event.lieu}, ${event.ville}`,
+    location: eventLocation(event),
   });
 
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
@@ -71,7 +77,7 @@ export function icsContent(event: ArtEvent, locale: Locale): string {
     `DTEND:${toIcsUtc(end)}`,
     `SUMMARY:${escapeIcsText(localizedTitle(event, locale))}`,
     `DESCRIPTION:${escapeIcsText(localizedDescription(event, locale))}`,
-    `LOCATION:${escapeIcsText(`${event.lieu}, ${event.ville}`)}`,
+    `LOCATION:${escapeIcsText(eventLocation(event))}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ];
