@@ -299,3 +299,38 @@ export async function removeUploadedFile(url: string | null) {
   if (!match) return;
   await createClient().storage.from(match[1]).remove([decodeURIComponent(match[2])]);
 }
+
+// ---------------------------------------------------------------------------
+// Images de la bibliothèque privée (migration 0037) : bucket privé "library",
+// lu par URL signée. library_items.image_url y contient un chemin, pas une URL.
+// ---------------------------------------------------------------------------
+
+const LIBRARY_URL_TTL_S = 60 * 60;
+
+export async function uploadLibraryImage(
+  userId: string,
+  original: File
+): Promise<{ path: string | null; error: string | null; errorCode: UploadErrorCode | null }> {
+  const { file, errorCode } = await prepareImage(original, "bibliotheque");
+  if (!file) return { path: null, error: null, errorCode };
+
+  const ext = file.type === "image/gif" ? "gif" : "jpg";
+  const path = `${userId}/${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const { error } = await createClient().storage.from("library").upload(path, file, { contentType: file.type });
+  if (error) return { path: null, error: error.message, errorCode: null };
+  return { path, error: null, errorCode: null };
+}
+
+export async function libraryImageUrls(paths: string[]): Promise<Record<string, string>> {
+  if (paths.length === 0) return {};
+  const { data } = await createClient().storage.from("library").createSignedUrls(paths, LIBRARY_URL_TTL_S);
+  const urls: Record<string, string> = {};
+  for (const row of data ?? []) {
+    if (row.path && row.signedUrl) urls[row.path] = row.signedUrl;
+  }
+  return urls;
+}
+
+export async function removeLibraryImage(path: string) {
+  await createClient().storage.from("library").remove([path]);
+}

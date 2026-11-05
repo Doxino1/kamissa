@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { IMAGE_ACCEPT, uploadErrorMessage, uploadImage } from "@/lib/upload";
+import {
+  IMAGE_ACCEPT,
+  libraryImageUrls,
+  removeLibraryImage,
+  uploadErrorMessage,
+  uploadLibraryImage,
+} from "@/lib/upload";
 import { useT } from "@/lib/i18n/context";
 import { BackLink, PageHeader } from "@/components/PageHeader";
 import { DANGER_ACTION, FIELD, FIELD_INPUT, FIELD_LABEL, FIELD_TEXTAREA, FILE_INPUT, PRIMARY_BUTTON, SECTION } from "@/lib/form-styles";
@@ -26,6 +32,8 @@ export default function BibliothequePage() {
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // URL signées des images, par chemin dans le bucket privé.
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
 
   async function load(uid: string) {
     const supabase = createClient();
@@ -35,6 +43,7 @@ export default function BibliothequePage() {
       .eq("user_id", uid)
       .order("created_at", { ascending: false });
     setItems(data ?? []);
+    setImageUrls(await libraryImageUrls((data ?? []).flatMap((item) => item.image_url ?? [])));
   }
 
   useEffect(() => {
@@ -63,13 +72,13 @@ export default function BibliothequePage() {
 
     let imageUrl: string | null = null;
     if (file) {
-      const { url, error: uploadError, errorCode } = await uploadImage(userId, "bibliotheque", file);
-      if (!url) {
+      const { path, error: uploadError, errorCode } = await uploadLibraryImage(userId, file);
+      if (!path) {
         setSaving(false);
         setError(uploadErrorMessage(t, errorCode, uploadError));
         return;
       }
-      imageUrl = url;
+      imageUrl = path;
     }
 
     const supabase = createClient();
@@ -92,10 +101,11 @@ export default function BibliothequePage() {
     load(userId);
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(item: LibraryItem) {
     if (!userId) return;
     const supabase = createClient();
-    await supabase.from("library_items").delete().eq("id", id);
+    const { error: deleteError } = await supabase.from("library_items").delete().eq("id", item.id);
+    if (!deleteError && item.image_url) await removeLibraryImage(item.image_url);
     load(userId);
   }
 
@@ -141,14 +151,18 @@ export default function BibliothequePage() {
           )}
           {(items ?? []).map((item) => (
             <article key={item.id} className="flex flex-wrap gap-x-6 gap-y-3 border-b border-border py-6">
-              {item.image_url && (
+              {item.image_url && imageUrls[item.image_url] && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={item.image_url} alt={item.titre} className="aspect-square w-[140px] shrink-0 object-cover" />
+                <img
+                  src={imageUrls[item.image_url]}
+                  alt={item.titre}
+                  className="aspect-square w-[140px] shrink-0 object-cover"
+                />
               )}
               <div className="min-w-0 flex-[1_1_240px]">
                 <h3 className="font-display text-[28px] leading-tight">{item.titre}</h3>
                 {item.contenu && <p className="mt-2 whitespace-pre-line text-sm text-text-soft">{item.contenu}</p>}
-                <button type="button" onClick={() => handleDelete(item.id)} className={`${DANGER_ACTION} mt-3`}>
+                <button type="button" onClick={() => handleDelete(item)} className={`${DANGER_ACTION} mt-3`}>
                   {t.library.delete}
                 </button>
               </div>

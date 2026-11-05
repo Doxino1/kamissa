@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
+import { safeNext } from "@/lib/safe-next";
 
 // Liens des emails d'authentification (confirmation d'inscription,
 // réinitialisation du mot de passe). Contrairement à /auth/callback, qui
@@ -10,11 +11,6 @@ import { createClient } from "@/lib/supabase/server";
 // d'email Supabase pointent vers
 // /auth/confirm?token_hash={{ .TokenHash }}&type=…&next=…
 const ALLOWED_TYPES: EmailOtpType[] = ["signup", "recovery", "email", "email_change", "invite", "magiclink"];
-
-// N'accepte qu'un chemin interne, pour ne pas servir de redirection ouverte.
-function safeNext(next: string | null) {
-  return next && next.startsWith("/") && !next.startsWith("//") ? next : "/";
-}
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
