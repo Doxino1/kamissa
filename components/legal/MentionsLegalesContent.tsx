@@ -35,6 +35,13 @@ function FR() {
       </section>
 
       <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Données</h2>
+        <p className="mt-2 text-text-soft">
+          Une partie des événements parisiens provient du jeu de données <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">« Que faire à Paris »</a> de la Ville de Paris, sous licence Open Database License (ODbL).
+        </p>
+      </section>
+
+      <section>
         <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Hébergement</h2>
         <p className="mt-2 text-text-soft">
           Le site est hébergé par :
@@ -108,6 +115,13 @@ function EN() {
       </section>
 
       <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Data</h2>
+        <p className="mt-2 text-text-soft">
+          Some Paris events come from the City of Paris dataset <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">“Que faire à Paris”</a>, under the Open Database License (ODbL).
+        </p>
+      </section>
+
+      <section>
         <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Hosting</h2>
         <p className="mt-2 text-text-soft">
           The site is hosted by:
@@ -175,6 +189,13 @@ function EL() {
           <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
             contact@kamissa.app
           </a>
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Δεδομένα</h2>
+        <p className="mt-2 text-text-soft">
+          Μέρος των εκδηλώσεων του Παρισιού προέρχεται από το σύνολο δεδομένων <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">«Que faire à Paris»</a> του Δήμου Παρισίων, με άδεια Open Database License (ODbL).
         </p>
       </section>
 

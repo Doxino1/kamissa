@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/weekly-email",
       "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/import-events",
+      "schedule": "0 17 * * 0"
     }
   ]
 }
