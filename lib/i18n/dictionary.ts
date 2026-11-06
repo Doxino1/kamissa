@@ -246,6 +246,14 @@ export interface Dictionary {
     repliesToggle: (count: number) => string;
   };
 
+  freeDays: {
+    title: string;
+    fromHour: (hour: number) => string;
+    reservationRequired: string;
+    reservationRecommended: string;
+    emailSubject: (ville: string) => string;
+  };
+
   weeklyEmail: {
     subject: (count: number, ville: string) => string;
     greeting: (nom: string) => string;
@@ -654,6 +662,13 @@ export const fr: Dictionary = {
     reply: "Répondre",
     replyingTo: (nom) => `Réponse à ${nom}`,
     repliesToggle: (count) => (count > 1 ? `${count} réponses` : `${count} réponse`),
+  },
+  freeDays: {
+    title: "Entrée gratuite cette semaine",
+    fromHour: (hour) => `à partir de ${hour} h`,
+    reservationRequired: "réservation obligatoire",
+    reservationRecommended: "réservation conseillée",
+    emailSubject: (ville) => `Entrée gratuite à ${ville} cette semaine — Kamissa`,
   },
   weeklyEmail: {
     subject: (count, ville) => `${count} événement${count > 1 ? "s" : ""} à ${ville} cette semaine — Kamissa`,
@@ -1068,6 +1083,13 @@ export const en: Dictionary = {
     reply: "Reply",
     replyingTo: (nom) => `Replying to ${nom}`,
     repliesToggle: (count) => (count > 1 ? `${count} replies` : `${count} reply`),
+  },
+  freeDays: {
+    title: "Free entry this week",
+    fromHour: (hour) => `from ${hour}:00`,
+    reservationRequired: "booking required",
+    reservationRecommended: "booking recommended",
+    emailSubject: (ville) => `Free entry in ${ville} this week — Kamissa`,
   },
   weeklyEmail: {
     subject: (count, ville) => `${count} event${count > 1 ? "s" : ""} in ${ville} this week — Kamissa`,
@@ -1485,6 +1507,13 @@ export const el: Dictionary = {
     reply: "Απάντηση",
     replyingTo: (nom) => `Απάντηση σε ${nom}`,
     repliesToggle: (count) => (count > 1 ? `${count} απαντήσεις` : `${count} απάντηση`),
+  },
+  freeDays: {
+    title: "Δωρεάν είσοδος αυτή την εβδομάδα",
+    fromHour: (hour) => `από τις ${hour}:00`,
+    reservationRequired: "απαιτείται κράτηση",
+    reservationRecommended: "συνιστάται κράτηση",
+    emailSubject: (ville) => `Δωρεάν είσοδος στην ${ville} αυτή την εβδομάδα — Kamissa`,
   },
   weeklyEmail: {
     subject: (count, ville) => `${count} εκδήλωση${count > 1 ? "εις" : ""} στην ${ville} αυτή την εβδομάδα — Kamissa`,

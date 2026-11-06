@@ -5,6 +5,8 @@ import { LOCALES, dictionaries } from "./i18n/dictionary.ts";
 import type { Locale } from "./i18n/dictionary.ts";
 import type { ArtEvent, Ville } from "./types.ts";
 import { localizedTitle } from "./localize-event.ts";
+import { freeDayNote, groupFreeDays, upcomingFreeDays } from "./free-days.ts";
+import type { FreeDay } from "./free-days.ts";
 
 interface ProfileRow {
   id: string;
@@ -81,22 +83,44 @@ function eventHtml(event: EventRow, locale: Locale, siteUrl: string | undefined)
     </li>`;
 }
 
+function freeDaysHtml(freeDays: FreeDay[], ville: Ville, locale: Locale): string {
+  if (freeDays.length === 0) return "";
+  const t = dictionaries[locale];
+  const lines = groupFreeDays(freeDays).map(({ date, rules }) => {
+    const day = formatInVille(date, ville, { weekday: "long", day: "numeric", month: "long" }, locale);
+    const places = rules.map((rule) => {
+      const note = freeDayNote(rule, t.freeDays);
+      return `<a href="${escapeHtml(rule.url)}">${escapeHtml(rule.lieu)}</a>${note ? ` (${escapeHtml(note)})` : ""}`;
+    });
+    return `<p style="margin: 4px 0;"><strong>${escapeHtml(day)}</strong> : ${places.join(", ")}</p>`;
+  });
+  return `
+      <p style="margin-top: 20px; font-weight: 600;">${escapeHtml(t.freeDays.title)}</p>
+      ${lines.join("")}`;
+}
+
 function digestHtml(
   nom: string,
   ville: string,
   events: EventRow[],
   locale: Locale,
   siteUrl: string | undefined,
-  communityLine: string | null
+  communityLine: string | null,
+  freeDays: string
 ): string {
   const t = dictionaries[locale];
   return `
     <div style="font-family: sans-serif; max-width: 480px;">
       <p>${escapeHtml(t.weeklyEmail.greeting(nom || ""))}</p>
-      <p>${escapeHtml(t.weeklyEmail.intro(ville))}</p>
+      ${
+        events.length > 0
+          ? `<p>${escapeHtml(t.weeklyEmail.intro(ville))}</p>
       <ul style="list-style: none; padding: 0;">
         ${events.map((e) => eventHtml(e, locale, siteUrl)).join("")}
-      </ul>
+      </ul>`
+          : ""
+      }
+      ${freeDays}
       ${communityLine ? `<p style="margin-top: 16px; color: #444;">${escapeHtml(communityLine)}</p>` : ""}
     </div>`;
 }
@@ -258,7 +282,10 @@ export async function sendWeeklyEmails({ dryRun, onLog }: SendWeeklyEmailsOption
           (e.discipline !== null && profile.disciplines.includes(e.discipline)))
     );
 
-    if (relevant.length === 0) {
+    // Une gratuité vaut un email à elle seule, quelle que soit la discipline.
+    const freeDays = upcomingFreeDays(profile.ville as Ville, now.getTime());
+
+    if (relevant.length === 0 && freeDays.length === 0) {
       skipped += 1;
       continue;
     }
@@ -271,15 +298,28 @@ export async function sendWeeklyEmails({ dryRun, onLog }: SendWeeklyEmailsOption
     const locale = resolveLocale(profile.langue_preferee);
     const t = dictionaries[locale];
     const villeLabel = t.villeLabels[profile.ville as Ville] ?? profile.ville;
-    const subject = t.weeklyEmail.subject(relevant.length, villeLabel);
+    const subject =
+      relevant.length > 0 ? t.weeklyEmail.subject(relevant.length, villeLabel) : t.freeDays.emailSubject(villeLabel);
     const communityLine =
       newMatchCount > 0 || newMessageCount > 0
         ? t.weeklyEmail.communityLine(newMatchCount, newMessageCount, villeLabel)
         : null;
-    const html = digestHtml(profile.nom, villeLabel, relevant, locale, SITE_URL, communityLine);
+    const html = digestHtml(
+      profile.nom,
+      villeLabel,
+      relevant,
+      locale,
+      SITE_URL,
+      communityLine,
+      freeDaysHtml(freeDays, profile.ville as Ville, locale)
+    );
 
     if (effectiveDryRun) {
-      log(`[dry-run] ${email} (${locale}) — ${subject}${communityLine ? ` | ${communityLine}` : ""}`);
+      log(
+        `[dry-run] ${email} (${locale}) — ${subject}${communityLine ? ` | ${communityLine}` : ""}${
+          freeDays.length > 0 ? ` | gratuit : ${freeDays.map((f) => f.rule.lieu).join(", ")}` : ""
+        }`
+      );
       sent += 1;
       continue;
     }

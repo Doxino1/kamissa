@@ -7,6 +7,7 @@ import { List, Map as MapIcon, Store, Plus, X } from "lucide-react";
 import { EventCard } from "@/components/EventCard";
 import { EventFilterBar } from "@/components/EventFilterBar";
 import { HomeGreeting } from "@/components/HomeGreeting";
+import { FreeDaysNotice } from "@/components/FreeDaysNotice";
 import { CardSkeleton } from "@/components/CardSkeleton";
 import { AddEventModal } from "@/components/AddEventModal";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -199,6 +200,8 @@ export default function EvenementsPage() {
           <EventFilterBar filters={filters} />
         </section>
       )}
+
+      {!showSaved && <FreeDaysNotice ville={ville} now={now} />}
 
       {!showSaved && (
         <main className="mx-auto max-w-[1360px] px-4 md:flex md:items-start md:gap-8 md:px-10">
