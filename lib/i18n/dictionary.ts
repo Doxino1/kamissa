@@ -269,6 +269,17 @@ export interface Dictionary {
     rejectConfirm: string;
     submittedBy: (nom: string) => string;
     loadError: (message: string) => string;
+    edit: string;
+    saved: string;
+    editingAsModerator: string;
+    source: string;
+    reports: {
+      title: string;
+      empty: string;
+      reported: string;
+      by: (nom: string) => string;
+      resolve: string;
+    };
     shops: {
       title: string;
       empty: string;
@@ -695,6 +706,17 @@ export const fr: Dictionary = {
     rejectConfirm: "Rejeter et supprimer cet événement ? Impossible de revenir en arrière.",
     submittedBy: (nom) => `Soumis par ${nom}`,
     loadError: (message) => `Petit souci pour charger les soumissions (${message}).`,
+    edit: "Modifier",
+    saved: "Modifications enregistrées.",
+    editingAsModerator: "Tu modifies cet événement en tant que modérateur : il garde son statut actuel.",
+    source: "Source",
+    reports: {
+      title: "Signalements",
+      empty: "Aucun signalement.",
+      reported: "Profil signalé",
+      by: (nom) => `par ${nom}`,
+      resolve: "Marquer comme traité",
+    },
     shops: {
       title: "Boutiques en attente",
       empty: "Aucune boutique en attente.",
@@ -1114,6 +1136,17 @@ export const en: Dictionary = {
     rejectConfirm: "Reject and delete this event? This can't be undone.",
     submittedBy: (nom) => `Submitted by ${nom}`,
     loadError: (message) => `Trouble loading submissions (${message}).`,
+    edit: "Edit",
+    saved: "Changes saved.",
+    editingAsModerator: "You're editing this event as a moderator: its status stays as it is.",
+    source: "Source",
+    reports: {
+      title: "Reports",
+      empty: "No reports.",
+      reported: "Reported profile",
+      by: (nom) => `by ${nom}`,
+      resolve: "Mark as handled",
+    },
     shops: {
       title: "Pending shops",
       empty: "No shops pending review.",
@@ -1534,6 +1567,17 @@ export const el: Dictionary = {
     rejectConfirm: "Απόρριψη και διαγραφή αυτής της εκδήλωσης; Δεν μπορεί να αναιρεθεί.",
     submittedBy: (nom) => `Υποβλήθηκε από ${nom}`,
     loadError: (message) => `Πρόβλημα στη φόρτωση των προτάσεων (${message}).`,
+    edit: "Επεξεργασία",
+    saved: "Οι αλλαγές αποθηκεύτηκαν.",
+    editingAsModerator: "Επεξεργάζεσαι αυτή την εκδήλωση ως συντονιστής: η κατάστασή της δεν αλλάζει.",
+    source: "Πηγή",
+    reports: {
+      title: "Αναφορές",
+      empty: "Καμία αναφορά.",
+      reported: "Προφίλ που αναφέρθηκε",
+      by: (nom) => `από ${nom}`,
+      resolve: "Σήμανση ως διεκπεραιωμένη",
+    },
     shops: {
       title: "Καταστήματα σε αναμονή",
       empty: "Κανένα κατάστημα σε αναμονή.",

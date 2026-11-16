@@ -20,6 +20,9 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
   const [initial, setInitial] = useState<EventFormValues | null>(null);
   const [withdrawing, setWithdrawing] = useState(false);
   const [wasPublished, setWasPublished] = useState(false);
+  // Événement d'un autre membre ou importé, ouvert par un modérateur : lecture
+  // et enregistrement passent par /api/moderation/events/[id].
+  const [asModerator, setAsModerator] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -43,31 +46,43 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
         .eq("id", id)
         .single();
 
+      let row = !error && data && data.soumis_par === user.id ? data : null;
+      let viaModeration = false;
+      if (!row) {
+        const res = await fetch(`/api/moderation/events/${id}`);
+        if (res.ok) {
+          row = (await res.json()).event;
+          viaModeration = true;
+        }
+      }
+
       if (!active) return;
 
-      if (error || !data || data.soumis_par !== user.id) {
+      if (!row) {
         setNotAllowed(true);
         setLoading(false);
         return;
       }
+      const data2 = row;
+      setAsModerator(viaModeration);
 
-      const ville = data.ville as Ville;
-      const { date, time } = utcIsoToZonedParts(data.date, VILLE_TIMEZONES[ville]);
+      const ville = data2.ville as Ville;
+      const { date, time } = utcIsoToZonedParts(data2.date, VILLE_TIMEZONES[ville]);
 
-      setWasPublished(data.statut === "publie");
+      setWasPublished(data2.statut === "publie");
       setInitial({
-        titre: data.titre,
-        description: data.description ?? "",
-        type: data.type as EventType,
-        sousType: (data.sous_type as AnnouncementSubtype) ?? "oeuvre",
-        discipline: data.discipline ?? DISCIPLINES[0],
+        titre: data2.titre,
+        description: data2.description ?? "",
+        type: data2.type as EventType,
+        sousType: (data2.sous_type as AnnouncementSubtype) ?? "oeuvre",
+        discipline: data2.discipline ?? DISCIPLINES[0],
         ville,
         date,
         heure: time,
-        dateFin: data.date_fin ? utcIsoToZonedParts(data.date_fin, VILLE_TIMEZONES[ville]).date : "",
-        lieu: data.lieu ?? "",
-        coutType: (data.cout_type as CoutType) ?? "",
-        coutDetail: data.cout_detail ?? "",
+        dateFin: data2.date_fin ? utcIsoToZonedParts(data2.date_fin, VILLE_TIMEZONES[ville]).date : "",
+        lieu: data2.lieu ?? "",
+        coutType: (data2.cout_type as CoutType) ?? "",
+        coutDetail: data2.cout_detail ?? "",
       });
       setLoading(false);
     }
@@ -82,26 +97,33 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
     const supabase = createClient();
     const dateIso = zonedTimeToUtcIso(values.date, values.heure, VILLE_TIMEZONES[values.ville]);
     const costEligible = EVENT_TYPES_WITH_COST.includes(values.type);
+    const payload = {
+      titre: values.titre,
+      description: values.description,
+      type: values.type,
+      sous_type: values.type === "annonce" ? values.sousType : null,
+      discipline: values.discipline,
+      ville: values.ville,
+      date: dateIso,
+      date_fin:
+        values.type === "expo" && values.dateFin
+          ? zonedTimeToUtcIso(values.dateFin, "23:59", VILLE_TIMEZONES[values.ville])
+          : null,
+      lieu: values.lieu,
+      cout_type: costEligible ? values.coutType || null : null,
+      cout_detail: costEligible ? values.coutDetail || null : null,
+    };
 
-    const { error } = await supabase
-      .from("events")
-      .update({
-        titre: values.titre,
-        description: values.description,
-        type: values.type,
-        sous_type: values.type === "annonce" ? values.sousType : null,
-        discipline: values.discipline,
-        ville: values.ville,
-        date: dateIso,
-        date_fin:
-          values.type === "expo" && values.dateFin
-            ? zonedTimeToUtcIso(values.dateFin, "23:59", VILLE_TIMEZONES[values.ville])
-            : null,
-        lieu: values.lieu,
-        cout_type: costEligible ? values.coutType || null : null,
-        cout_detail: costEligible ? values.coutDetail || null : null,
-      })
-      .eq("id", id);
+    if (asModerator) {
+      const res = await fetch(`/api/moderation/events/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      return { error: res.ok ? null : ((await res.json()).error ?? "Error") };
+    }
+
+    const { error } = await supabase.from("events").update(payload).eq("id", id);
 
     if (!error && wasPublished) {
       fetch("/api/events/translate", {
@@ -117,6 +139,12 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
   async function handleWithdraw() {
     if (!window.confirm(t.evenements.withdrawConfirm)) return;
     setWithdrawing(true);
+    if (asModerator) {
+      const res = await fetch(`/api/moderation/events/${id}`, { method: "DELETE" });
+      setWithdrawing(false);
+      if (res.ok) router.push("/moderation");
+      return;
+    }
     const supabase = createClient();
     const { error } = await supabase.from("events").delete().eq("id", id);
     setWithdrawing(false);
@@ -144,10 +172,15 @@ export default function ModifierEvenementPage({ params }: { params: Promise<{ id
       <PageHeader title={t.evenements.editLink} eyebrow={<BackLink href="/">{t.eventDetail.back}</BackLink>} />
       <main className="mx-auto max-w-[1360px] px-4 pt-8 md:px-10">
         <div className="max-w-[640px]">
+          {asModerator && (
+            <p className="mb-6 border-l-2 border-accent-secondary pl-4 text-sm text-text-soft">
+              {t.moderation.editingAsModerator}
+            </p>
+          )}
           <EventForm
             initial={initial}
             submitLabel={t.profil.save}
-            successMessage={t.profil.saved}
+            successMessage={t.moderation.saved}
             onSubmit={handleSubmit}
             extra={
               <button

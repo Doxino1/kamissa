@@ -2,12 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { LinkifiedText } from "@/components/LinkifiedText";
 import { formatInVille } from "@/lib/timezone";
 import { useLocale } from "@/lib/i18n/context";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 import { EventTypeBadge } from "@/components/EventTypeBadge";
 import { EventType, Ville } from "@/lib/types";
 import { PageHeader, TAB_NUMBER } from "@/components/PageHeader";
-import { META } from "@/lib/form-styles";
+import { META, SECONDARY_BUTTON, TEXT_ACTION } from "@/lib/form-styles";
+
+const REPORT_LABELS: Record<Report["motif"], (t: Dictionary) => string> = {
+  spam: (t) => t.safety.reportReasonSpam,
+  comportement: (t) => t.safety.reportReasonBehavior,
+  usurpation: (t) => t.safety.reportReasonImpersonation,
+  autre: (t) => t.safety.reportReasonOther,
+};
 
 const CARD = "flex flex-col gap-2 border-b border-border py-6";
 const ITEM_TITLE = "font-display text-[30px] leading-tight";
@@ -26,8 +36,22 @@ interface PendingEvent {
   discipline: string | null;
   ville: Ville;
   date: string;
+  date_fin: string | null;
   lieu: string | null;
+  cout_type: "gratuit" | "payant" | null;
+  cout_detail: string | null;
+  source: string;
   profiles: { nom: string } | null;
+}
+
+interface Report {
+  id: string;
+  motif: "spam" | "comportement" | "usurpation" | "autre";
+  description: string | null;
+  created_at: string;
+  reported_user_id: string;
+  reported: { nom: string } | null;
+  reporter: { nom: string } | null;
 }
 
 interface PendingShop {
@@ -46,6 +70,7 @@ export default function ModerationPage() {
   const { locale, t } = useLocale();
   const [events, setEvents] = useState<PendingEvent[] | null>(null);
   const [shops, setShops] = useState<PendingShop[] | null>(null);
+  const [reports, setReports] = useState<Report[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
@@ -53,9 +78,10 @@ export default function ModerationPage() {
     let active = true;
 
     async function load() {
-      const [eventsRes, shopsRes] = await Promise.all([
+      const [eventsRes, shopsRes, reportsRes] = await Promise.all([
         fetch("/api/moderation/events"),
         fetch("/api/moderation/shops"),
+        fetch("/api/moderation/reports"),
       ]);
 
       if (eventsRes.status === 403 || shopsRes.status === 403) {
@@ -78,6 +104,7 @@ export default function ModerationPage() {
 
       setEvents(eventsBody.events);
       setShops(shopsBody.shops);
+      if (reportsRes.ok) setReports((await reportsRes.json()).reports);
     }
 
     load();
@@ -99,6 +126,13 @@ export default function ModerationPage() {
     const res = await fetch(`/api/moderation/events/${id}`, { method: "DELETE" });
     setBusyId(null);
     if (res.ok) setEvents((prev) => (prev ?? []).filter((e) => e.id !== id));
+  }
+
+  async function handleResolveReport(id: string) {
+    setBusyId(id);
+    const res = await fetch(`/api/moderation/reports/${id}`, { method: "DELETE" });
+    setBusyId(null);
+    if (res.ok) setReports((prev) => (prev ?? []).filter((r) => r.id !== id));
   }
 
   async function handlePublishShop(id: string) {
@@ -142,14 +176,22 @@ export default function ModerationPage() {
                     { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" },
                     locale
                   )}
+                  {event.date_fin &&
+                    ` → ${formatInVille(event.date_fin, event.ville, { day: "numeric", month: "short", year: "numeric" }, locale)}`}
                 </span>
               </div>
               <h3 className={ITEM_TITLE}>{event.titre}</h3>
               <p className="text-sm text-foreground-muted">
                 {t.villeLabels[event.ville]} ·{" "}
                 {event.discipline ? (t.disciplineLabels[event.discipline] ?? event.discipline) : ""} · {event.lieu}
+                {event.cout_type && ` · ${t.coutLabels[event.cout_type]}`}
+                {event.cout_detail && ` (${event.cout_detail})`}
               </p>
-              {event.description && <p className="text-[15px] leading-relaxed text-text-soft">{event.description}</p>}
+              {event.description && (
+                <p className="whitespace-pre-line text-[15px] leading-relaxed text-text-soft">
+                  <LinkifiedText text={event.description} />
+                </p>
+              )}
               <p className={META}>{t.moderation.submittedBy(event.profiles?.nom ?? "—")}</p>
               <div className="mt-2 flex gap-2">
                 <button
@@ -168,6 +210,9 @@ export default function ModerationPage() {
                 >
                   {t.moderation.reject}
                 </button>
+                <Link href={`/evenements/${event.id}/modifier`} className={`${SECONDARY_BUTTON} min-h-10`}>
+                  {t.moderation.edit}
+                </Link>
               </div>
             </div>
           ))}
@@ -218,6 +263,45 @@ export default function ModerationPage() {
                   className={REJECT}
                 >
                   {t.moderation.reject}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h2 className={SECTION_HEADING}>
+          <span className={TAB_NUMBER}>( 03 )</span>
+          {t.moderation.reports.title}
+        </h2>
+        {reports !== null && reports.length === 0 && (
+          <p className="mt-6 text-sm text-foreground-muted">{t.moderation.reports.empty}</p>
+        )}
+        <div className="flex max-w-[860px] flex-col">
+          {(reports ?? []).map((report) => (
+            <div key={report.id} className={CARD}>
+              <div className={`flex items-center justify-between gap-2 ${META}`}>
+                <span>{REPORT_LABELS[report.motif](t)}</span>
+                <span>{formatInVille(report.created_at, "Paris", { day: "numeric", month: "short" }, locale)}</span>
+              </div>
+              <p className="text-sm text-foreground-muted">
+                {t.moderation.reports.reported} :{" "}
+                <Link
+                  href={`/artistes/${report.reported_user_id}`}
+                  className="font-semibold text-foreground underline underline-offset-4"
+                >
+                  {report.reported?.nom ?? "—"}
+                </Link>{" "}
+                {t.moderation.reports.by(report.reporter?.nom ?? "—")}
+              </p>
+              {report.description && <p className="text-[15px] leading-relaxed text-text-soft">{report.description}</p>}
+              <div className="mt-2">
+                <button
+                  type="button"
+                  disabled={busyId === report.id}
+                  onClick={() => handleResolveReport(report.id)}
+                  className={TEXT_ACTION}
+                >
+                  {t.moderation.reports.resolve}
                 </button>
               </div>
             </div>

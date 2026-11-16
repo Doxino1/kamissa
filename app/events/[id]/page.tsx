@@ -24,15 +24,25 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   const { saved, setStatus, canSave } = useSavedEvents();
   const { locale, t } = useLocale();
   const [userId, setUserId] = useState<string | null>(null);
+  const [isModerator, setIsModerator] = useState(false);
   const goingFollows = useGoingFollows(id, userId);
 
   useEffect(() => {
     let active = true;
-    createClient()
-      .auth.getUser()
-      .then(({ data: { user } }) => {
-        if (active) setUserId(user?.id ?? null);
-      });
+    const supabase = createClient();
+
+    async function loadUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!active) return;
+      setUserId(user?.id ?? null);
+      if (!user) return;
+      const { data } = await supabase.from("profiles").select("is_moderator").eq("id", user.id).single();
+      if (active) setIsModerator(data?.is_moderator === true);
+    }
+
+    loadUser();
     return () => {
       active = false;
     };
@@ -144,6 +154,12 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           <div className="mt-6">
             <CalendarButtons event={event} />
           </div>
+
+          {isModerator && (
+            <Link href={`/evenements/${event.id}/modifier`} className={`${TEXT_ACTION} mt-6 inline-flex items-center`}>
+              {t.moderation.edit}
+            </Link>
+          )}
         </aside>
       </main>
     </div>
