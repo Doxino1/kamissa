@@ -46,6 +46,18 @@ function FR() {
       </section>
 
       <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Informations reprises de sources publiques</h2>
+        <p className="mt-2 text-text-soft">
+          Une partie des événements, des boutiques et des journées gratuites est rassemblée par Kamissa à partir de sources publiques (sites des lieux et des organisateurs, agendas culturels, données ouvertes), dont le lien figure sur chaque fiche. Ces informations sont données à titre indicatif : dates, horaires, prix et conditions d&rsquo;accès peuvent changer, vérifie-les auprès de l&rsquo;organisateur avant de te déplacer.
+        </p>
+        <p className="mt-2 text-text-soft">
+          Tu organises un événement ou tu tiens un lieu présent sur Kamissa et tu souhaites une correction ou un retrait ? Écris à <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
+          </a> : la demande est traitée rapidement.
+        </p>
+      </section>
+
+      <section>
         <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Modération</h2>
         <p className="mt-2 text-text-soft">
           Les événements et boutiques soumis passent par une validation avant publication (automatique pour les
@@ -116,6 +128,18 @@ function EN() {
           <li>harassment, discriminatory remarks, or impersonation;</li>
           <li>illegal content or content infringing on a third party&rsquo;s rights.</li>
         </ul>
+      </section>
+
+      <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Information taken from public sources</h2>
+        <p className="mt-2 text-text-soft">
+          Some events, shops and free-entry days are gathered by Kamissa from public sources (venue and organiser websites, cultural listings, open data), linked on each listing. This information is provided for guidance only: dates, opening hours, prices and entry conditions may change, so check with the organiser before you go.
+        </p>
+        <p className="mt-2 text-text-soft">
+          Do you organise an event or run a venue listed on Kamissa and want a correction or removal? Write to <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
+          </a> and we&rsquo;ll handle it promptly.
+        </p>
       </section>
 
       <section>
@@ -191,6 +215,18 @@ function EL() {
           <li>η παρενόχληση, τα διακριτικά σχόλια ή η υποδυόμενη ταυτότητα·</li>
           <li>το παράνομο περιεχόμενο ή αυτό που προσβάλλει τα δικαιώματα τρίτων.</li>
         </ul>
+      </section>
+
+      <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Πληροφορίες από δημόσιες πηγές</h2>
+        <p className="mt-2 text-text-soft">
+          Ένα μέρος των εκδηλώσεων, των καταστημάτων και των ημερών δωρεάν εισόδου συγκεντρώνεται από το Kamissa από δημόσιες πηγές (ιστότοποι χώρων και διοργανωτών, πολιτιστικά πρόγραμμα, ανοιχτά δεδομένα), με σύνδεσμο σε κάθε καταχώριση. Οι πληροφορίες αυτές είναι ενδεικτικές: ημερομηνίες, ωράρια, τιμές και όροι εισόδου μπορεί να αλλάξουν, επιβεβαίωσέ τα με τον διοργανωτή πριν πας.
+        </p>
+        <p className="mt-2 text-text-soft">
+          Διοργανώνεις μια εκδήλωση ή έχεις έναν χώρο που εμφανίζεται στο Kamissa και θέλεις διόρθωση ή αφαίρεση; Γράψε στο <a href="mailto:contact@kamissa.app" className="underline hover:text-foreground">
+            contact@kamissa.app
+          </a>: το αίτημα θα διεκπεραιωθεί γρήγορα.
+        </p>
       </section>
 
       <section>
