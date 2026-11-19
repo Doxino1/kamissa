@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Store, User } from "lucide-react";
+import { ShieldCheck, Store, User } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { NotificationBell } from "./NotificationBell";
 import { Logo } from "./Logo";
@@ -17,7 +17,15 @@ function navIconClass(active: boolean) {
   }`;
 }
 
-export function TopNav({ show, userId }: { show: boolean; userId: string | null }) {
+export function TopNav({
+  show,
+  userId,
+  isModerator = false,
+}: {
+  show: boolean;
+  userId: string | null;
+  isModerator?: boolean;
+}) {
   const t = useT();
   const pathname = usePathname();
 
@@ -30,6 +38,7 @@ export function TopNav({ show, userId }: { show: boolean; userId: string | null 
   ];
   const onShops = pathname.startsWith("/boutiques");
   const onProfile = pathname.startsWith("/profil");
+  const onModeration = pathname.startsWith("/moderation");
 
   return (
     <header className="sticky top-0 z-40 hidden bg-background md:block">
@@ -58,6 +67,17 @@ export function TopNav({ show, userId }: { show: boolean; userId: string | null 
 
         <div className="flex items-center justify-end gap-2.5">
           <NotificationBell userId={userId} />
+          {isModerator && (
+            <Link
+              href="/moderation"
+              aria-label={t.nav.moderation}
+              title={t.nav.moderation}
+              aria-current={onModeration ? "page" : undefined}
+              className={navIconClass(onModeration)}
+            >
+              <ShieldCheck size={17} strokeWidth={1.75} />
+            </Link>
+          )}
           <Link
             href="/boutiques"
             aria-label={t.shops.title}

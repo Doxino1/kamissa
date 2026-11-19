@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Calendar, Users, User } from "lucide-react";
+import { Home, Calendar, Users, User, ShieldCheck } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 
-export function BottomNav({ show }: { show: boolean }) {
+export function BottomNav({ show, isModerator = false }: { show: boolean; isModerator?: boolean }) {
   const t = useT();
   const pathname = usePathname();
 
@@ -15,6 +15,7 @@ export function BottomNav({ show }: { show: boolean }) {
     { href: "/", label: t.nav.evenements, Icon: Home },
     { href: "/communaute", label: t.nav.communaute, Icon: Users },
     { href: "/calendrier", label: t.calendar.tab, Icon: Calendar },
+    ...(isModerator ? [{ href: "/moderation", label: t.nav.moderation, Icon: ShieldCheck }] : []),
     { href: "/profil", label: t.nav.profil, Icon: User },
   ];
 
@@ -27,13 +28,16 @@ export function BottomNav({ show }: { show: boolean }) {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex flex-col items-center gap-1 px-2.5 py-1 transition ${
+            className={`flex min-w-0 flex-1 flex-col items-center gap-1 px-0.5 py-1 transition ${
               active ? "text-foreground" : "text-foreground-muted"
             }`}
           >
             <Icon size={20} strokeWidth={1.75} />
+            {/* Cinq onglets pour un modérateur : lettres moins espacées pour tenir en 375 px. */}
             <span
-              className={`text-[10px] font-semibold uppercase tracking-[0.08em] underline-offset-4 ${active ? "underline" : ""}`}
+              className={`max-w-full truncate text-[10px] font-semibold uppercase underline-offset-4 ${
+                items.length > 4 ? "tracking-[0.02em]" : "tracking-[0.08em]"
+              } ${active ? "underline" : ""}`}
             >
               {label}
             </span>

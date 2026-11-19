@@ -51,15 +51,20 @@ export default async function RootLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  // Lien Modération dans la navigation, pour les seuls modérateurs.
+  const { data: profile } = user
+    ? await supabase.from("profiles").select("is_moderator").eq("id", user.id).maybeSingle()
+    : { data: null };
+  const isModerator = profile?.is_moderator === true;
 
   return (
     <html lang="fr" className={`${hankenGrotesk.variable} ${instrumentSerif.variable} ${notoSans.variable} ${notoSerif.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <LocaleProvider>
           <ToastProvider>
-            <TopNav show={!!user} userId={user?.id ?? null} />
+            <TopNav show={!!user} userId={user?.id ?? null} isModerator={isModerator} />
             <div className={`flex-1 ${user ? "pb-16 md:pb-0" : ""}`}>{children}</div>
-            <BottomNav show={!!user} />
+            <BottomNav show={!!user} isModerator={isModerator} />
             {!user && <PublicFooter />}
           </ToastProvider>
         </LocaleProvider>
