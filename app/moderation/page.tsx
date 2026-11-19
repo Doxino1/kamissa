@@ -11,6 +11,8 @@ import { EventTypeBadge } from "@/components/EventTypeBadge";
 import { EventType, Ville } from "@/lib/types";
 import { PageHeader, TAB_NUMBER } from "@/components/PageHeader";
 import { META, SECONDARY_BUTTON, TEXT_ACTION } from "@/lib/form-styles";
+import { ModeratorsSection } from "@/components/ModeratorsSection";
+import { createClient } from "@/lib/supabase/client";
 
 const REPORT_LABELS: Record<Report["motif"], (t: Dictionary) => string> = {
   spam: (t) => t.safety.reportReasonSpam,
@@ -73,11 +75,18 @@ export default function ModerationPage() {
   const [reports, setReports] = useState<Report[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
 
     async function load() {
+      createClient()
+        .auth.getUser()
+        .then(({ data }) => {
+          if (active) setCurrentUserId(data.user?.id ?? null);
+        });
+
       const [eventsRes, shopsRes, reportsRes] = await Promise.all([
         fetch("/api/moderation/events"),
         fetch("/api/moderation/shops"),
@@ -307,6 +316,12 @@ export default function ModerationPage() {
             </div>
           ))}
         </div>
+
+        <h2 className={SECTION_HEADING}>
+          <span className={TAB_NUMBER}>( 04 )</span>
+          {t.moderation.moderators.title}
+        </h2>
+        <ModeratorsSection currentUserId={currentUserId} />
       </main>
     </div>
   );

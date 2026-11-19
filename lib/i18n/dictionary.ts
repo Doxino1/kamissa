@@ -292,6 +292,18 @@ export interface Dictionary {
       empty: string;
       rejectConfirm: string;
     };
+    moderators: {
+      title: string;
+      intro: string;
+      you: string;
+      searchPlaceholder: string;
+      noResult: string;
+      promote: string;
+      demote: string;
+      already: string;
+      promoteConfirm: (nom: string) => string;
+      demoteConfirm: (nom: string) => string;
+    };
   };
 
   portfolio: {
@@ -735,6 +747,18 @@ export const fr: Dictionary = {
       empty: "Aucune boutique en attente.",
       rejectConfirm: "Rejeter et supprimer cette boutique ? Impossible de revenir en arrière.",
     },
+    moderators: {
+      title: "Modérateurs",
+      intro: "Un modérateur valide les événements et les boutiques, lit les signalements et peut nommer d’autres modérateurs.",
+      you: "(toi)",
+      searchPlaceholder: "Chercher un membre par son nom",
+      noResult: "Aucun membre trouvé.",
+      promote: "Nommer modérateur",
+      demote: "Retirer",
+      already: "Déjà modérateur",
+      promoteConfirm: (nom: string) => `Nommer ${nom} modérateur ? Il ou elle pourra publier, refuser et nommer d’autres modérateurs.`,
+      demoteConfirm: (nom: string) => `Retirer le rôle de modérateur à ${nom} ?`,
+    },
   },
   portfolio: {
     title: "Mon portfolio",
@@ -1170,6 +1194,18 @@ export const en: Dictionary = {
       title: "Pending shops",
       empty: "No shops pending review.",
       rejectConfirm: "Reject and delete this shop? This can't be undone.",
+    },
+    moderators: {
+      title: "Moderators",
+      intro: "A moderator approves events and shops, reads reports and can appoint other moderators.",
+      you: "(you)",
+      searchPlaceholder: "Search a member by name",
+      noResult: "No member found.",
+      promote: "Make moderator",
+      demote: "Remove",
+      already: "Already a moderator",
+      promoteConfirm: (nom: string) => `Make ${nom} a moderator? They will be able to publish, reject and appoint other moderators.`,
+      demoteConfirm: (nom: string) => `Remove ${nom} as a moderator?`,
     },
   },
   portfolio: {
@@ -1607,6 +1643,18 @@ export const el: Dictionary = {
       title: "Καταστήματα σε αναμονή",
       empty: "Κανένα κατάστημα σε αναμονή.",
       rejectConfirm: "Απόρριψη και διαγραφή αυτού του καταστήματος; Δεν μπορεί να αναιρεθεί.",
+    },
+    moderators: {
+      title: "Συντονιστές",
+      intro: "Ένας συντονιστής εγκρίνει εκδηλώσεις και καταστήματα, διαβάζει τις αναφορές και μπορεί να ορίσει άλλους συντονιστές.",
+      you: "(εσύ)",
+      searchPlaceholder: "Αναζήτηση μέλους με το όνομα",
+      noResult: "Δεν βρέθηκε μέλος.",
+      promote: "Ορισμός ως συντονιστή",
+      demote: "Αφαίρεση",
+      already: "Ήδη συντονιστής",
+      promoteConfirm: (nom: string) => `Να οριστεί ο/η ${nom} συντονιστής; Θα μπορεί να δημοσιεύει, να απορρίπτει και να ορίζει άλλους συντονιστές.`,
+      demoteConfirm: (nom: string) => `Αφαίρεση του ρόλου συντονιστή από τον/την ${nom};`,
     },
   },
   portfolio: {
