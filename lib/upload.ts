@@ -209,7 +209,7 @@ export async function portfolioPdfUrl(path: string): Promise<string | null> {
 }
 
 // ---------------------------------------------------------------------------
-// Vidéos des posts (migration 0034) : bucket public "videos", 50 Mo maximum
+// Vidéos des posts (migration 0034) : bucket public "videos", 30 Mo maximum (abaissé de 50 Mo le 19/11 : le stockage gratuit est de 1 Go pour tout le site, les vidéos en prenaient l’essentiel)
 // (limite par fichier de l'offre gratuite de Supabase). Pas de compression
 // dans le navigateur : l'iPhone fournit déjà une version compressée quand on
 // choisit une vidéo dans la photothèque.
@@ -218,7 +218,7 @@ export async function portfolioPdfUrl(path: string): Promise<string | null> {
 const VIDEO_TYPES = ["video/mp4", "video/quicktime", "video/webm"];
 export const VIDEO_ACCEPT = VIDEO_TYPES.join(",");
 export const POST_MEDIA_ACCEPT = `${IMAGE_ACCEPT},${VIDEO_ACCEPT}`;
-const VIDEO_MAX_BYTES = 50 * 1024 * 1024;
+const VIDEO_MAX_BYTES = 30 * 1024 * 1024;
 
 export function isVideoFile(file: File) {
   return file.type.startsWith("video/") || /\.(mp4|mov|m4v|webm)$/i.test(file.name);
