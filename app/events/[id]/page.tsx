@@ -4,7 +4,9 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SaveButtons } from "@/components/SaveButtons";
+import { Share2 } from "lucide-react";
 import { CalendarButtons } from "@/components/CalendarButtons";
+import { ShareButton } from "@/components/ShareButton";
 import { EventTypeBadge } from "@/components/EventTypeBadge";
 import { CostBadge } from "@/components/CostBadge";
 import { useEvents } from "@/lib/use-events";
@@ -151,8 +153,17 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             )}
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap items-start gap-2">
             <CalendarButtons event={event} />
+            <ShareButton
+              path={`/events/${event.id}`}
+              title={localizedTitle(event, locale)}
+              align="left"
+              className="flex min-h-10 items-center gap-1.5 rounded-full border border-foreground px-4 text-xs font-semibold uppercase tracking-[0.08em] transition hover:bg-surface-hover"
+            >
+              <Share2 size={14} strokeWidth={1.75} />
+              {t.common.share}
+            </ShareButton>
           </div>
 
           {isModerator && (

@@ -37,6 +37,7 @@ const notoSerif = Noto_Serif({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.kamissa.app"),
   title: "Kamissa",
   description: "Événements, matching et communauté pour artistes",
 };

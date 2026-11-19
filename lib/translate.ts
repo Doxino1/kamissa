@@ -2,9 +2,40 @@ import { createAdminClient } from "./supabase/admin";
 
 type DeeplTargetLang = "EN" | "EL";
 
+const URL_RE = /https?:\/\/[^\s<>"]+/g;
+
+function escapeXml(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function unescapeXml(text: string): string {
+  return text.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+}
+
+// DeepL traduisait les adresses (« Source : https://… ») et cassait les liens.
+// Chaque URL est remplacée par une balise ignorée <x i="n"/>, remise ensuite.
+function protectUrls(text: string): { xml: string; urls: string[] } {
+  const urls: string[] = [];
+  let xml = "";
+  let last = 0;
+  for (const match of text.matchAll(URL_RE)) {
+    xml += escapeXml(text.slice(last, match.index));
+    xml += `<x i="${urls.length}"/>`;
+    urls.push(match[0]);
+    last = match.index + match[0].length;
+  }
+  xml += escapeXml(text.slice(last));
+  return { xml, urls };
+}
+
+function restoreUrls(xml: string, urls: string[]): string {
+  return unescapeXml(xml.replace(/<x i="(\d+)"\s*\/>/g, (_, i) => urls[Number(i)] ?? ""));
+}
+
 async function translateText(text: string, targetLang: DeeplTargetLang): Promise<string | null> {
   const apiKey = process.env.DEEPL_API_KEY;
   if (!apiKey || !text.trim()) return null;
+  const { xml, urls } = protectUrls(text);
 
   const endpoint = apiKey.endsWith(":fx") ? "https://api-free.deepl.com" : "https://api.deepl.com";
 
@@ -15,7 +46,7 @@ async function translateText(text: string, targetLang: DeeplTargetLang): Promise
         Authorization: `DeepL-Auth-Key ${apiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text: [text], target_lang: targetLang }),
+      body: JSON.stringify({ text: [xml], target_lang: targetLang, tag_handling: "xml", ignore_tags: ["x"] }),
     });
 
     if (!res.ok) {
@@ -24,7 +55,8 @@ async function translateText(text: string, targetLang: DeeplTargetLang): Promise
     }
 
     const data = await res.json();
-    return data.translations?.[0]?.text ?? null;
+    const translated: string | undefined = data.translations?.[0]?.text;
+    return translated == null ? null : restoreUrls(translated, urls);
   } catch (err) {
     console.error("DeepL translation error:", err);
     return null;

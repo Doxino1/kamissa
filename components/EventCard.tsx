@@ -9,7 +9,7 @@ import { formatInVille } from "@/lib/timezone";
 import { localizedTitle } from "@/lib/localize-event";
 import { useSavedEvents } from "@/lib/use-saved-events";
 import { useLocale } from "@/lib/i18n/context";
-import { useToast } from "@/lib/toast-context";
+import { ShareButton } from "./ShareButton";
 import { isOngoing } from "@/lib/event-dates";
 
 // Numéro de ligne façon Racines : ( 01 ), ( 02 )… — le même que sur le repère
@@ -35,12 +35,6 @@ export function EventCard({
 }) {
   const { saved, setStatus, canSave } = useSavedEvents();
   const { locale, t } = useLocale();
-  const { showToast } = useToast();
-
-  function handleShare() {
-    const url = `${window.location.origin}/events/${event.id}`;
-    navigator.clipboard.writeText(url).then(() => showToast(t.toast.linkCopied));
-  }
 
   const date = isOngoing(event)
     ? t.evenements.until(formatInVille(event.dateFin!, event.ville, { day: "numeric", month: "short" }, locale))
@@ -83,15 +77,14 @@ export function EventCard({
             {t.saveButtons.loginToSave}
           </Link>
         )}
-        <button
-          type="button"
-          onClick={handleShare}
-          aria-label={t.common.share}
-          title={t.common.share}
+        <ShareButton
+          path={`/events/${event.id}`}
+          title={localizedTitle(event, locale)}
+          ariaLabel={t.common.share}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition hover:border-foreground"
         >
           <Share2 size={14} strokeWidth={1.75} />
-        </button>
+        </ShareButton>
       </div>
     </article>
   );

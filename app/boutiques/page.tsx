@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Search, Share2, Map as MapIcon, List, Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { useToast } from "@/lib/toast-context";
+import { ShareButton } from "@/components/ShareButton";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { useMinimumLoading } from "@/lib/use-minimum-loading";
 import { useT } from "@/lib/i18n/context";
@@ -45,7 +45,6 @@ export const SHOP_SELECT = "id, nom, ville, adresse, description, lien, discipli
 
 export default function BoutiquesPage() {
   const t = useT();
-  const { showToast } = useToast();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [mobileView, setMobileView] = useState<MobileView>("liste");
   const [ville, setVille] = useState<Ville>("Paris");
@@ -99,11 +98,6 @@ export default function BoutiquesPage() {
     const supabase = createClient();
     await supabase.from("shops").delete().eq("id", id);
     load();
-  }
-
-  function handleShare(id: string) {
-    const url = `${window.location.origin}/boutiques?shop=${id}`;
-    navigator.clipboard.writeText(url).then(() => showToast(t.toast.linkCopied));
   }
 
   const byVille = (shops ?? [])
@@ -211,14 +205,15 @@ export default function BoutiquesPage() {
                           {shop.lien}
                         </a>
                       )}
-                      <button
-                        type="button"
-                        onClick={() => handleShare(shop.id)}
+                      <ShareButton
+                        path={`/boutiques?shop=${shop.id}`}
+                        title={shop.nom}
+                        align="left"
                         className="flex min-h-10 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.1em] underline underline-offset-4"
                       >
                         <Share2 size={13} strokeWidth={1.75} />
                         {t.common.share}
-                      </button>
+                      </ShareButton>
                       {isModerator && (
                         <button
                           type="button"

@@ -53,6 +53,13 @@ export interface Dictionary {
     allCities: string;
   };
 
+  shareMenu: {
+    label: string;
+    copyLink: string;
+    email: string;
+    more: string;
+  };
+
   toast: {
     linkCopied: string;
     eventAdded: string;
@@ -487,6 +494,12 @@ export const fr: Dictionary = {
     share: "Partager",
     allCities: "Toutes les villes",
   },
+  shareMenu: {
+    label: "Partager via",
+    copyLink: "Copier le lien",
+    email: "E-mail",
+    more: "Autres applications…",
+  },
   toast: {
     linkCopied: "Lien copié ✓",
     eventAdded: "Événement ajouté ✓",
@@ -919,6 +932,12 @@ export const en: Dictionary = {
     share: "Share",
     allCities: "All cities",
   },
+  shareMenu: {
+    label: "Share via",
+    copyLink: "Copy link",
+    email: "Email",
+    more: "More apps…",
+  },
   toast: {
     linkCopied: "Link copied ✓",
     eventAdded: "Event added ✓",
@@ -1348,6 +1367,12 @@ export const el: Dictionary = {
     loadMore: "Φόρτωση περισσότερων",
     share: "Κοινοποίηση",
     allCities: "Όλες οι πόλεις",
+  },
+  shareMenu: {
+    label: "Κοινοποίηση μέσω",
+    copyLink: "Αντιγραφή συνδέσμου",
+    email: "Email",
+    more: "Άλλες εφαρμογές…",
   },
   toast: {
     linkCopied: "Ο σύνδεσμος αντιγράφηκε ✓",
