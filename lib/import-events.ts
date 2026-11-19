@@ -41,6 +41,32 @@ interface QfapRecord {
   price_type: string | null;
   price_detail: string | null;
   qfap_tags: string | null;
+  access_link: string | null;
+  contact_url: string | null;
+}
+
+// Billetteries et agrégateurs : on veut la page du lieu, pas une caisse.
+const NOT_A_VENUE =
+  /(^|\.)(feverup|billetweb|weezevent|helloasso|eventbrite|ticketmaster|fnacspectacles|shotgun|dice|yurplan|facebook|instagram|linktr|heyzine|calameo|issuu|canva)\.|billetterie/i;
+
+// Lien « Source » : la page de l'événement sur le site du lieu quand la fiche
+// la donne (access_link, sinon contact_url s'il pointe vers une page précise),
+// à défaut la fiche paris.fr. Une page d'accueil ne compte pas.
+export function sourceLink(record: Pick<QfapRecord, "url" | "access_link" | "contact_url">): string | null {
+  for (const candidate of [record.access_link, record.contact_url]) {
+    if (!candidate) continue;
+    try {
+      const u = new URL(candidate.trim());
+      if (!/^https?:$/.test(u.protocol) || NOT_A_VENUE.test(u.hostname) || NOT_A_VENUE.test(u.pathname)) continue;
+      // Page d'accueil, y compris « /fr/ » ou « /en » : trop vague.
+      if (u.pathname.replace(/^\/(fr|en|el|gr)(?=\/|$)/i, "").replace(/\/+$/, "") === "" && !u.search) continue;
+      if (u.hostname.endsWith("paris.fr") && u.pathname.startsWith("/evenements/")) continue;
+      return u.toString();
+    } catch {
+      continue;
+    }
+  }
+  return record.url;
 }
 
 function tagsOf(record: QfapRecord): string[] {
@@ -110,10 +136,11 @@ function toEvent(record: QfapRecord, kind: "expo" | "workshop") {
   const prefix = kind === "expo" ? "Exposition" : "Atelier";
   const lead = truncate(plainText(record.lead_text), DESCRIPTION_MAX);
   const date = startDate(record.date_start!);
+  const link = sourceLink(record);
 
   return {
     titre: new RegExp(`^${prefix}\\b`, "i").test(title) ? title : `${prefix} — ${title}`,
-    description: [lead, record.url && `Source : ${record.url}`].filter(Boolean).join("\n"),
+    description: [lead, link && `Source : ${link}`].filter(Boolean).join("\n"),
     type: kind,
     discipline: disciplineOf(record),
     ville: "Paris",
@@ -198,7 +225,9 @@ export async function importParisEvents({ dryRun, onLog }: ImportOptions) {
   for (const { record, kind } of selected) {
     const event = toEvent(record, kind);
     if (dryRun) {
-      log(`[dry-run] ${event.date.slice(0, 10)} ${event.discipline} ${event.cout_type ?? "?"} | ${event.titre}`);
+      log(
+        `[dry-run] ${event.date.slice(0, 10)} ${event.discipline} ${event.cout_type ?? "?"} | ${event.titre} | ${sourceLink(record)}`
+      );
       imported += 1;
       continue;
     }
