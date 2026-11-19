@@ -37,7 +37,7 @@ function FR() {
       <section>
         <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Données</h2>
         <p className="mt-2 text-text-soft">
-          Une partie des événements parisiens provient du jeu de données <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">« Que faire à Paris »</a> de la Ville de Paris, sous licence Open Database License (ODbL).
+          Une partie des événements parisiens provient du jeu de données <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">« Que faire à Paris »</a> de la Ville de Paris, sous licence Open Database License (ODbL). Une partie des boutiques parisiennes provient de la <a href="https://opendata.apur.org/datasets/Apur::bdcom-2023" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">base des commerces parisiens (BDCOM 2023)</a> de l&rsquo;Atelier parisien d&rsquo;urbanisme (Apur), sous licence ODbL ; leurs adresses sont complétées par la <a href="https://adresse.data.gouv.fr" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Base adresse nationale</a> (Licence Ouverte 2.0).
         </p>
       </section>
 
@@ -117,7 +117,7 @@ function EN() {
       <section>
         <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Data</h2>
         <p className="mt-2 text-text-soft">
-          Some Paris events come from the City of Paris dataset <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">“Que faire à Paris”</a>, under the Open Database License (ODbL).
+          Some Paris events come from the City of Paris dataset <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">“Que faire à Paris”</a>, under the Open Database License (ODbL). Some Paris shops come from the <a href="https://opendata.apur.org/datasets/Apur::bdcom-2023" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Paris retail database (BDCOM 2023)</a> by the Paris urban planning agency (Apur), under the ODbL; their addresses are completed with the French <a href="https://adresse.data.gouv.fr" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Base adresse nationale</a> (Licence Ouverte 2.0).
         </p>
       </section>
 
@@ -195,7 +195,7 @@ function EL() {
       <section>
         <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Δεδομένα</h2>
         <p className="mt-2 text-text-soft">
-          Μέρος των εκδηλώσεων του Παρισιού προέρχεται από το σύνολο δεδομένων <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">«Que faire à Paris»</a> του Δήμου Παρισίων, με άδεια Open Database License (ODbL).
+          Μέρος των εκδηλώσεων του Παρισιού προέρχεται από το σύνολο δεδομένων <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">«Que faire à Paris»</a> του Δήμου Παρισίων, με άδεια Open Database License (ODbL). Μέρος των καταστημάτων του Παρισιού προέρχεται από τη <a href="https://opendata.apur.org/datasets/Apur::bdcom-2023" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">βάση εμπορικών καταστημάτων του Παρισιού (BDCOM 2023)</a> του Atelier parisien d&rsquo;urbanisme (Apur), με άδεια ODbL· οι διευθύνσεις τους συμπληρώνονται από τη <a href="https://adresse.data.gouv.fr" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Base adresse nationale</a> (Licence Ouverte 2.0).
         </p>
       </section>
 
