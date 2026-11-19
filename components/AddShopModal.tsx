@@ -1,5 +1,6 @@
 "use client";
 
+import { safeHttpUrl } from "@/lib/safe-url";
 import { useState } from "react";
 import { Modal } from "./Modal";
 import { createClient } from "@/lib/supabase/client";
@@ -31,8 +32,13 @@ export function AddShopModal({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSaving(true);
     setError(null);
+    const lienSur = safeHttpUrl(lien);
+    if (lien.trim() && !lienSur) {
+      setError(t.shops.invalidLink);
+      return;
+    }
+    setSaving(true);
 
     const supabase = createClient();
     const {
@@ -52,7 +58,7 @@ export function AddShopModal({
       ville: shopVille,
       adresse: adresse || null,
       description: description || null,
-      lien: lien || null,
+      lien: lienSur,
       discipline: discipline || null,
       lat: coords?.lat ?? null,
       lng: coords?.lng ?? null,
@@ -118,7 +124,8 @@ export function AddShopModal({
           className={FIELD_TEXTAREA}
         />
         <input
-          type="url"
+          type="text"
+          inputMode="url"
           placeholder={t.shops.lien}
           value={lien}
           onChange={(e) => setLien(e.target.value)}

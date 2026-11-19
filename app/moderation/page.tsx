@@ -1,5 +1,6 @@
 "use client";
 
+import { safeHttpUrl } from "@/lib/safe-url";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -245,9 +246,10 @@ export default function ModerationPage() {
               <h3 className={ITEM_TITLE}>{shop.nom}</h3>
               {shop.adresse && <p className="text-sm text-foreground-muted">{shop.adresse}</p>}
               {shop.description && <p className="text-[15px] leading-relaxed text-text-soft">{shop.description}</p>}
-              {shop.lien && (
+              {shop.lien && !safeHttpUrl(shop.lien) && <p className="break-all text-sm text-danger">{shop.lien}</p>}
+              {safeHttpUrl(shop.lien) && (
                 <a
-                  href={shop.lien}
+                  href={safeHttpUrl(shop.lien)!}
                   target="_blank"
                   rel="noreferrer"
                   className="break-all text-sm underline underline-offset-4 hover:text-foreground"

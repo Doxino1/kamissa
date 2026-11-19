@@ -1,5 +1,6 @@
 "use client";
 
+import { safeHttpUrl } from "@/lib/safe-url";
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -195,9 +196,9 @@ export default function BoutiquesPage() {
                       <p className="mt-2 font-display text-[19px] italic leading-[1.25] md:text-[21px]">{shop.description}</p>
                     )}
                     <div className="mt-3.5 flex flex-wrap items-center gap-x-[18px] gap-y-2">
-                      {shop.lien && (
+                      {safeHttpUrl(shop.lien) && (
                         <a
-                          href={shop.lien}
+                          href={safeHttpUrl(shop.lien)!}
                           target="_blank"
                           rel="noreferrer"
                           className="max-w-full truncate text-[13px] underline underline-offset-4"

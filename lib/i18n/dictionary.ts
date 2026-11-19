@@ -373,6 +373,7 @@ export interface Dictionary {
     adresse: string;
     description: string;
     lien: string;
+    invalidLink: string;
     add: string;
     empty: string;
     delete: string;
@@ -823,6 +824,7 @@ export const fr: Dictionary = {
     adresse: "Adresse",
     description: "Description",
     lien: "Lien",
+    invalidLink: "Ce lien n’est pas une adresse web valide (exemple : https://boutique.fr).",
     add: "Ajouter",
     empty: "Aucune boutique par ici pour l'instant.",
     delete: "Supprimer",
@@ -1271,6 +1273,7 @@ export const en: Dictionary = {
     adresse: "Address",
     description: "Description",
     lien: "Link",
+    invalidLink: "This link isn’t a valid web address (for example: https://shop.com).",
     add: "Add",
     empty: "No shops listed yet.",
     delete: "Delete",
@@ -1720,6 +1723,7 @@ export const el: Dictionary = {
     adresse: "Διεύθυνση",
     description: "Περιγραφή",
     lien: "Σύνδεσμος",
+    invalidLink: "Αυτός ο σύνδεσμος δεν είναι έγκυρη διεύθυνση ιστού (π.χ. https://katastima.gr).",
     add: "Προσθήκη",
     empty: "Κανένα κατάστημα ακόμη.",
     delete: "Διαγραφή",

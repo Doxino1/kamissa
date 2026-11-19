@@ -1,5 +1,6 @@
 "use client";
 
+import { safeHttpUrl } from "@/lib/safe-url";
 import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -42,8 +43,9 @@ function ClusterLayer({ shops }: { shops: ShopWithCoords[] }) {
       const marker = L.marker([shop.lat, shop.lng], { icon: makePinIcon(shop.n, shopCategoryColor(shop.discipline)) });
       const nom = escapeHtml(shop.nom);
       const adresse = shop.adresse ? `<br/>${escapeHtml(shop.adresse)}` : "";
-      const lien = shop.lien
-        ? `<br/><a href="${escapeHtml(shop.lien)}" target="_blank" rel="noreferrer">${escapeHtml(shop.lien)}</a>`
+      const href = safeHttpUrl(shop.lien);
+      const lien = href
+        ? `<br/><a href="${escapeHtml(href)}" target="_blank" rel="noreferrer">${escapeHtml(shop.lien!)}</a>`
         : "";
       marker.bindPopup(`<strong>${nom}</strong>${adresse}${lien}`);
       clusterGroup.addLayer(marker);
