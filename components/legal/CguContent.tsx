@@ -85,6 +85,13 @@ function FR() {
       </section>
 
       <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Propriété de Kamissa</h2>
+        <p className="mt-2 text-text-soft">
+          Le nom et la marque Kamissa, le logo, le design de l&rsquo;application, ses textes et son code source appartiennent à l&rsquo;éditeur de Kamissa et sont protégés par le droit d&rsquo;auteur et le droit des marques. Toute reproduction, copie ou réutilisation, totale ou partielle, sans autorisation écrite est interdite. Les contenus publiés par les utilisateurs restent leur propriété, dans les conditions décrites plus haut.
+        </p>
+      </section>
+
+      <section>
         <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Évolution du service</h2>
         <p className="mt-2 text-text-soft">
           Le site est un projet personnel et évolutif ; ses fonctionnalités peuvent changer. Ces conditions
@@ -166,6 +173,13 @@ function EN() {
         <p className="mt-2 text-text-soft">
           In case of a clear breach of these terms, an account may be suspended or deleted. You can delete your
           own account at any time from Settings.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Ownership of Kamissa</h2>
+        <p className="mt-2 text-text-soft">
+          The Kamissa name and brand, logo, the app&rsquo;s design, its texts and its source code belong to the publisher of Kamissa and are protected by copyright and trademark law. Any reproduction, copying or reuse, in whole or in part, without written permission is prohibited. Content published by users remains their property, under the terms described above.
         </p>
       </section>
 
@@ -255,6 +269,13 @@ function EL() {
         <p className="mt-2 text-text-soft">
           Σε περίπτωση εμφανούς μη τήρησης αυτών των όρων, ένας λογαριασμός μπορεί να ανασταλεί ή να διαγραφεί.
           Μπορείς ανά πάσα στιγμή να διαγράψεις τον δικό σου λογαριασμό από τις Ρυθμίσεις.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-display text-[28px] leading-tight md:text-[32px]">Ιδιοκτησία του Kamissa</h2>
+        <p className="mt-2 text-text-soft">
+          Το όνομα και το σήμα Kamissa, το λογότυπο, ο σχεδιασμός της εφαρμογής, τα κείμενά της και ο πηγαίος κώδικάς της ανήκουν στον εκδότη του Kamissa και προστατεύονται από τη νομοθεσία για την πνευματική ιδιοκτησία και τα σήματα. Απαγορεύεται κάθε αναπαραγωγή, αντιγραφή ή επαναχρησιμοποίηση, ολική ή μερική, χωρίς γραπτή άδεια. Το περιεχόμενο που δημοσιεύουν οι χρήστες παραμένει δική τους ιδιοκτησία, σύμφωνα με τους όρους που περιγράφονται παραπάνω.
         </p>
       </section>
 
